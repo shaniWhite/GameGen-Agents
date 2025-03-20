@@ -6,6 +6,14 @@ import re
 import logging
 from termcolor import colored
 import openai
+from dotenv import load_dotenv
+
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+if not openai.api_key:
+    logging.error("⚠ OpenAI API key not found! Exiting...")
+    raise ValueError("Missing OPENAI_API_KEY environment variable")
+
 
 PRINT_RESPONSE = False
 

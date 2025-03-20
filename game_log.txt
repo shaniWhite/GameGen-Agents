@@ -1,0 +1,1264 @@
+2025-03-20 11:50:35 - DEBUG - Using proactor: IocpProactor
+2025-03-20 11:50:42 - INFO - Planning the game structure...
+2025-03-20 11:50:42 - INFO - Iteration 1 of 1 planning iterations
+2025-03-20 11:51:21 - INFO - [33mgame plan written to game_plan.xml[0m
+2025-03-20 11:51:21 - INFO - Game Name: Obstacle Dodger
+2025-03-20 11:51:21 - INFO - Creating game files...
+2025-03-20 11:51:25 - INFO - File 'main.py' has been created.
+2025-03-20 11:51:26 - INFO - File 'settings.py' has been created.
+2025-03-20 11:51:26 - INFO - File 'enemy.py' has been created.
+2025-03-20 11:51:26 - INFO - File 'player.py' has been created.
+2025-03-20 11:51:29 - INFO - File 'game.py' has been created.
+2025-03-20 11:51:29 - INFO - Game creation complete!
+2025-03-20 11:51:29 - INFO - Final game plan:
+2025-03-20 11:51:29 - INFO - [35mRunning the game...[0m
+2025-03-20 11:51:29 - INFO - Game is running.
+2025-03-20 11:51:29 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
+2025-03-20 11:51:29 - ERROR - [31mRuntime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1, in <module>
+    import pygame
+ModuleNotFoundError: No module named 'pygame'
+
+Process exited with return code 1
+[0m
+2025-03-20 11:51:29 - INFO - \u26a0 No active game process found to terminate.
+2025-03-20 11:51:29 - ERROR - [31mError detected: Runtime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1, in <module>
+    import pygame
+ModuleNotFoundError: No module named 'pygame'
+
+Process exited with return code 1
+[0m
+2025-03-20 11:51:29 - INFO - Attempt 1 to fix the errors...
+2025-03-20 11:51:29 - INFO - [33mAttempting to fix the error...[0m
+2025-03-20 11:51:50 - INFO - [35m<file name="enemy.py">
+import pygame
+from settings import ENEMY_COLOR
+
+class Enemy:
+    def __init__(self, x, y, speed):
+        """
+        Initialize the Enemy with a position and speed.
+        
+        Args:
+        x (int): Initial x-coordinate of the enemy.
+        y (int): Initial y-coordinate of the enemy.
+        speed (int): Speed of the enemy's movement.
+        """
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.width = 40
+        self.height = 40
+
+    def move(self):
+        """
+        Move the enemy downwards on the screen.
+        The enemy's position is updated based on its speed.
+        If the enemy moves off the bottom of the screen, it wraps around to the top.
+        """
+        self.y += self.speed
+        if self.y > 600:  # Assuming the window height is 600
+            self.y = -self.height  # Wrap to the top
+
+    def draw(self, surface):
+        """
+        Draw the enemy on the provided surface.
+        
+        Args:
+        surface: The surface to draw the enemy on.
+        """
+        pygame.draw.rect(surface, ENEMY_COLOR, (self.x, self.y, self.width, self.height))
+</file>
+
+<file name="game.py">
+import pygame
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, WHITE
+from player import Player
+from enemy import Enemy
+
+class Game:
+    def __init__(self):
+        # Initialize Pygame and create the game window
+        pygame.init()
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Obstacle Dodger")
+
+        # Game state variables
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.paused = False
+
+        # Create player and enemy instances
+        self.player = Player()
+        self.enemies = [Enemy(x * 100, 0, 3) for x in range(5)]  # Example: 5 enemies at different x positions
+
+    def run(self):
+        # Main game loop
+        while self.running:
+            self.handle_events()
+            if not self.paused:
+                self.update()
+            self.render()
+
+        # Quit Pygame properly
+        pygame.quit()
+
+    def handle_events(self):
+        # Process user input and events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:  # Toggle pause
+                    self.paused = not self.paused
+
+    def update(self):
+        # Update game objects and state
+        keys = pygame.key.get_pressed()  # Get the current state of all keyboard buttons
+        self.player.move(keys)
+        for enemy in self.enemies:
+            enemy.move()
+
+    def render(self):
+        # Draw everything to the screen
+        self.screen.fill(WHITE)  # Clear the screen with a white background
+        self.player.draw(self.screen)  # Draw the player
+        for enemy in self.enemies:  # Draw each enemy
+            enemy.draw(self.screen)
+        
+        # Refresh the display
+        pygame.display.flip()
+        self.clock.tick(60)  # Maintain 60 frames per second
+</file>
+
+<file name="main.py">
+import pygame
+from game import Game
+
+def main():
+    # Initialize Pygame
+    pygame.init()
+
+    # Create an instance of the Game class
+    game = Game()
+
+    # Main game loop
+    running = True
+    while running:
+        # Handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        
+        # Run the game logic
+        game.run()
+
+    # Clean up and exit
+    pygame.quit()
+
+# Run the main function if this file is being executed
+if __name__ == "__main__":
+    main()
+</file>
+
+<file name="player.py">
+import pygame
+from settings import PLAYER_COLOR
+
+class Player:
+    def __init__(self, x=300, y=300, width=50, height=50):
+        """Initialize the player with position, size, and color."""
+        self.rect = pygame.Rect(x, y, width, height)  # Create a rectangle for the player
+        self.speed = 5  # Speed of player movement
+
+    def move(self, keys):
+        """Move the player based on key input."""
+        if keys[pygame.K_LEFT] and self.rect.left > 0:
+            self.rect.x -= self.speed  # Move left
+        if keys[pygame.K_RIGHT] and self.rect.right < 600:  # Assuming the window width is 600
+            self.rect.x += self.speed  # Move right
+        if keys[pygame.K_UP] and self.rect.top > 0:
+            self.rect.y -= self.speed  # Move up
+        if keys[pygame.K_DOWN] and self.rect.bottom < 600:  # Assuming the window height is 600
+            self.rect.y += self.speed  # Move down
+
+    def draw(self, surface):
+        """Draw the player rectangle onto the provided surface."""
+        pygame.draw.rect(surface, PLAYER_COLOR, self.rect)  # Draw the player as a rectangle
+</file>
+
+<file name="settings.py">
+# settings.py
+
+# This module contains constant variables for game settings, including screen size, colors, and initial parameters.
+
+# Screen dimensions
+SCREEN_WIDTH = 600  # Width of the game window
+SCREEN_HEIGHT = 600  # Height of the game window
+
+# Colors in RGB format
+WHITE = (255, 255, 255)  # Color for background and other UI elements
+BLACK = (0, 0, 0)  # Color for the player and other game elements
+RED = (255, 0, 0)  # Color for enemy objects
+GREEN = (0, 255, 0)  # Color for items or power-ups, if applicable
+
+# Player settings
+PLAYER_COLOR = GREEN  # Color of the player character
+PLAYER_SPEED = 5  # Speed at which the player can move
+
+# Enemy settings
+ENEMY_COLOR = RED  # Color of enemy objects
+ENEMY_SPEED = 3  # Speed at which the enemies will move
+
+# Game parameters
+FPS = 60  # Frames per second setting for the game
+INITIAL_SCORE = 0  # Initial score at the beginning of the game
+
+# Additional game settings can be added, such as game levels, difficulty settings, etc.
+</file>[0m
+2025-03-20 11:51:50 - INFO - Updated file: enemy.py
+2025-03-20 11:51:50 - INFO - Updated file: game.py
+2025-03-20 11:51:50 - INFO - Updated file: main.py
+2025-03-20 11:51:50 - INFO - Updated file: player.py
+2025-03-20 11:51:50 - INFO - Updated file: settings.py
+2025-03-20 11:51:52 - INFO - [35mRunning the game...[0m
+2025-03-20 11:51:52 - INFO - Game is running.
+2025-03-20 11:51:52 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
+2025-03-20 11:51:52 - ERROR - [31mRuntime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1, in <module>
+    import pygame
+ModuleNotFoundError: No module named 'pygame'
+
+Process exited with return code 1
+[0m
+2025-03-20 11:51:52 - INFO - \u26a0 No active game process found to terminate.
+2025-03-20 11:51:52 - INFO - Attempt 2 to fix the errors...
+2025-03-20 11:51:52 - INFO - [33mAttempting to fix the error...[0m
+2025-03-20 11:52:17 - INFO - [35m<file name="main.py">
+import pygame
+from game import Game
+
+def main():
+    # Initialize Pygame
+    pygame.init()
+
+    # Create an instance of the Game class
+    game = Game()
+
+    # Main game loop
+    running = True
+    while running:
+        # Run the game logic
+        game.run()  # This method handles events internally
+
+        # Check if the game is still running after executing game logic
+        if not game.running:
+            running = False
+
+    # Clean up and exit
+    pygame.quit()
+
+# Run the main function if this file is being executed
+if __name__ == "__main__":
+    main()
+</file>
+
+<file name="game.py">
+import pygame
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, WHITE
+from player import Player
+from enemy import Enemy
+
+class Game:
+    def __init__(self):
+        # Initialize Pygame and create the game window
+        pygame.init()
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Obstacle Dodger")
+
+        # Game state variables
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.paused = False
+
+        # Create player and enemy instances
+        self.player = Player()
+        self.enemies = [Enemy(x * 100, 0, 3) for x in range(5)]  # Example: 5 enemies at different x positions
+
+    def run(self):
+        # Main game loop
+        while self.running:
+            self.handle_events()
+            if not self.paused:
+                self.update()
+            self.render()
+
+        # Quit Pygame properly
+        pygame.quit()
+
+    def handle_events(self):
+        # Process user input and events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:  # Toggle pause
+                    self.paused = not self.paused
+
+    def update(self):
+        # Update game objects and state
+        keys = pygame.key.get_pressed()  # Get the current state of all keyboard buttons
+        self.player.move(keys)
+        for enemy in self.enemies:
+            enemy.move()
+
+    def render(self):
+        # Draw everything to the screen
+        self.screen.fill(WHITE)  # Clear the screen with a white background
+        self.player.draw(self.screen)  # Draw the player
+        for enemy in self.enemies:  # Draw each enemy
+            enemy.draw(self.screen)
+        
+        # Refresh the display
+        pygame.display.flip()
+        self.clock.tick(60)  # Maintain 60 frames per second
+</file>
+
+<file name="player.py">
+import pygame
+from settings import PLAYER_COLOR
+
+class Player:
+    def __init__(self, x=300, y=300, width=50, height=50):
+        """Initialize the player with position, size, and color."""
+        self.rect = pygame.Rect(x, y, width, height)  # Create a rectangle for the player
+        self.speed = 5  # Speed of player movement
+
+    def move(self, keys):
+        """Move the player based on key input."""
+        if keys[pygame.K_LEFT] and self.rect.left > 0:
+            self.rect.x -= self.speed  # Move left
+        if keys[pygame.K_RIGHT] and self.rect.right < 600:  # Assuming the window width is 600
+            self.rect.x += self.speed  # Move right
+        if keys[pygame.K_UP] and self.rect.top > 0:
+            self.rect.y -= self.speed  # Move up
+        if keys[pygame.K_DOWN] and self.rect.bottom < 600:  # Assuming the window height is 600
+            self.rect.y += self.speed  # Move down
+
+    def draw(self, surface):
+        """Draw the player rectangle onto the provided surface."""
+        pygame.draw.rect(surface, PLAYER_COLOR, self.rect)  # Draw the player as a rectangle
+</file>
+
+<file name="enemy.py">
+import pygame
+from settings import ENEMY_COLOR
+
+class Enemy:
+    def __init__(self, x, y, speed):
+        """
+        Initialize the Enemy with a position and speed.
+        
+        Args:
+        x (int): Initial x-coordinate of the enemy.
+        y (int): Initial y-coordinate of the enemy.
+        speed (int): Speed of the enemy's movement.
+        """
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.width = 40
+        self.height = 40
+
+    def move(self):
+        """
+        Move the enemy downwards on the screen.
+        The enemy's position is updated based on its speed.
+        If the enemy moves off the bottom of the screen, it wraps around to the top.
+        """
+        self.y += self.speed
+        if self.y > 600:  # Assuming the window height is 600
+            self.y = -self.height  # Wrap to the top
+
+    def draw(self, surface):
+        """
+        Draw the enemy on the provided surface.
+        
+        Args:
+        surface: The surface to draw the enemy on.
+        """
+        pygame.draw.rect(surface, ENEMY_COLOR, (self.x, self.y, self.width, self.height))
+</file>
+
+<file name="settings.py">
+# settings.py
+
+# This module contains constant variables for game settings, including screen size, colors, and initial parameters.
+
+# Screen dimensions
+SCREEN_WIDTH = 600  # Width of the game window
+SCREEN_HEIGHT = 600  # Height of the game window
+
+# Colors in RGB format
+WHITE = (255, 255, 255)  # Color for background and other UI elements
+BLACK = (0, 0, 0)  # Color for the player and other game elements
+RED = (255, 0, 0)  # Color for enemy objects
+GREEN = (0, 255, 0)  # Color for items or power-ups, if applicable
+
+# Player settings
+PLAYER_COLOR = GREEN  # Color of the player character
+PLAYER_SPEED = 5  # Speed at which the player can move
+
+# Enemy settings
+ENEMY_COLOR = RED  # Color of enemy objects
+ENEMY_SPEED = 3  # Speed at which the enemies will move
+
+# Game parameters
+FPS = 60  # Frames per second setting for the game
+INITIAL_SCORE = 0  # Initial score at the beginning of the game
+
+# Additional game settings can be added, such as game levels, difficulty settings, etc.
+</file>[0m
+2025-03-20 11:52:17 - INFO - Updated file: main.py
+2025-03-20 11:52:17 - INFO - Updated file: game.py
+2025-03-20 11:52:17 - INFO - Updated file: player.py
+2025-03-20 11:52:17 - INFO - Updated file: enemy.py
+2025-03-20 11:52:17 - INFO - Updated file: settings.py
+2025-03-20 11:52:19 - INFO - [35mRunning the game...[0m
+2025-03-20 11:52:19 - INFO - Game is running.
+2025-03-20 11:52:19 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
+2025-03-20 11:52:19 - ERROR - [31mRuntime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1, in <module>
+    import pygame
+ModuleNotFoundError: No module named 'pygame'
+
+Process exited with return code 1
+[0m
+2025-03-20 11:52:19 - INFO - \u26a0 No active game process found to terminate.
+2025-03-20 11:52:19 - INFO - Attempt 3 to fix the errors...
+2025-03-20 11:52:19 - INFO - [33mAttempting to fix the error...[0m
+2025-03-20 11:52:43 - INFO - [35m<file name="enemy.py">
+import pygame
+from settings import ENEMY_COLOR
+
+class Enemy:
+    def __init__(self, x, y, speed):
+        """
+        Initialize the Enemy with a position and speed.
+        
+        Args:
+        x (int): Initial x-coordinate of the enemy.
+        y (int): Initial y-coordinate of the enemy.
+        speed (int): Speed of the enemy's movement.
+        """
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.width = 40
+        self.height = 40
+
+    def move(self):
+        """
+        Move the enemy downwards on the screen.
+        The enemy's position is updated based on its speed.
+        If the enemy moves off the bottom of the screen, it wraps around to the top.
+        """
+        self.y += self.speed
+        if self.y > 600:  # Assuming the window height is 600
+            self.y = -self.height  # Wrap to the top
+
+    def draw(self, surface):
+        """
+        Draw the enemy on the provided surface.
+        
+        Args:
+        surface: The surface to draw the enemy on.
+        """
+        pygame.draw.rect(surface, ENEMY_COLOR, (self.x, self.y, self.width, self.height))
+</file>
+
+<file name="game.py">
+import pygame
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, WHITE
+from player import Player
+from enemy import Enemy
+
+class Game:
+    def __init__(self):
+        # Initialize Pygame and create the game window
+        pygame.init()
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Obstacle Dodger")
+
+        # Game state variables
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.paused = False
+
+        # Create player and enemy instances
+        self.player = Player()
+        self.enemies = [Enemy(x * 100, 0, 3) for x in range(5)]  # Example: 5 enemies at different x positions
+
+    def run(self):
+        # Main game loop
+        while self.running:
+            self.handle_events()
+            if not self.paused:
+                self.update()
+            self.render()
+
+        # Quit Pygame properly
+        pygame.quit()
+
+    def handle_events(self):
+        # Process user input and events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:  # Toggle pause
+                    self.paused = not self.paused
+
+    def update(self):
+        # Update game objects and state
+        keys = pygame.key.get_pressed()  # Get the current state of all keyboard buttons
+        self.player.move(keys)
+        for enemy in self.enemies:
+            enemy.move()
+
+    def render(self):
+        # Draw everything to the screen
+        self.screen.fill(WHITE)  # Clear the screen with a white background
+        self.player.draw(self.screen)  # Draw the player
+        for enemy in self.enemies:  # Draw each enemy
+            enemy.draw(self.screen)
+        
+        # Refresh the display
+        pygame.display.flip()
+        self.clock.tick(60)  # Maintain 60 frames per second
+</file>
+
+<file name="main.py">
+import pygame
+from game import Game
+
+def main():
+    # Initialize Pygame
+    pygame.init()
+
+    # Create an instance of the Game class
+    game = Game()
+
+    # Main game loop
+    running = True
+    while running:
+        # Run the game logic
+        game.run()  # This method handles events internally
+
+        # Check if the game is still running after executing game logic
+        if not game.running:
+            running = False
+
+    # Clean up and exit
+    pygame.quit()
+
+# Run the main function if this file is being executed
+if __name__ == "__main__":
+    main()
+</file>
+
+<file name="player.py">
+import pygame
+from settings import PLAYER_COLOR
+
+class Player:
+    def __init__(self, x=300, y=300, width=50, height=50):
+        """Initialize the player with position, size, and color."""
+        self.rect = pygame.Rect(x, y, width, height)  # Create a rectangle for the player
+        self.speed = 5  # Speed of player movement
+
+    def move(self, keys):
+        """Move the player based on key input."""
+        if keys[pygame.K_LEFT] and self.rect.left > 0:
+            self.rect.x -= self.speed  # Move left
+        if keys[pygame.K_RIGHT] and self.rect.right < 600:  # Assuming the window width is 600
+            self.rect.x += self.speed  # Move right
+        if keys[pygame.K_UP] and self.rect.top > 0:
+            self.rect.y -= self.speed  # Move up
+        if keys[pygame.K_DOWN] and self.rect.bottom < 600:  # Assuming the window height is 600
+            self.rect.y += self.speed  # Move down
+
+    def draw(self, surface):
+        """Draw the player rectangle onto the provided surface."""
+        pygame.draw.rect(surface, PLAYER_COLOR, self.rect)  # Draw the player as a rectangle
+</file>
+
+<file name="settings.py">
+# settings.py
+
+# This module contains constant variables for game settings, including screen size, colors, and initial parameters.
+
+# Screen dimensions
+SCREEN_WIDTH = 600  # Width of the game window
+SCREEN_HEIGHT = 600  # Height of the game window
+
+# Colors in RGB format
+WHITE = (255, 255, 255)  # Color for background and other UI elements
+BLACK = (0, 0, 0)  # Color for the player and other game elements
+RED = (255, 0, 0)  # Color for enemy objects
+GREEN = (0, 255, 0)  # Color for items or power-ups, if applicable
+
+# Player settings
+PLAYER_COLOR = GREEN  # Color of the player character
+PLAYER_SPEED = 5  # Speed at which the player can move
+
+# Enemy settings
+ENEMY_COLOR = RED  # Color of enemy objects
+ENEMY_SPEED = 3  # Speed at which the enemies will move
+
+# Game parameters
+FPS = 60  # Frames per second setting for the game
+INITIAL_SCORE = 0  # Initial score at the beginning of the game
+
+# Additional game settings can be added, such as game levels, difficulty settings, etc.
+</file>[0m
+2025-03-20 11:52:43 - INFO - Updated file: enemy.py
+2025-03-20 11:52:43 - INFO - Updated file: game.py
+2025-03-20 11:52:43 - INFO - Updated file: main.py
+2025-03-20 11:52:43 - INFO - Updated file: player.py
+2025-03-20 11:52:43 - INFO - Updated file: settings.py
+2025-03-20 11:52:45 - INFO - [35mRunning the game...[0m
+2025-03-20 11:52:45 - INFO - Game is running.
+2025-03-20 11:52:45 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
+2025-03-20 11:52:45 - ERROR - [31mRuntime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1, in <module>
+    import pygame
+ModuleNotFoundError: No module named 'pygame'
+
+Process exited with return code 1
+[0m
+2025-03-20 11:52:45 - INFO - \u26a0 No active game process found to terminate.
+2025-03-20 11:52:45 - INFO - Attempt 4 to fix the errors...
+2025-03-20 11:52:45 - INFO - [33mAttempting to fix the error...[0m
+2025-03-20 11:53:07 - INFO - [35m<file name="enemy.py">
+import pygame
+from settings import ENEMY_COLOR
+
+class Enemy:
+    def __init__(self, x, y, speed):
+        """
+        Initialize the Enemy with a position and speed.
+        
+        Args:
+        x (int): Initial x-coordinate of the enemy.
+        y (int): Initial y-coordinate of the enemy.
+        speed (int): Speed of the enemy's movement.
+        """
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.width = 40
+        self.height = 40
+
+    def move(self):
+        """
+        Move the enemy downwards on the screen.
+        The enemy's position is updated based on its speed.
+        If the enemy moves off the bottom of the screen, it wraps around to the top.
+        """
+        self.y += self.speed
+        if self.y > 600:  # Assuming the window height is 600
+            self.y = -self.height  # Wrap to the top
+
+    def draw(self, surface):
+        """
+        Draw the enemy on the provided surface.
+        
+        Args:
+        surface: The surface to draw the enemy on.
+        """
+        pygame.draw.rect(surface, ENEMY_COLOR, (self.x, self.y, self.width, self.height))
+</file>
+
+<file name="game.py">
+import pygame
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, WHITE
+from player import Player
+from enemy import Enemy
+
+class Game:
+    def __init__(self):
+        # Initialize Pygame and create the game window
+        pygame.init()
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Obstacle Dodger")
+
+        # Game state variables
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.paused = False
+
+        # Create player and enemy instances
+        self.player = Player()
+        self.enemies = [Enemy(x * 100, 0, 3) for x in range(5)]  # Example: 5 enemies at different x positions
+
+    def run(self):
+        # Main game loop
+        while self.running:
+            self.handle_events()
+            if not self.paused:
+                self.update()
+            self.render()
+
+        # Quit Pygame properly
+        pygame.quit()
+
+    def handle_events(self):
+        # Process user input and events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:  # Toggle pause
+                    self.paused = not self.paused
+
+    def update(self):
+        # Update game objects and state
+        keys = pygame.key.get_pressed()  # Get the current state of all keyboard buttons
+        self.player.move(keys)
+        for enemy in self.enemies:
+            enemy.move()
+
+    def render(self):
+        # Draw everything to the screen
+        self.screen.fill(WHITE)  # Clear the screen with a white background
+        self.player.draw(self.screen)  # Draw the player
+        for enemy in self.enemies:  # Draw each enemy
+            enemy.draw(self.screen)
+        
+        # Refresh the display
+        pygame.display.flip()
+        self.clock.tick(60)  # Maintain 60 frames per second
+</file>
+
+<file name="main.py">
+import pygame
+from game import Game
+
+def main():
+    # Initialize Pygame
+    pygame.init()
+
+    # Create an instance of the Game class
+    game = Game()
+
+    # Main game loop
+    running = True
+    while running:
+        # Run the game logic
+        game.run()  # This method handles events internally
+
+        # Check if the game is still running after executing game logic
+        if not game.running:
+            running = False
+
+    # Clean up and exit
+    pygame.quit()
+
+# Run the main function if this file is being executed
+if __name__ == "__main__":
+    main()
+</file>
+
+<file name="player.py">
+import pygame
+from settings import PLAYER_COLOR
+
+class Player:
+    def __init__(self, x=300, y=300, width=50, height=50):
+        """Initialize the player with position, size, and color."""
+        self.rect = pygame.Rect(x, y, width, height)  # Create a rectangle for the player
+        self.speed = 5  # Speed of player movement
+
+    def move(self, keys):
+        """Move the player based on key input."""
+        if keys[pygame.K_LEFT] and self.rect.left > 0:
+            self.rect.x -= self.speed  # Move left
+        if keys[pygame.K_RIGHT] and self.rect.right < 600:  # Assuming the window width is 600
+            self.rect.x += self.speed  # Move right
+        if keys[pygame.K_UP] and self.rect.top > 0:
+            self.rect.y -= self.speed  # Move up
+        if keys[pygame.K_DOWN] and self.rect.bottom < 600:  # Assuming the window height is 600
+            self.rect.y += self.speed  # Move down
+
+    def draw(self, surface):
+        """Draw the player rectangle onto the provided surface."""
+        pygame.draw.rect(surface, PLAYER_COLOR, self.rect)  # Draw the player as a rectangle
+</file>
+
+<file name="settings.py">
+# settings.py
+
+# This module contains constant variables for game settings, including screen size, colors, and initial parameters.
+
+# Screen dimensions
+SCREEN_WIDTH = 600  # Width of the game window
+SCREEN_HEIGHT = 600  # Height of the game window
+
+# Colors in RGB format
+WHITE = (255, 255, 255)  # Color for background and other UI elements
+BLACK = (0, 0, 0)  # Color for the player and other game elements
+RED = (255, 0, 0)  # Color for enemy objects
+GREEN = (0, 255, 0)  # Color for items or power-ups, if applicable
+
+# Player settings
+PLAYER_COLOR = GREEN  # Color of the player character
+PLAYER_SPEED = 5  # Speed at which the player can move
+
+# Enemy settings
+ENEMY_COLOR = RED  # Color of enemy objects
+ENEMY_SPEED = 3  # Speed at which the enemies will move
+
+# Game parameters
+FPS = 60  # Frames per second setting for the game
+INITIAL_SCORE = 0  # Initial score at the beginning of the game
+
+# Additional game settings can be added, such as game levels, difficulty settings, etc.
+</file>[0m
+2025-03-20 11:53:07 - INFO - Updated file: enemy.py
+2025-03-20 11:53:07 - INFO - Updated file: game.py
+2025-03-20 11:53:07 - INFO - Updated file: main.py
+2025-03-20 11:53:07 - INFO - Updated file: player.py
+2025-03-20 11:53:07 - INFO - Updated file: settings.py
+2025-03-20 11:53:09 - INFO - [35mRunning the game...[0m
+2025-03-20 11:53:09 - INFO - Game is running.
+2025-03-20 11:53:09 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
+2025-03-20 11:53:09 - ERROR - [31mRuntime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1, in <module>
+    import pygame
+ModuleNotFoundError: No module named 'pygame'
+
+Process exited with return code 1
+[0m
+2025-03-20 11:53:09 - INFO - \u26a0 No active game process found to terminate.
+2025-03-20 11:53:09 - INFO - Attempt 5 to fix the errors...
+2025-03-20 11:53:09 - INFO - [33mAttempting to fix the error...[0m
+2025-03-20 11:53:37 - INFO - [35m<file name="enemy.py">
+import pygame
+from settings import ENEMY_COLOR
+
+class Enemy:
+    def __init__(self, x, y, speed):
+        """
+        Initialize the Enemy with a position and speed.
+        
+        Args:
+        x (int): Initial x-coordinate of the enemy.
+        y (int): Initial y-coordinate of the enemy.
+        speed (int): Speed of the enemy's movement.
+        """
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.width = 40
+        self.height = 40
+
+    def move(self):
+        """
+        Move the enemy downwards on the screen.
+        The enemy's position is updated based on its speed.
+        If the enemy moves off the bottom of the screen, it wraps around to the top.
+        """
+        self.y += self.speed
+        if self.y > 600:  # Assuming the window height is 600
+            self.y = -self.height  # Wrap to the top
+
+    def draw(self, surface):
+        """
+        Draw the enemy on the provided surface.
+        
+        Args:
+        surface: The surface to draw the enemy on.
+        """
+        pygame.draw.rect(surface, ENEMY_COLOR, (self.x, self.y, self.width, self.height))
+</file>
+<file name="game.py">
+import pygame
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, WHITE
+from player import Player
+from enemy import Enemy
+
+class Game:
+    def __init__(self):
+        # Initialize Pygame and create the game window
+        pygame.init()
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Obstacle Dodger")
+
+        # Game state variables
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.paused = False
+
+        # Create player and enemy instances
+        self.player = Player()
+        self.enemies = [Enemy(x * 100, 0, 3) for x in range(5)]  # Example: 5 enemies at different x positions
+
+    def run(self):
+        # Main game loop
+        while self.running:
+            self.handle_events()
+            if not self.paused:
+                self.update()
+            self.render()
+
+        # Quit Pygame properly
+        pygame.quit()
+
+    def handle_events(self):
+        # Process user input and events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:  # Toggle pause
+                    self.paused = not self.paused
+
+    def update(self):
+        # Update game objects and state
+        keys = pygame.key.get_pressed()  # Get the current state of all keyboard buttons
+        self.player.move(keys)
+        for enemy in self.enemies:
+            enemy.move()
+
+    def render(self):
+        # Draw everything to the screen
+        self.screen.fill(WHITE)  # Clear the screen with a white background
+        self.player.draw(self.screen)  # Draw the player
+        for enemy in self.enemies:  # Draw each enemy
+            enemy.draw(self.screen)
+        
+        # Refresh the display
+        pygame.display.flip()
+        self.clock.tick(60)  # Maintain 60 frames per second
+</file>
+<file name="main.py">
+import pygame
+from game import Game
+
+def main():
+    # Initialize Pygame
+    pygame.init()
+
+    # Create an instance of the Game class
+    game = Game()
+
+    # Main game loop
+    running = True
+    while running:
+        # Run the game logic
+        game.run()  # This method handles events internally
+
+        # Check if the game is still running after executing game logic
+        if not game.running:
+            running = False
+
+    # Clean up and exit
+    pygame.quit()
+
+# Run the main function if this file is being executed
+if __name__ == "__main__":
+    main()
+</file>
+<file name="player.py">
+import pygame
+from settings import PLAYER_COLOR
+
+class Player:
+    def __init__(self, x=300, y=300, width=50, height=50):
+        """Initialize the player with position, size, and color."""
+        self.rect = pygame.Rect(x, y, width, height)  # Create a rectangle for the player
+        self.speed = 5  # Speed of player movement
+
+    def move(self, keys):
+        """Move the player based on key input."""
+        if keys[pygame.K_LEFT] and self.rect.left > 0:
+            self.rect.x -= self.speed  # Move left
+        if keys[pygame.K_RIGHT] and self.rect.right < 600:  # Assuming the window width is 600
+            self.rect.x += self.speed  # Move right
+        if keys[pygame.K_UP] and self.rect.top > 0:
+            self.rect.y -= self.speed  # Move up
+        if keys[pygame.K_DOWN] and self.rect.bottom < 600:  # Assuming the window height is 600
+            self.rect.y += self.speed  # Move down
+
+    def draw(self, surface):
+        """Draw the player rectangle onto the provided surface."""
+        pygame.draw.rect(surface, PLAYER_COLOR, self.rect)  # Draw the player as a rectangle
+</file>
+<file name="settings.py">
+# settings.py
+
+# This module contains constant variables for game settings, including screen size, colors, and initial parameters.
+
+# Screen dimensions
+SCREEN_WIDTH = 600  # Width of the game window
+SCREEN_HEIGHT = 600  # Height of the game window
+
+# Colors in RGB format
+WHITE = (255, 255, 255)  # Color for background and other UI elements
+BLACK = (0, 0, 0)  # Color for the player and other game elements
+RED = (255, 0, 0)  # Color for enemy objects
+GREEN = (0, 255, 0)  # Color for items or power-ups, if applicable
+
+# Player settings
+PLAYER_COLOR = GREEN  # Color of the player character
+PLAYER_SPEED = 5  # Speed at which the player can move
+
+# Enemy settings
+ENEMY_COLOR = RED  # Color of enemy objects
+ENEMY_SPEED = 3  # Speed at which the enemies will move
+
+# Game parameters
+FPS = 60  # Frames per second setting for the game
+INITIAL_SCORE = 0  # Initial score at the beginning of the game
+
+# Additional game settings can be added, such as game levels, difficulty settings, etc.
+</file>[0m
+2025-03-20 11:53:37 - INFO - Updated file: enemy.py
+2025-03-20 11:53:37 - INFO - Updated file: game.py
+2025-03-20 11:53:37 - INFO - Updated file: main.py
+2025-03-20 11:53:37 - INFO - Updated file: player.py
+2025-03-20 11:53:37 - INFO - Updated file: settings.py
+2025-03-20 11:53:39 - INFO - [35mRunning the game...[0m
+2025-03-20 11:53:39 - INFO - Game is running.
+2025-03-20 11:53:39 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
+2025-03-20 11:53:39 - ERROR - [31mRuntime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1, in <module>
+    import pygame
+ModuleNotFoundError: No module named 'pygame'
+
+Process exited with return code 1
+[0m
+2025-03-20 11:53:39 - INFO - \u26a0 No active game process found to terminate.
+2025-03-20 11:53:39 - INFO - Attempt 6 to fix the errors...
+2025-03-20 11:53:39 - INFO - [33mAttempting to fix the error...[0m
+2025-03-20 11:54:05 - INFO - [35m<file name="enemy.py">
+import pygame
+from settings import ENEMY_COLOR
+
+class Enemy:
+    def __init__(self, x, y, speed):
+        """
+        Initialize the Enemy with a position and speed.
+        
+        Args:
+        x (int): Initial x-coordinate of the enemy.
+        y (int): Initial y-coordinate of the enemy.
+        speed (int): Speed of the enemy's movement.
+        """
+        self.x = x
+        self.y = y
+        self.speed = speed
+        self.width = 40
+        self.height = 40
+
+    def move(self):
+        """
+        Move the enemy downwards on the screen.
+        The enemy's position is updated based on its speed.
+        If the enemy moves off the bottom of the screen, it wraps around to the top.
+        """
+        self.y += self.speed
+        if self.y > 600:  # Assuming the window height is 600
+            self.y = -self.height  # Wrap to the top
+
+    def draw(self, surface):
+        """
+        Draw the enemy on the provided surface.
+        
+        Args:
+        surface: The surface to draw the enemy on.
+        """
+        pygame.draw.rect(surface, ENEMY_COLOR, (self.x, self.y, self.width, self.height))
+</file>
+
+<file name="game.py">
+import pygame
+from settings import SCREEN_WIDTH, SCREEN_HEIGHT, WHITE
+from player import Player
+from enemy import Enemy
+
+class Game:
+    def __init__(self):
+        # Initialize Pygame and create the game window
+        pygame.init()  # Ensure Pygame is initialized
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Obstacle Dodger")
+
+        # Game state variables
+        self.clock = pygame.time.Clock()
+        self.running = True
+        self.paused = False
+
+        # Create player and enemy instances
+        self.player = Player()
+        self.enemies = [Enemy(x * 100, 0, 3) for x in range(5)]  # Example: 5 enemies at different x positions
+
+    def run(self):
+        # Main game loop
+        while self.running:
+            self.handle_events()
+            if not self.paused:
+                self.update()
+            self.render()
+
+        # Quit Pygame properly
+        pygame.quit()
+
+    def handle_events(self):
+        # Process user input and events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:  # Toggle pause
+                    self.paused = not self.paused
+
+    def update(self):
+        # Update game objects and state
+        keys = pygame.key.get_pressed()  # Get the current state of all keyboard buttons
+        self.player.move(keys)
+        for enemy in self.enemies:
+            enemy.move()
+
+    def render(self):
+        # Draw everything to the screen
+        self.screen.fill(WHITE)  # Clear the screen with a white background
+        self.player.draw(self.screen)  # Draw the player
+        for enemy in self.enemies:  # Draw each enemy
+            enemy.draw(self.screen)
+        
+        # Refresh the display
+        pygame.display.flip()
+        self.clock.tick(60)  # Maintain 60 frames per second
+</file>
+
+<file name="main.py">
+import pygame
+from game import Game
+
+def main():
+    # Initialize Pygame
+    pygame.init()
+
+    # Create an instance of the Game class
+    game = Game()
+
+    # Main game loop
+    running = True
+    while running:
+        # Run the game logic
+        game.run()  # This method handles events internally
+
+        # Check if the game is still running after executing game logic
+        if not game.running:
+            running = False
+
+    # Clean up and exit
+    pygame.quit()
+
+# Run the main function if this file is being executed
+if __name__ == "__main__":
+    main()
+</file>
+
+<file name="player.py">
+import pygame
+from settings import PLAYER_COLOR
+
+class Player:
+    def __init__(self, x=300, y=300, width=50, height=50):
+        """Initialize the player with position, size, and color."""
+        self.rect = pygame.Rect(x, y, width, height)  # Create a rectangle for the player
+        self.speed = 5  # Speed of player movement
+
+    def move(self, keys):
+        """Move the player based on key input."""
+        if keys[pygame.K_LEFT] and self.rect.left > 0:
+            self.rect.x -= self.speed  # Move left
+        if keys[pygame.K_RIGHT] and self.rect.right < 600:  # Assuming the window width is 600
+            self.rect.x += self.speed  # Move right
+        if keys[pygame.K_UP] and self.rect.top > 0:
+            self.rect.y -= self.speed  # Move up
+        if keys[pygame.K_DOWN] and self.rect.bottom < 600:  # Assuming the window height is 600
+            self.rect.y += self.speed  # Move down
+
+    def draw(self, surface):
+        """Draw the player rectangle onto the provided surface."""
+        pygame.draw.rect(surface, PLAYER_COLOR, self.rect)  # Draw the player as a rectangle
+</file>
+
+<file name="settings.py">
+# settings.py
+
+# This module contains constant variables for game settings, including screen size, colors, and initial parameters.
+
+# Screen dimensions
+SCREEN_WIDTH = 600  # Width of the game window
+SCREEN_HEIGHT = 600  # Height of the game window
+
+# Colors in RGB format
+WHITE = (255, 255, 255)  # Color for background and other UI elements
+BLACK = (0, 0, 0)  # Color for the player and other game elements
+RED = (255, 0, 0)  # Color for enemy objects
+GREEN = (0, 255, 0)  # Color for items or power-ups, if applicable
+
+# Player settings
+PLAYER_COLOR = GREEN  # Color of the player character
+PLAYER_SPEED = 5  # Speed at which the player can move
+
+# Enemy settings
+ENEMY_COLOR = RED  # Color of enemy objects
+ENEMY_SPEED = 3  # Speed at which the enemies will move
+
+# Game parameters
+FPS = 60  # Frames per second setting for the game
+INITIAL_SCORE = 0  # Initial score at the beginning of the game
+
+# Additional game settings can be added, such as game levels, difficulty settings, etc.
+</file>[0m
+2025-03-20 11:54:05 - INFO - Updated file: enemy.py
+2025-03-20 11:54:05 - INFO - Updated file: game.py
+2025-03-20 11:54:05 - INFO - Updated file: main.py
+2025-03-20 11:54:05 - INFO - Updated file: player.py
+2025-03-20 11:54:05 - INFO - Updated file: settings.py
+2025-03-20 11:54:07 - INFO - [35mRunning the game...[0m
+2025-03-20 11:54:07 - INFO - Game is running.
+2025-03-20 11:54:07 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
+2025-03-20 11:54:07 - ERROR - [31mRuntime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1, in <module>
+    import pygame
+ModuleNotFoundError: No module named 'pygame'
+
+Process exited with return code 1
+[0m
+2025-03-20 11:54:07 - INFO - \u26a0 No active game process found to terminate.
+2025-03-20 11:54:07 - INFO - Attempt 7 to fix the errors...
+2025-03-20 11:54:07 - INFO - [33mAttempting to fix the error...[0m

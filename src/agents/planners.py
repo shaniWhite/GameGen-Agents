@@ -1,8 +1,16 @@
 
 import logging
-import os
 import re
 import openai
+from termcolor import colored
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
+if not openai.api_key:
+    logging.error("⚠ OpenAI API key not found! Exiting...")
+    raise ValueError("Missing OPENAI_API_KEY environment variable")
 
 PRINT_RESPONSE = False
 
@@ -85,3 +93,9 @@ async def plan_project(user_input, iterations):
         messages_2.append({"role": "assistant", "content": response_2.choices[0].message['content']})
         messages_1.append({"role": "user", "content": response_2.choices[0].message['content']})
     
+    # Extract the XML content from the response
+    xml_content = re.search(r'<game_plan>.*?</game_plan>', response_2.choices[0].message['content'], re.DOTALL)
+    if xml_content:
+        return xml_content.group(0)
+    else:
+        raise ValueError("No valid XML content found in the response")
