@@ -1,132 +1,101 @@
 <game_plan>
-  <overview>This is an easy arcade-style runner game where players control a character to dodge obstacles and run as far as possible.</overview>
-  <game_name>Easy Runner</game_name>
+  <overview>
+    This is a simple Pygame project where players control a character and navigate through a grid while avoiding obstacles. The game supports a pause feature and handles quitting gracefully.
+  </overview>
+  <game_name>Grid Escape</game_name>
   <window_size width="600" height="600"/>
-  <mechanics>The game allows the player to move left or right and pause the game using the keyboard. The player must avoid obstacles in their path. Pressing 'P' will pause the game, and pressing 'Q' will quit the game.</mechanics>
+  <mechanics>
+    Players move their character using arrow keys, avoiding obstacles. Pressing 'P' pauses the game, halting all in-game movement and updates. The game can be exited cleanly through a menu or by closing the window.
+  </mechanics>
   <files>
     <file>
       <name>main.py</name>
-      <description>This is the entry point of the game. It initializes Pygame, sets up the game window, and starts the main game loop.</description>
-      <imports>
-        import pygame
-        from game import Game
-      </imports>
+      <description>This is the entry point of the game which initializes Pygame and runs the main game loop. It handles quitting the game.</description>
+      <imports>import pygame; from game import Game</imports>
       <functions>
         <function>
           <name>main</name>
-          <description>Initializes Pygame and starts the game loop.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
+          <description>Initializes the Pygame environment and runs the game loop.</description>
+          <inputs>none</inputs>
+          <returns>none</returns>
         </function>
       </functions>
     </file>
     <file>
       <name>game.py</name>
-      <description>This module contains the main game logic, including game states, updating entities, and rendering.</description>
-      <imports>
-        import pygame
-        from player import Player
-      </imports>
-      <classes>
-        <class>
-          <name>Game</name>
-          <description>Manages the game state, updates, and renders.</description>
-          <methods>
-            <method>
-              <name>__init__</name>
-              <description>Initializes game variables and creates an instance of the Player class.</description>
-              <inputs>None</inputs>
-              <returns>None</returns>
-            </method>
-            <method>
-              <name>run</name>
-              <description>Main game loop that handles events, updating, and rendering.</description>
-              <inputs>None</inputs>
-              <returns>None</returns>
-            </method>
-            <method>
-              <name>update</name>
-              <description>Updates the game state, including moving entities and checking for collisions.</description>
-              <inputs>None</inputs>
-              <returns>None</returns>
-            </method>
-            <method>
-              <name>draw</name>
-              <description>Renders the game entities on the screen.</description>
-              <inputs>screen (pygame.Surface)</inputs>
-              <returns>None</returns>
-            </method>
-            <method>
-              <name>handle_events</name>
-              <description>Handles keyboard events for quitting and pausing the game.</description>
-              <inputs>None</inputs>
-              <returns>None</returns>
-            </method>
-          </methods>
-        </class>
-      </classes>
-    </file>
-    <file>
-      <name>player.py</name>
-      <description>This module defines the player character, including its properties and behaviors such as movement.</description>
-      <imports>
-        import pygame
-      </imports>
-      <classes>
-        <class>
-          <name>Player</name>
-          <description>Represents the player character and its behaviors.</description>
-          <methods>
-            <method>
-              <name>__init__</name>
-              <description>Initializes player attributes, including position and speed.</description>
-              <inputs>x (int), y (int)</inputs>
-              <returns>None</returns>
-            </method>
-            <method>
-              <name>move</name>
-              <description>Updates the player's position based on current key states.</description>
-              <inputs>keys (set)</inputs>
-              <returns>None</returns>
-            </method>
-            <method>
-              <name>draw</name>
-              <description>Draws the player character onto the screen.</description>
-              <inputs>screen (pygame.Surface)</inputs>
-              <returns>None</returns>
-            </method>
-          </methods>
-        </class>
-      </classes>
+      <description>This module contains the Game class that manages the game state, including gameplay loop, updates, and pause functionality.</description>
+      <imports>import pygame; from settings import Settings; from player import Player</imports>
+      <functions>
+        <function>
+          <name>__init__</name>
+          <description>Initializes game settings and player character.</description>
+          <inputs>self</inputs>
+          <returns>none</returns>
+        </function>
+        <function>
+          <name>run</name>
+          <description>Main game loop, handles events, updates, and rendering.</description>
+          <inputs>self</inputs>
+          <returns>none</returns>
+        </function>
+        <function>
+          <name>pause</name>
+          <description>Toggles the paused state, stopping game updates.</description>
+          <inputs>self</inputs>
+          <returns>none</returns>
+        </function>
+      </functions>
     </file>
     <file>
       <name>settings.py</name>
-      <description>This module contains game settings and constants like colors and screen dimensions.</description>
-      <imports>
-        (none)
-      </imports>
-      <constants>
-        <constant>
-          <name>SCREEN_WIDTH</name>
-          <description>Width of the game window.</description>
-          <value>600</value>
-        </constant>
-        <constant>
-          <name>SCREEN_HEIGHT</name>
-          <description>Height of the game window.</description>
-          <value>600</value>
-        </constant>
-        <constant>
-          <name>BACKGROUND_COLOR</name>
-          <description>RGB color for the background of the game.</description>
-          <value>(255, 255, 255)</value>
-        </constant>
-        <constant>
-          <name>PLAYER_COLOR</name>
-          <description>RGB color for the player character.</description>
-          <value>(0, 128, 255)</value>
-        </constant>
-      </constants>
+      <description>This module contains game settings such as screen dimensions and color definitions, allowing easy adjustment.</description>
+      <imports>none</imports>
+      <functions>
+        <function>
+          <name>__init__</name>
+          <description>Initializes game settings attributes like screen size and colors.</description>
+          <inputs>self</inputs>
+          <returns>none</returns>
+        </function>
+      </functions>
+    </file>
+    <file>
+      <name>player.py</name>
+      <description>Defines the Player class that represents the player character, managing movement and rendering.</description>
+      <imports>import pygame; from settings import Settings</imports>
+      <functions>
+        <function>
+          <name>__init__</name>
+          <description>Initializes player attributes including position and size based on the settings provided.</description>
+          <inputs>self, settings</inputs>
+          <returns>none</returns>
+        </function>
+        <function>
+          <name>update</name>
+          <description>Updates player position based on the current keys pressed.</description>
+          <inputs>self, keys</inputs>
+          <returns>none</returns>
+        </function>
+        <function>
+          <name>draw</name>
+          <description>Draws the player onto the screen at its current position.</description>
+          <inputs>self, screen</inputs>
+          <returns>none</returns>
+        </function>
+      </functions>
+    </file>
+    <file>
+      <name>utils.py</name>
+      <description>Contains utility functions for rendering text and other common tasks throughout the game to promote code reuse.</description>
+      <imports>import pygame</imports>
+      <functions>
+        <function>
+          <name>render_text</name>
+          <description>Renders text onto the screen at specified position.</description>
+          <inputs>screen, text, position, font_size</inputs>
+          <returns>none</returns>
+        </function>
+      </functions>
     </file>
   </files>
 </game_plan>

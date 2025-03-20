@@ -1,20 +1,38 @@
 
-import subprocess
-import pyautogui
+
 import time
-import sys
 import openai
 import base64
 from io import BytesIO
 from PIL import Image
 import os
-import pygetwindow as gw
-import keyboard
-from PIL import  ImageDraw
-import cv2
 import string
 import logging
+import sys
+import keyboard
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from dotenv import load_dotenv
+from utils.window_utils import capture_screenshot, detect_and_mark_movement, delete_screenshot
+from utils.file_utils import load_game_plan
+from utils.game_utils import  start_game, simulate_input
+
+
+# Configure logging
+logging.basicConfig(
+    filename="game_log2.txt",  
+    level=logging.DEBUG,  # Set the log level (DEBUG, INFO, WARNING, ERROR)
+    format="%(asctime)s - %(levelname)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.ERROR)  # Only show errors in the console
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+console_handler.setFormatter(formatter)
+logging.getLogger().addHandler(console_handler)
+logging.getLogger("openai").setLevel(logging.WARNING)  # Hide INFO logs from OpenAI API
+logging.getLogger("httpx").setLevel(logging.WARNING)  # For newer OpenAI SDK versions
+logging.getLogger("urllib3").setLevel(logging.WARNING)  # If using requests directly
+logging.getLogger("PIL").setLevel(logging.WARNING)
 
 
 load_dotenv()
@@ -26,26 +44,26 @@ if not openai.api_key:
 # Global variable for game process
 game_process = None
 
-def start_game():
-    """Starts the game process if not already running."""
-    global game_process
-    if game_process is None or game_process.poll() is not None:
-        logging.info("🎮 Starting the game...")
-        game_process = subprocess.Popen([sys.executable, "game/main.py"])
-        time.sleep(2)  # Allow time for the game to load
 
-
-def get_game_window(game_name):
-    """Finds the game window by title."""
-    for window in gw.getWindowsWithTitle(game_name):  # Replace with the actual title
-        return window
-    return None
 
 # Create a folder for saving screenshots (if it doesn’t exist)
 screenshot_folder = "screenshots"
 os.makedirs(screenshot_folder, exist_ok=True)
 
-paused = False  # ✅ Tracks whether the game is paused or running
+def extract_action(answer):
+    """Extracts the relevant action (key or mouse command) from the AI response."""
+    answer = answer.lower().strip()  # Normalize input
+
+    # Define valid actions
+    valid_actions = ["left", "right", "up", "down", "enter", "space",
+                     "click", "double click", "right click", "move mouse"] + list(string.ascii_lowercase)
+
+    # Find which valid action appears in the response
+    for action in valid_actions:
+        if action in answer:
+            return action  # Return the first matching action
+
+    return None  # Return None if no valid action is found
 
 def toggle_pause():
     """Toggles the game's pause state using the 'P' key."""
@@ -63,140 +81,15 @@ def toggle_pause():
 
     paused = not paused  # ✅ Toggle the pause state
 
-def capture_screenshot(game_name, index):
-    """Captures a screenshot of the game window."""
-    game_window = get_game_window(game_name)
-    if game_window:
-        x, y, width, height = game_window.left, game_window.top, game_window.width, game_window.height
-        screenshot = pyautogui.screenshot(region=(x, y, width, height))
-        screenshot_path = os.path.join(screenshot_folder, f"screenshot_{index}.png")
-        screenshot.save(screenshot_path)
-        logging.info(f"Screenshot saved: {screenshot_path}")
-        return screenshot_path
-    return None
 
-def delete_screenshot(file_path):
-    """Deletes the movement_diff.png file if it exists."""
-    # file_path = "screenshots/movement_diff.png"
-    
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        # print(f"🗑️ Deleted: {file_path}")
-    else:
-        logging.error(f"⚠ No file found: {file_path}")
-        
-def extract_action(answer):
-    """Extracts the relevant action (key or mouse command) from the AI response."""
-    answer = answer.lower().strip()  # Normalize input
-
-    # Define valid actions
-    valid_actions = ["left", "right", "up", "down", "enter", "space",
-                     "click", "double click", "right click", "move mouse"] + list(string.ascii_lowercase)
-
-    # Find which valid action appears in the response
-    for action in valid_actions:
-        if action in answer:
-            return action  # Return the first matching action
-
-    return None  # Return None if no valid action is found
-
-def simulate_input(action):
-    """Simulates a keyboard press or mouse click based on AI instructions."""
-    action = action.lower().strip()  # Normalize input
-
-    # Keyboard actions
-    if action in ["left", "right", "up", "down"]:
-        logging.info(f"Pressing {action} key...")
-        pyautogui.keyDown(action)
-        time.sleep(0.3)
-        pyautogui.keyUp(action)
-
-    elif action in ["enter", "space"] or action in string.ascii_lowercase:
-        logging.info(f"Pressing {action.capitalize()} key...")
-        keyboard.press(action)
-        time.sleep(0.2)
-        keyboard.release(action)
-
-    # Mouse actions
-    elif action == "click":
-        logging.info("Performing mouse click...")
-        pyautogui.click()
-
-    elif action == "double click":
-        logging.info("Performing mouse double click...")
-        pyautogui.doubleClick()
-
-    elif action == "right click":
-        logging.info("Performing right-click...")
-        pyautogui.rightClick()
-
-    elif action == "move mouse":
-        logging.info("Moving mouse to center of the screen...")
-        screen_width, screen_height = pyautogui.size()
-        pyautogui.moveTo(screen_width // 2, screen_height // 2, duration=0.5)
-
-    else:
-        logging.error(f"⚠ Unknown action: {action}")
-
-
-def detect_and_mark_movement(before, after, output_path):
-    """Detect the main moving object (e.g., the blue square) and mark both its previous and new positions."""
-    
-    # Load images in grayscale
-    before_img = cv2.imread(before, cv2.IMREAD_GRAYSCALE)
-    after_img = cv2.imread(after, cv2.IMREAD_GRAYSCALE)
-
-    # Use Canny edge detection to find edges
-    before_edges = cv2.Canny(before_img, 50, 150)
-    after_edges = cv2.Canny(after_img, 50, 150)
-
-    # Compute absolute difference between the edge images
-    diff = cv2.absdiff(before_edges, after_edges)
-
-    # Find contours in the difference image
-    contours, _ = cv2.findContours(diff, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-    if not contours:
-        logging.error("⚠ No movement detected!")
-        return None
-
-    # Find the largest contour (assuming it's the blue square)
-    largest_contour = max(contours, key=cv2.contourArea)
-
-    # Get bounding box around the detected object
-    x, y, w, h = cv2.boundingRect(largest_contour)
-    
-    # Convert the after image to PIL for drawing
-    pil_img = Image.open(after).convert("RGB")
-    draw = ImageDraw.Draw(pil_img)
-
-    # Draw a **red circle** at the previous position (center of detected object)
-    center_x, center_y = x + w // 2, y + h // 2
-    draw.ellipse((center_x - 10, center_y - 10, center_x + 10, center_y + 10), outline="red", width=3)
-
-    # Save result
-    pil_img.save(output_path)
-    logging.info(f" Movement detected and marked at: {output_path}")
-    return output_path
-
-def load_game_plan():
-    """Loads the game_plan.xml file content as text."""
-    xml_path = "game_plan.xml"
-    try:
-        with open(xml_path, "r", encoding="utf-8") as file:
-            return file.read()
-    except FileNotFoundError:
-        logging.warning("⚠ Warning: game_plan.xml not found. AI will not have game context.")
-        return None
-
+paused = False  # ✅ Tracks whether the game is paused or running
 def ControlTesterAgent(game_name):
     """Runs the game loop until a problem occurs."""
-    start_game()  # Start the game if not already running
     game_plan_text = load_game_plan()
+    start_game()  # Start the game if not already running
     
     for i in range(3):  
-        
-        screenshot_before = capture_screenshot(game_name, "before")
+        screenshot_before = capture_screenshot(game_name,"before",screenshot_folder)
         if not paused:
             toggle_pause()
         if not screenshot_before:
@@ -233,6 +126,7 @@ def ControlTesterAgent(game_name):
         )
         
         answer = response.choices[0].message.content.lower()
+        print(f"Model suggestion: {answer}")
         logging.info(f"Model suggestion: {answer}")
         action = extract_action(answer)
         if not action:
@@ -244,13 +138,16 @@ def ControlTesterAgent(game_name):
             toggle_pause () # pause the game after taking action
             time.sleep(1)  
 
-        screenshot_after = capture_screenshot(game_name,"after")
+        screenshot_after = capture_screenshot(game_name,"after", screenshot_folder)
         if not screenshot_after:
             logging.error("Game window not found after action. Skipping verification.")
             continue
         
         screenshot_diff = "screenshots/movement_diff.png"
-        delete_screenshot(screenshot_diff)  # Delete previous diff image if exists
+        if os.path.exists(screenshot_diff):
+            delete_screenshot(screenshot_diff)  # Delete previous diff image if exists
+        else:
+            logging.info(f"⚠ File {screenshot_diff} does not exist. Skipping deletion.")
         highlighted_path = detect_and_mark_movement(screenshot_before, screenshot_after, screenshot_diff)
 
         # Check if the function successfully created the file
@@ -279,6 +176,7 @@ def ControlTesterAgent(game_name):
                     "1. The first image is the game screen **before** pressing the key you suggested.\n"
                     "2. The second image is the game screen **after** pressing the key.\n"
                     "3.The third image is an **annotated version** where the player's position **before movement** is highlighted with a red mark.\n\n"
+                        "so in the third image, if the player is not where the red mark is, it means that he moved and you determine if the movement was correct or not."
                     "Your Task:\n"
                         "- Analyze the images to verify if the movement occurred as expected based on the suggested key action.\n"
                         "- Then, confirm whether the movement aligns with the key action that was suggested.\n\n"
@@ -322,6 +220,7 @@ def ControlTesterAgent(game_name):
     )
         
         verification_response = response.choices[0].message.content.lower()
+        print(f"GPT Response: {verification_response}")
         logging.info(f"GPT Response: {verification_response}")
 
         if "problem occurred" in verification_response:
@@ -334,5 +233,5 @@ def ControlTesterAgent(game_name):
         
         logging.info("✅ No problem detected. Continuing game...")
         time.sleep(3)  # Wait before next move
-# run_game("Moving Adventures")
-# simulate_input("click")
+
+# ControlTesterAgent("Grid Escape")

@@ -1,5 +1,7 @@
 
 import xml.etree.ElementTree as ET
+import logging
+
 
 def parse_file_structure(xml_string):
     """Parses game details, including game name, window size, and file structure."""
@@ -33,3 +35,13 @@ def insert_message_separator(messages):
         if messages[i]["role"] == "user" and messages[i+1]["role"] == "user":
             messages.insert(i+1, {"role": "assistant", "content": "--- Next Message ---"})
     return messages
+
+def load_game_plan():
+    """Loads the game_plan.xml file content as text."""
+    xml_path = "game_plan.xml"
+    try:
+        with open(xml_path, "r", encoding="utf-8") as file:
+            return file.read()
+    except FileNotFoundError:
+        logging.warning("⚠ Warning: game_plan.xml not found. AI will not have game context.")
+        return None

@@ -5,7 +5,21 @@ import subprocess
 import sys
 import traceback
 from termcolor import colored
+import time
+import keyboard
+import pyautogui
+import string
 
+
+def start_game():
+    """Starts the game process if not already running."""
+    global game_process
+    if game_process is None or game_process.poll() is not None:
+        logging.info("🎮 Starting the game...")
+        game_process = subprocess.Popen([sys.executable, "game/main.py"])
+        time.sleep(2)  # Allow time for the game to load
+        
+        
 game_process = None
 async def run_game():
     global game_process
@@ -75,3 +89,61 @@ def close_game():
         logging.info("✅ Game closed successfully.")
     else:
         logging.info("⚠ No active game process found to terminate.")
+
+paused = False  # ✅ Tracks whether the game is paused or running
+
+def toggle_pause():
+    """Toggles the game's pause state using the 'P' key."""
+    global paused
+
+    if paused:
+        logging.info("Resuming game...")  # ✅ Only resume if game is actually paused
+    else:
+        logging.info("Pausing game...")   # ✅ Only pause if game is running
+
+    keyboard.press("p")
+    time.sleep(0.3)
+    keyboard.release("p")
+    time.sleep(0.5)  # ✅ Allow time for the game to register pause/unpause
+
+    paused = not paused  # ✅ Toggle the pause state
+
+def simulate_input(action):
+    """Simulates a keyboard press or mouse click based on AI instructions."""
+    action = action.lower().strip()  # Normalize input
+
+    # Keyboard actions
+    if action in ["left", "right", "up", "down"]:
+        logging.info(f"Pressing {action} key...")
+        pyautogui.keyDown(action)
+        time.sleep(0.3)
+        pyautogui.keyUp(action)
+
+    elif action in ["enter", "space"] or action in string.ascii_lowercase:
+        logging.info(f"Pressing {action.capitalize()} key...")
+        keyboard.press(action)
+        time.sleep(0.2)
+        keyboard.release(action)
+
+    # Mouse actions
+    elif action == "click":
+        logging.info("Performing mouse click...")
+        pyautogui.click()
+
+    elif action == "double click":
+        logging.info("Performing mouse double click...")
+        pyautogui.doubleClick()
+
+    elif action == "right click":
+        logging.info("Performing right-click...")
+        pyautogui.rightClick()
+
+    elif action == "move mouse":
+        logging.info("Moving mouse to center of the screen...")
+        screen_width, screen_height = pyautogui.size()
+        pyautogui.moveTo(screen_width // 2, screen_height // 2, duration=0.5)
+
+    else:
+        logging.error(f"⚠ Unknown action: {action}")
+
+

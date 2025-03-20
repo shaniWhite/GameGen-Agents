@@ -1,273 +1,71 @@
-2025-03-20 15:10:37 - DEBUG - Using proactor: IocpProactor
-2025-03-20 15:10:41 - INFO - Planning the game structure...
-2025-03-20 15:10:41 - INFO - Iteration 1 of 1 planning iterations
-2025-03-20 15:11:18 - INFO - [33mgame plan written to game_plan.xml[0m
-2025-03-20 15:11:18 - INFO - Game Name: Easy Runner
-2025-03-20 15:11:18 - INFO - Creating game files...
-2025-03-20 15:11:21 - INFO - File 'game.py' has been created.
-2025-03-20 15:11:22 - INFO - File 'main.py' has been created.
-2025-03-20 15:11:25 - INFO - File 'settings.py' has been created.
-2025-03-20 15:11:29 - INFO - File 'player.py' has been created.
-2025-03-20 15:11:29 - INFO - Game creation complete!
-2025-03-20 15:11:29 - INFO - Final game plan:
-2025-03-20 15:11:29 - INFO - [35mRunning the game...[0m
-2025-03-20 15:11:29 - INFO - Game is running.
-2025-03-20 15:11:29 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:11:29 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:11:29 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:11:29 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:11:29 - ERROR - [31mRuntime errors:
+2025-03-20 16:14:21 - DEBUG - Using proactor: IocpProactor
+2025-03-20 16:14:38 - INFO - Planning the game structure...
+2025-03-20 16:14:38 - INFO - Iteration 1 of 1 planning iterations
+2025-03-20 16:15:04 - INFO - [33mgame plan written to game_plan.xml[0m
+2025-03-20 16:15:04 - INFO - Game Name: Grid Escape
+2025-03-20 16:15:04 - INFO - Creating game files...
+2025-03-20 16:15:09 - INFO - File 'main.py' has been created.
+2025-03-20 16:15:09 - INFO - File 'settings.py' has been created.
+2025-03-20 16:15:10 - INFO - File 'utils.py' has been created.
+2025-03-20 16:15:10 - INFO - File 'player.py' has been created.
+2025-03-20 16:15:17 - INFO - File 'game.py' has been created.
+2025-03-20 16:15:17 - INFO - Game creation complete!
+2025-03-20 16:15:17 - INFO - Final game plan:
+2025-03-20 16:15:17 - INFO - [35mRunning the game...[0m
+2025-03-20 16:15:17 - INFO - Game is running.
+2025-03-20 16:15:18 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
+2025-03-20 16:15:18 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
+2025-03-20 16:15:18 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
+2025-03-20 16:15:18 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
+2025-03-20 16:15:18 - ERROR - [31mRuntime errors:
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 2, in <module>
-    from game import Game
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 2, in <module>
-    from game import Game
-ImportError: cannot import name 'Game' from partially initialized module 'game' (most likely due to a circular import) (C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py)
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 14, in main
+    game = Game()
+           ^^^^^^
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 13, in __init__
+    self.player = Player(self.settings)  # Create the player
+                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\player.py", line 8, in __init__
+    self.image = pygame.Surface((settings.player_size, settings.player_size))
+                                 ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Settings' object has no attribute 'player_size'
 
 Process exited with return code 1
 [0m
-2025-03-20 15:11:29 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:11:29 - ERROR - [31mError detected: Runtime errors:
+2025-03-20 16:15:18 - INFO - \u26a0 No active game process found to terminate.
+2025-03-20 16:15:18 - ERROR - [31mError detected: Runtime errors:
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 2, in <module>
-    from game import Game
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 2, in <module>
-    from game import Game
-ImportError: cannot import name 'Game' from partially initialized module 'game' (most likely due to a circular import) (C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py)
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 14, in main
+    game = Game()
+           ^^^^^^
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 13, in __init__
+    self.player = Player(self.settings)  # Create the player
+                  ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\player.py", line 8, in __init__
+    self.image = pygame.Surface((settings.player_size, settings.player_size))
+                                 ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Settings' object has no attribute 'player_size'
 
 Process exited with return code 1
 [0m
-2025-03-20 15:11:29 - INFO - Attempt 1 to fix the errors...
-2025-03-20 15:11:29 - INFO - [33mAttempting to fix the error...[0m
-2025-03-20 15:11:47 - INFO - Updated file: game.py
-2025-03-20 15:11:47 - INFO - Updated file: main.py
-2025-03-20 15:11:47 - INFO - Updated file: player.py
-2025-03-20 15:11:47 - INFO - Updated file: settings.py
-2025-03-20 15:11:49 - INFO - [35mRunning the game...[0m
-2025-03-20 15:11:49 - INFO - Game is running.
-2025-03-20 15:11:58 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:11:58 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:11:59 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:11:59 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:11:59 - ERROR - [31mRuntime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 20, in main
-    game.update()  # Update game state
-    ^^^^^^^^^^^^^
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 24, in update
-    keys = pygame.key.get_pressed()  # Get the current key states
-           ^^^^^^^^^^^^^^^^^^^^^^^^
-pygame.error: video system not initialized
-
-Process exited with return code 1
-[0m
-2025-03-20 15:11:59 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:11:59 - INFO - Attempt 2 to fix the errors...
-2025-03-20 15:11:59 - INFO - [33mAttempting to fix the error...[0m
-2025-03-20 15:12:17 - INFO - Updated file: game.py
-2025-03-20 15:12:17 - INFO - Updated file: main.py
-2025-03-20 15:12:17 - INFO - Updated file: player.py
-2025-03-20 15:12:17 - INFO - Updated file: settings.py
-2025-03-20 15:12:19 - INFO - [35mRunning the game...[0m
-2025-03-20 15:12:19 - INFO - Game is running.
-2025-03-20 15:12:23 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:12:23 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:12:23 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:12:23 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:12:23 - ERROR - [31mRuntime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 22, in main
-    game.draw(screen)  # Draw game elements
-    ^^^^^^^^^^^^^^^^^
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 31, in draw
-    screen.fill((255, 255, 255))  # Clear the screen with a background color
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-pygame.error: display Surface quit
-
-Process exited with return code 1
-[0m
-2025-03-20 15:12:23 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:12:23 - INFO - Attempt 3 to fix the errors...
-2025-03-20 15:12:23 - INFO - [33mAttempting to fix the error...[0m
-2025-03-20 15:12:39 - INFO - Updated file: game.py
-2025-03-20 15:12:39 - INFO - Updated file: main.py
-2025-03-20 15:12:39 - INFO - Updated file: player.py
-2025-03-20 15:12:39 - INFO - Updated file: settings.py
-2025-03-20 15:12:41 - INFO - [35mRunning the game...[0m
-2025-03-20 15:12:41 - INFO - Game is running.
-2025-03-20 15:12:46 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:12:46 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:12:46 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:12:46 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:12:46 - ERROR - [31mRuntime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 25, in main
-    pygame.display.flip()
-pygame.error: video system not initialized
-
-Process exited with return code 1
-[0m
-2025-03-20 15:12:46 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:12:46 - INFO - Attempt 4 to fix the errors...
-2025-03-20 15:12:46 - INFO - [33mAttempting to fix the error...[0m
-2025-03-20 15:13:04 - INFO - Updated file: game.py
-2025-03-20 15:13:04 - INFO - Updated file: main.py
-2025-03-20 15:13:04 - INFO - Updated file: player.py
-2025-03-20 15:13:04 - INFO - Updated file: settings.py
-2025-03-20 15:13:06 - INFO - [35mRunning the game...[0m
-2025-03-20 15:13:06 - INFO - Game is running.
-2025-03-20 15:13:10 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:13:10 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:13:10 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:13:10 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:13:10 - ERROR - [31mRuntime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 25, in main
-    pygame.display.flip()
-pygame.error: video system not initialized
-
-Process exited with return code 1
-[0m
-2025-03-20 15:13:10 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:13:10 - INFO - Attempt 5 to fix the errors...
-2025-03-20 15:13:10 - INFO - [33mAttempting to fix the error...[0m
-2025-03-20 15:13:34 - INFO - Updated file: game.py
-2025-03-20 15:13:34 - INFO - Updated file: main.py
-2025-03-20 15:13:34 - INFO - Updated file: player.py
-2025-03-20 15:13:34 - INFO - Updated file: settings.py
-2025-03-20 15:13:36 - INFO - [35mRunning the game...[0m
-2025-03-20 15:13:36 - INFO - Game is running.
-2025-03-20 15:13:41 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:13:41 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:13:41 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:13:41 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:13:41 - ERROR - [31mRuntime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 25, in main
-    pygame.display.flip()
-pygame.error: video system not initialized
-
-Process exited with return code 1
-[0m
-2025-03-20 15:13:41 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:13:41 - INFO - Attempt 6 to fix the errors...
-2025-03-20 15:13:41 - INFO - [33mAttempting to fix the error...[0m
-2025-03-20 15:13:56 - INFO - Updated file: main.py
-2025-03-20 15:13:56 - INFO - Updated file: game.py
-2025-03-20 15:13:56 - INFO - Updated file: player.py
-2025-03-20 15:13:58 - INFO - [35mRunning the game...[0m
-2025-03-20 15:13:58 - INFO - Game is running.
-2025-03-20 15:14:00 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:14:00 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:14:01 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:14:01 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:14:01 - ERROR - [31mRuntime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 25, in main
-    pygame.display.flip()
-pygame.error: video system not initialized
-
-Process exited with return code 1
-[0m
-2025-03-20 15:14:01 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:14:01 - INFO - Attempt 7 to fix the errors...
-2025-03-20 15:14:01 - INFO - [33mAttempting to fix the error...[0m
-2025-03-20 15:14:22 - INFO - Updated file: game.py
-2025-03-20 15:14:22 - INFO - Updated file: main.py
-2025-03-20 15:14:22 - INFO - Updated file: player.py
-2025-03-20 15:14:22 - INFO - Updated file: settings.py
-2025-03-20 15:14:24 - INFO - [35mRunning the game...[0m
-2025-03-20 15:14:24 - INFO - Game is running.
-2025-03-20 15:14:28 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:14:28 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:14:28 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:14:28 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:14:28 - ERROR - [31mRuntime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 25, in main
-    pygame.display.flip()  # Update the full display Surface to the screen
-    ^^^^^^^^^^^^^^^^^^^^^
-pygame.error: video system not initialized
-
-Process exited with return code 1
-[0m
-2025-03-20 15:14:28 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:14:28 - INFO - Attempt 8 to fix the errors...
-2025-03-20 15:14:28 - INFO - [33mAttempting to fix the error...[0m
-2025-03-20 15:14:48 - INFO - Updated file: game.py
-2025-03-20 15:14:48 - INFO - Updated file: main.py
-2025-03-20 15:14:48 - INFO - Updated file: player.py
-2025-03-20 15:14:48 - INFO - Updated file: settings.py
-2025-03-20 15:14:50 - INFO - [35mRunning the game...[0m
-2025-03-20 15:14:50 - INFO - Game is running.
-2025-03-20 15:15:04 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:15:04 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:15:04 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:15:04 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:15:04 - ERROR - [31mRuntime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 26, in main
-    pygame.display.flip()  # Update the full display Surface to the screen
-    ^^^^^^^^^^^^^^^^^^^^^
-pygame.error: video system not initialized
-
-Process exited with return code 1
-[0m
-2025-03-20 15:15:04 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:15:04 - INFO - Attempt 9 to fix the errors...
-2025-03-20 15:15:04 - INFO - [33mAttempting to fix the error...[0m
-2025-03-20 15:15:20 - INFO - Updated file: game.py
-2025-03-20 15:15:20 - INFO - Updated file: main.py
-2025-03-20 15:15:20 - INFO - Updated file: player.py
-2025-03-20 15:15:20 - INFO - Updated file: settings.py
-2025-03-20 15:15:22 - INFO - [35mRunning the game...[0m
-2025-03-20 15:15:22 - INFO - Game is running.
-2025-03-20 15:15:25 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:15:25 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:15:25 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:15:25 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:15:25 - ERROR - [31mRuntime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 26, in main
-    pygame.display.flip()  # Update the full display Surface to the screen
-    ^^^^^^^^^^^^^^^^^^^^^
-pygame.error: video system not initialized
-
-Process exited with return code 1
-[0m
-2025-03-20 15:15:25 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:15:25 - INFO - Attempt 10 to fix the errors...
-2025-03-20 15:15:25 - INFO - [33mAttempting to fix the error...[0m
-2025-03-20 15:15:44 - INFO - Updated file: game.py
-2025-03-20 15:15:44 - INFO - Updated file: main.py
-2025-03-20 15:15:44 - INFO - Updated file: player.py
-2025-03-20 15:15:44 - INFO - Updated file: settings.py
-2025-03-20 15:15:46 - INFO - [35mRunning the game...[0m
-2025-03-20 15:15:46 - INFO - Game is running.
-2025-03-20 15:15:49 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
-2025-03-20 15:15:49 - ERROR - [31mRuntime error: Traceback (most recent call last):[0m
-2025-03-20 15:15:49 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
-2025-03-20 15:15:49 - ERROR - [31mRuntime error: File "<string>", line 1, in <module>[0m
-2025-03-20 15:15:49 - ERROR - [31mRuntime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 26, in main
-    pygame.display.flip()  # Update the full display Surface to the screen
-    ^^^^^^^^^^^^^^^^^^^^^
-pygame.error: video system not initialized
-
-Process exited with return code 1
-[0m
-2025-03-20 15:15:49 - INFO - \u26a0 No active game process found to terminate.
-2025-03-20 15:15:49 - ERROR - [31mFailed to fix all errors after 10 attempts.[0m
+2025-03-20 16:15:18 - INFO - Attempt 1 to fix the errors...
+2025-03-20 16:15:18 - INFO - [33mAttempting to fix the error...[0m
+2025-03-20 16:15:52 - INFO - Updated file: settings.py
+2025-03-20 16:15:52 - INFO - Updated file: game.py
+2025-03-20 16:15:52 - INFO - Updated file: main.py
+2025-03-20 16:15:52 - INFO - Updated file: player.py
+2025-03-20 16:15:54 - INFO - [35mRunning the game...[0m
+2025-03-20 16:15:54 - INFO - Game is running.
+2025-03-20 16:16:36 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
+2025-03-20 16:16:36 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
+2025-03-20 16:16:36 - INFO - \u26a0 No active game process found to terminate.
+2025-03-20 16:16:36 - INFO - [32mErrors fixed successfully![0m
+2025-03-20 16:16:36 - INFO - [35mRunning the game...[0m
+2025-03-20 16:16:36 - INFO - Game is running.
+2025-03-20 16:16:40 - INFO - pygame 2.6.1 (SDL 2.28.4, Python 3.12.6)
+2025-03-20 16:16:40 - INFO - Hello from the pygame community. https://www.pygame.org/contribute.html
+2025-03-20 16:16:40 - INFO - \u26a0 No active game process found to terminate.
+2025-03-20 16:16:40 - INFO - [32mGame ran successfully![0m
+2025-03-20 16:16:40 - INFO - \U0001f3ae Starting the game...

@@ -7,8 +7,9 @@ import time
 import logging
 import agents.code_repair 
 import agents.code_updater 
-import tools.file_tools 
-import tools.run_game 
+import agents.video_analizer
+import utils.file_utils 
+import utils.game_utils 
 import agents.developers 
 import agents.planners
 import agents.control_test
@@ -61,7 +62,7 @@ async def main():
     with open("game_plan.xml", "w", encoding="utf-8") as f:
         f.write(final_plan)
     
-    game_name, window_size, file_structure = tools.file_tools.parse_file_structure(final_plan)
+    game_name, window_size, file_structure = utils.file_utils.parse_file_structure(final_plan)
     logging.info(f"Game Name: {game_name}")
     logging.info("Creating game files...")
     os.makedirs("game", exist_ok=True)
@@ -75,12 +76,11 @@ async def main():
  
     logging.info("Game creation complete!")
     logging.info("Final game plan:")
-    
     # Run the game in a loop to catch and fix errors, then enter feedback loop
     max_attempts = 10
     while True:
-        error_message = await tools.run_game.run_game()
-        tools.run_game.close_game()
+        error_message = await utils.game_utils.run_game()
+        utils.game_utils.close_game()
         if error_message is None:
             logging.info(colored("Game ran successfully!", "green"))
             
@@ -88,8 +88,15 @@ async def main():
             error_details = agents.control_test.ControlTesterAgent(game_name)
             if error_details is None:
                 logging.info(colored("✅ Game ran successfully! No issues detected.", "green"))
-                print(colored("🎉 Game created successfully! You can now play.", "cyan"))  # ✅ User feedback
-                break  
+                analize = agents.video_analizer(game_name)
+                if analize is None:
+                    logging.info(colored("✅ Game ran successfully! No issues detected.", "green"))
+                    print(colored("🎉 Game created successfully! You can now play.", "cyan"))  # ✅ User feedback
+                    break 
+        
+                logging.error(colored(f"❌ Video analysis issue detected: {analize}", "red"))
+                await agents.code_updater.GameUpdater_Agent(analize)
+                
             print(colored(f"❌ Movement issue detected: {error_details}", "red"))
             # Send the error message 
             await agents.code_updater.GameUpdater_Agent(error_details)  
@@ -102,8 +109,8 @@ async def main():
                 time.sleep(1)  
                                
                 # Try running the game again after fixing
-                error_message = await tools.run_game.run_game()
-                tools.run_game.close_game()
+                error_message = await utils.game_utils.run_game()
+                utils.game_utils.close_game()
                 if error_message is None:
                     logging.info(colored("Errors fixed successfully!", "green"))
                     break
