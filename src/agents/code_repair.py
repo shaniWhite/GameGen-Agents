@@ -14,7 +14,7 @@ if not openai.api_key:
     raise ValueError("Missing OPENAI_API_KEY environment variable")
 
 
-PRINT_RESPONSE = True
+PRINT_RESPONSE = False
 
 async def Code_Repair_Agent(error_message):
     logging.info(colored("Attempting to fix the error...", "yellow"))
@@ -35,10 +35,10 @@ async def Code_Repair_Agent(error_message):
     Remember that the game should start with a main module in the main.py file(main shouldn't take any arguments).
     Write clean, well-commented code that follows best practices.
     The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates.
-    Ensure that Pygame is properly initialized before using any Pygame functions. The program must call pygame.init() before using pygame.event.get() or any other Pygame-related functions. 
+    Ensure that pygame.init() is called before using any Pygame functions, including pygame.event.get(), and check pygame.get_init() before handling events or rendering.
     Additionally, check that the display is initialized using pygame.get_init() before attempting to render menus or handle events. 
-    If pygame.quit() has been called, the program should not continue executing functions that rely on an active Pygame session.
-    If you get the error "video system not initialized" it means your code is still trying to use Pygame functions after quitting Pygame.
+    If "video system not initialized" error occur, it is because the program is triyng to execute Pygame-related functions and continuing to process events or update the display after pygame.quit() is called.
+    The game loop should exit immediately when the QUIT event is detected, and calling pygame.event.clear() before quitting can help prevent lingering events from causing issues.
     carefully reason about the error in a step by step manner ahead of providing the corrected code. no external files are allowed within the game. 
     One of the main goals is to review the logic of the code to ensure a playable and enjoyable game play experience for the user.
     <reasoning>

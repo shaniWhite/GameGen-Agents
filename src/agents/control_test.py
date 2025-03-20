@@ -262,32 +262,49 @@ def ControlTesterAgent(game_name):
         messages=[
             {"role": "system", "content": "You are analyzing a game screen to verify if the movement happened as expected, if not, you should report the problem to the repair team."},
         ]
+        # Prepare the list of images
+        image_data = [
+            {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64.b64encode(open(screenshot_before, 'rb').read()).decode()}"}},
+            {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64.b64encode(open(screenshot_after, 'rb').read()).decode()}"}}
+        ]
+        # Only add the highlighted movement image if the file exists
+        if os.path.exists(screenshot_diff):
+            image_data.append(
+                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64.b64encode(open(screenshot_diff, 'rb').read()).decode()}"}}
+            )
         messages.append(
             {"role": "user", "content": [
                 {"type": "text", "text": (
                     "I am sending you three images:\n"
                     "1. The first image is the game screen **before** pressing the key you suggested.\n"
                     "2. The second image is the game screen **after** pressing the key.\n"
-                    "3. The third image is an **annotated version** where the detected movement is highlighted with a red mark.\n\n"
-                    "Your task is to carefully analyze the images and verify if the movement occurred as expected based on the action you suggested.\n"
-                        " First, compare the first image (before) with the second image (after) to check if any movement happened.\n"
-                        " Then, verify if the movement aligns with the action you suggested in your previous response.\n"
-                        " If the expected movement happened as a result of your suggestion, confirm that the movement was correct.\n"
-                        "❌ If the movement did not happen at all, or if the result was different from what should have occurred based on your suggestion, explain why the movement failed, and most important - end your response with: 'PROBLEM OCCURRED'."
-                        "dont say 'no problem accurred' or the sequence 'problem accurred' if the movement happened as expected." 
-                )},
-                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64.b64encode(open(screenshot_before, 'rb').read()).decode()}"}},
-                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64.b64encode(open(screenshot_after, 'rb').read()).decode()}"}},
-                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64.b64encode(open(screenshot_diff, 'rb').read()).decode()}"}}
+                    "3.The third image is an **annotated version** where the player's position **before movement** is highlighted with a red mark.\n\n"
+                    "Your Task:\n"
+                        "- Analyze the images to verify if the movement occurred as expected based on the suggested key action.\n"
+                        "- Then, confirm whether the movement aligns with the key action that was suggested.\n\n"
+                        
+                        "How to Respond:\n"
+                        "✅ If the expected movement **did** happen correctly, explicitly state that the movement worked.\n"
+                        "❌ If the expected movement **did not** occur, provide a clear and specific explanation:\n"
+                        "   - **Identify the key action that failed** (e.g., 'The left arrow key did not move the character left.')\n"
+                        "   - **Describe what should have happened vs. what actually happened**\n"
+                        "   - **Suggest possible reasons why the movement did not work** (e.g., key event not detected, movement function not updating, collision preventing movement)\n"
+                        "   - **Most importantly, if a movement failure is detected, end your response with:** `PROBLEM OCCURRED`\n\n"
+                        
+                        "⚠ Important: Do **not** say 'no problem occurred' or the sequence 'problem occurred' if the movement happened as expected."
+                )}, *image_data
             ]}
         ),
         messages.append(
         {"role": "assistant", "content": (
-            "**Example of a correct output:**\n"
+            "**Example of a response when movement works:**\n"
             "\"The movement happened as expected. The character moved from position A to position B, aligning with the suggested action.\"\n\n"
-            "**Example of an incorrect output:**\n"
-            "\"The movement did not happen as expected. The character remained in the same position. "
-            "Possible causes: the key is not working, the movement duration is too short, or another issue occurred. PROBLEM OCCURRED\""
+            "**Example of a response when movement fails**\n"
+            "\"The movement did not happen as expected. After pressing the left arrow key, the character remained at the same position instead of moving left**.\n "
+            "Possible causes: key event is not being detected properly.\n The movement function is not updating the character’s position.\n"
+            "There is a collision or restriction preventing movement.\n\n"
+            "Action Required: Investigate why the left arrow key does not move the character.\n"
+            "PROBLEM OCCURRED"
         )})
         
         if game_plan_text:

@@ -90,7 +90,7 @@ async def main():
                 logging.info(colored("✅ Game ran successfully! No issues detected.", "green"))
                 print(colored("🎉 Game created successfully! You can now play.", "cyan"))  # ✅ User feedback
                 break  
-            logging.error(colored(f"❌ Movement issue detected: {error_details}", "red"))
+            print(colored(f"❌ Movement issue detected: {error_details}", "red"))
             # Send the error message 
             await agents.code_updater.GameUpdater_Agent(error_details)  
             
