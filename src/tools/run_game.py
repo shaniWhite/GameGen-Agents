@@ -1,10 +1,10 @@
 import asyncio
 import logging
+import os
 import subprocess
 import sys
 import traceback
 from termcolor import colored
-
 
 game_process = None
 async def run_game():

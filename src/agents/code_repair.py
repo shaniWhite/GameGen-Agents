@@ -1,13 +1,12 @@
 import os
-import logging
 import re
 import sys
 import time
 from termcolor import colored
 import openai
+import logging
 
 PRINT_RESPONSE = True
-
 
 async def Code_Repair_Agent(error_message):
     logging.info(colored("Attempting to fix the error...", "yellow"))

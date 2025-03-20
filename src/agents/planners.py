@@ -1,11 +1,11 @@
+
 import logging
+import os
 import re
-from termcolor import colored
 import openai
 
 PRINT_RESPONSE = False
 
-# Function for planner agents to discuss and plan the project
 async def plan_project(user_input, iterations):
     system_message_1 = f"""
     You are a logical, critical game design expert. Your role is to discuss and plan with a critical and rigorous eye, a Pygame project based on user input. 
@@ -47,7 +47,7 @@ async def plan_project(user_input, iterations):
                                "don't return any directories but just the file names and descriptions. make sure to mention what imports are necessary for each file. Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur. "
                                "ensure function and method inputs are accurate as well as their returns. Remember that the game should start with a main module in the main.py file (main shouldn't take any arguments)."})
         
-        messages_1 = insert_message_separator(messages_1)
+        # messages_1 = insert_message_separator(messages_1)
         
         response_1 = await openai.ChatCompletion.acreate(
             model="gpt-4o-mini",
@@ -69,7 +69,7 @@ async def plan_project(user_input, iterations):
                                "we will save all files in the same folder. make sure to mention what imports are necessary for each file. Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur as well as the clear and accurate definition of function and method inputs." 
                                "Remember that the game should start with a main module in the main.py file(main shouldn't take any arguments)."})
         
-        messages_2 = insert_message_separator(messages_2)
+        # messages_2 = insert_message_separator(messages_2)
         
         response_2 = await openai.ChatCompletion.acreate(
             model="gpt-4o-mini",
@@ -85,9 +85,3 @@ async def plan_project(user_input, iterations):
         messages_2.append({"role": "assistant", "content": response_2.choices[0].message['content']})
         messages_1.append({"role": "user", "content": response_2.choices[0].message['content']})
     
-    # Extract the XML content from the response
-    xml_content = re.search(r'<game_plan>.*?</game_plan>', response_2.choices[0].message['content'], re.DOTALL)
-    if xml_content:
-        return xml_content.group(0)
-    else:
-        raise ValueError("No valid XML content found in the response")
