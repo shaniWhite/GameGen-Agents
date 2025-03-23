@@ -220,4 +220,4 @@ def ControlTesterAgent(game_name):
         logging.info("✅ No problem detected. Continuing game...")
         time.sleep(3)  # Wait before next move
 
-ControlTesterAgent("Pong Classic")
+# ControlTesterAgent("Pong Classic")

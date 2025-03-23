@@ -17,7 +17,6 @@ from termcolor import colored
 import utils.game_database
 
 
-
 # Initialize the database once when the program starts
 utils.game_database.init_db()
 

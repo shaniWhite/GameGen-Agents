@@ -64,7 +64,7 @@ async def run_game():
             await asyncio.sleep(0.1)
             
         # Wait for 5 seconds before terminating the game
-        await asyncio.sleep(5)
+        await asyncio.sleep(15)
 
         stdout, stderr = process.communicate()
         full_output += stdout
@@ -72,7 +72,7 @@ async def run_game():
         
         # Send a close event like clicking X
         logging.info(colored("🛑 Closing the game window after 5 seconds...", "yellow"))
-        pyautogui.hotkey('alt', 'f4')  # Simulates pressing the X button
+        stop_game(process)
         logging.info(colored("✅ Game closed.", "green"))
         
         if process.returncode != 0:
@@ -93,15 +93,15 @@ async def run_game():
     else:
         return None
 
-def close_game():
-    """Terminates the running game process."""
-    global game_process
-    if game_process and game_process.poll() is None:  # Check if the process is still running
-        game_process.terminate()  # Forcefully close the game
-        game_process.wait()  # Ensure the process fully stops
-        logging.info("✅ Game closed successfully.")
-    else:
-        logging.info("⚠ No active game process found to terminate.")
+# def close_game():
+#     """Terminates the running game process."""
+#     global game_process
+#     if game_process and game_process.poll() is None:  # Check if the process is still running
+#         game_process.terminate()  # Forcefully close the game
+#         game_process.wait()  # Ensure the process fully stops
+#         logging.info("✅ Game closed successfully.")
+#     else:
+#         logging.info("⚠ No active game process found to terminate.")
 
 
 def simulate_input(action):
@@ -142,4 +142,5 @@ def simulate_input(action):
     else:
         logging.error(f"⚠ Unknown action: {action}")
 
-run_game()
+
+
