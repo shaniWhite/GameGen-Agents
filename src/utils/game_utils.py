@@ -3,8 +3,6 @@ import logging
 import os
 import subprocess
 import sys
-import traceback
-from termcolor import colored
 import time
 import keyboard
 import pyautogui

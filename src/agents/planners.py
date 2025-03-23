@@ -53,6 +53,7 @@ async def plan_project(user_input, iterations):
             
             messages_1.append({"role": "user", "content": "this is the final iteration. please provide your final game structure along with file structure you think is best for the game."
                                "don't return any directories but just the file names and descriptions. make sure to mention what imports are necessary for each file. Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur. "
+                               "There should be 'paused' and 'exit' actions in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game."
                                "ensure function and method inputs are accurate as well as their returns. Remember that the game should start with a *main* module in the main.py file!(main shouldn't take any arguments)."})
         
         # messages_1 = insert_message_separator(messages_1)
