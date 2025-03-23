@@ -124,7 +124,7 @@ def ControlTesterAgent(game_name):
             toggle_pause () # pause the game after taking action
             print({paused})
             time.sleep(1)  
-
+            
         screenshot_after = capture_screenshot(game_name,"after", screenshot_folder)
         if not screenshot_after:
             logging.error("Game window not found after action. Skipping verification.")
@@ -217,7 +217,7 @@ def ControlTesterAgent(game_name):
                 
             return verification_response
         
-        logging.info("✅ No problem detected. Continuing game...")
+        logging.info("✅ No problem detected from control tester. Continuing game...")
         time.sleep(3)  # Wait before next move
 
-# ControlTesterAgent("Pong Classic")
+# ControlTesterAgent("Pong Duel")

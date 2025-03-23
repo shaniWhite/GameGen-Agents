@@ -6,7 +6,7 @@ import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.window_utils import record_gameplay_video
-
+import logging
 
 def analyze_game_video(game_name, game_plan_path="game_plan.xml"):
     """
@@ -15,13 +15,11 @@ def analyze_game_video(game_name, game_plan_path="game_plan.xml"):
     video_file_path= record_gameplay_video(game_name)
     
     # Upload the video file
-    print(f"📤 Uploading video file: {video_file_path}...")
+    logging.info(f"📤 Uploading video file: {video_file_path}...")
     if not os.path.exists(video_file_path):
-        print("❌ Error: Video file does not exist!")
+        logging.error("❌ Error: Video file does not exist!")
         return None
     
-    # Ensure game plan file exists
-    # game_plan_content = utils.file_utils.load_game_plan()
     
     video_file = genai.upload_file(path=video_file_path)
     game_plan_file = genai.upload_file(path=game_plan_path)
@@ -29,14 +27,14 @@ def analyze_game_video(game_name, game_plan_path="game_plan.xml"):
     # Check the file processing state
     for file in [video_file, game_plan_file]:
         while file.state.name == "PROCESSING":
-            print(f"⏳ Processing file: {file.name}... Waiting...")
+            logging.info(f"⏳ Processing file: {file.name}... Waiting...")
             time.sleep(10)
             file = genai.get_file(file.name)
 
         if file.state.name == "FAILED":
             raise ValueError(f"❌ [ERROR] File processing failed: {video_file.state.name}")
         
-    print("✅ Video and game plan files are ready for analysis.")    
+    # print("✅ Video and game plan files are ready for analysis.")    
     # Read the game plan XML content
     with open(game_plan_path, "r", encoding="utf-8") as f:
         game_plan_content = f.readlines()
@@ -70,17 +68,17 @@ def analyze_game_video(game_name, game_plan_path="game_plan.xml"):
     model = genai.GenerativeModel(model_name="gemini-1.5-pro")
 
     # Generate content (Ask Gemini to analyze the video)
-    print("🔍 Asking Gemini")
+    # print("🔍 Asking Gemini")
     try:
         response = model.generate_content(
             [video_file, prompt],
             request_options={"timeout": 600}  # 10-minute timeout for video processing
             
         )
-        print("📢 Gemini Feedback:\n", response.text)
+        logging.info("📢 Gemini Feedback on video:\n", response.text)
         return response.text  # ✅ Return AI feedback
     except Exception as e:
-        print(f"❌ [ERROR] Failed to analyze video: {e}")
+        logging.error(f"❌ [ERROR] Failed to analyze video: {e}")
         return None
     
 

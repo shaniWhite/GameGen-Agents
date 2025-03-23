@@ -1,44 +1,36 @@
 <game_plan>
-  <overview>A classic Pong game where two players control paddles on either side of the screen, attempting to bounce a ball back and forth without letting it go past their paddle. The game supports pausing and quitting seamlessly.</overview>
-  <game_name>Pong Battle</game_name>
+  <overview>This is a simple Pong game built using Pygame, where two players control paddles to hit a ball back and forth. The game supports pausing and clean quitting, ensuring a smooth gameplay experience.</overview>
+  <game_name>Pong Clash</game_name>
   <window_size width="600" height="600"/>
-  <mechanics>Players control paddles that move vertically. The ball bounces off paddles and walls. Players score points by getting the ball past the opponent's paddle. The game features a pause functionality.</mechanics>
+  <mechanics>The game consists of two paddles controlled by players. Players can move their paddles up or down to hit the ball. The game keeps track of the score, and there is a pause feature that pauses all movement and physics updates when toggled.</mechanics>
   <files>
     <file>
       <name>main.py</name>
-      <description>The entry point of the game that initializes Pygame, sets up the window, and contains the main game loop. Manages quitting and toggling the paused state.</description>
+      <description>Main entry point of the game. Initializes Pygame and starts the main game loop, handling events for pausing and quitting.</description>
+      <imports>pygame, Game</imports>
+      <functions>
+        <function>
+          <name>main()</name>
+          <description>Initializes Pygame and starts the game loop.</description>
+          <inputs>None</inputs>
+          <returns>None</returns>
+        </function>
+      </functions>
     </file>
     <file>
       <name>game.py</name>
-      <description>Manages the overall game logic, including ball and paddle interaction, scoring, and pause handling. Contains methods for running the main game loop, drawing game elements, and responding to user inputs.</description>
+      <description>Encapsulates the main game logic, manages game states, updates game elements, and renders to the screen.</description>
+      <imports>pygame, Paddle, Ball</imports>
       <functions>
         <function>
-          <name>__init__</name>
+          <name>__init__(self)</name>
+          <description>Initializes the game state, creating paddles and the ball.</description>
           <inputs>None</inputs>
           <returns>None</returns>
         </function>
         <function>
-          <name>run</name>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>draw</name>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>handle_events</name>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>update</name>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>toggle_pause</name>
+          <name>run(self)</name>
+          <description>The main loop of the game that processes events, updates game logic, and renders the game.</description>
           <inputs>None</inputs>
           <returns>None</returns>
         </function>
@@ -46,50 +38,104 @@
     </file>
     <file>
       <name>paddle.py</name>
-      <description>Defines the Paddle class that represents the player-controlled paddles. Manages paddle movement and rendering.</description>
+      <description>Defines a Paddle class representing the paddles in the game, handling movement and rendering.</description>
+      <imports>pygame</imports>
       <functions>
         <function>
-          <name>__init__</name>
-          <inputs>x (int), y (int)</inputs>
+          <name>__init__(self, position, width, height, color)</name>
+          <description>Constructs a paddle at a specified position with given dimensions and color.</description>
+          <inputs>position (tuple), width (int), height (int), color (tuple)</inputs>
           <returns>None</returns>
         </function>
         <function>
-          <name>move</name>
-          <inputs>up (bool), down (bool)</inputs>
+          <name>move(self, direction)</name>
+          <description>Moves the paddle in the specified direction (up = -1, down = 1).</description>
+          <inputs>direction (int)</inputs>
           <returns>None</returns>
         </function>
         <function>
-          <name>draw</name>
-          <inputs>screen (Surface)</inputs>
+          <name>draw(self, screen)</name>
+          <description>Draws the paddle on the provided screen surface.</description>
+          <inputs>screen (pygame.Surface)</inputs>
           <returns>None</returns>
         </function>
       </functions>
     </file>
     <file>
       <name>ball.py</name>
-      <description>Defines the Ball class to manage the ball's behavior, including movement, collision detections, and rendering.</description>
+      <description>Contains the Ball class, which manages the ball's movement, collision detection, and rendering.</description>
+      <imports>pygame</imports>
       <functions>
         <function>
-          <name>__init__</name>
+          <name>__init__(self, position, radius, color)</name>
+          <description>Initializes the ball with a specified position, radius, and color.</description>
+          <inputs>position (tuple), radius (int), color (tuple)</inputs>
+          <returns>None</returns>
+        </function>
+        <function>
+          <name>move(self)</name>
+          <description>Updates the ball's position according to its velocity.</description>
           <inputs>None</inputs>
           <returns>None</returns>
         </function>
         <function>
-          <name>update</name>
+          <name>reset(self)</name>
+          <description>Resets the ball's position and direction.</description>
           <inputs>None</inputs>
           <returns>None</returns>
         </function>
         <function>
-          <name>draw</name>
-          <inputs>screen (Surface)</inputs>
+          <name>draw(self, screen)</name>
+          <description>Draws the ball on the provided screen surface.</description>
+          <inputs>screen (pygame.Surface)</inputs>
           <returns>None</returns>
         </function>
         <function>
-          <name>reset_position</name>
-          <inputs>None</inputs>
+          <name>check_collisions(self, paddles)</name>
+          <description>Checks for collisions with paddles and walls, adjusting ball movement if necessary.</description>
+          <inputs>paddles (list of Paddle)</inputs>
           <returns>None</returns>
         </function>
       </functions>
+    </file>
+    <file>
+      <name>settings.py</name>
+      <description>Stores all game constants like screen dimensions, colors, and other settings necessary throughout the game.</description>
+      <imports>None</imports>
+      <constants>
+        <constant>
+          <name>SCREEN_WIDTH</name>
+          <value>600</value>
+        </constant>
+        <constant>
+          <name>SCREEN_HEIGHT</name>
+          <value>600</value>
+        </constant>
+        <constant>
+          <name>PADDLE_WIDTH</name>
+          <value>10</value>
+        </constant>
+        <constant>
+          <name>PADDLE_HEIGHT</name>
+          <value>100</value>
+        </constant>
+        <constant>
+          <name>BALL_RADIUS</name>
+          <value>10</value>
+        </constant>
+        <constant>
+          <name>BACKGROUND_COLOR</name>
+          <value>(0, 0, 0)</value>
+        </constant>
+        <constant>
+          <name>PADDLE_COLOR</name>
+          <value>(255, 255, 255)</value>
+        </constant>
+        <constant>
+          <name>BALL_COLOR</name>
+          <value>(255, 0, 0)</value>
+        </constant>
+      </constants>
     </file>
   </files>
 </game_plan>
