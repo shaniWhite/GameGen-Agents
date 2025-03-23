@@ -8,7 +8,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.window_utils import record_gameplay_video
 
 
-def analyze_game_video(game_name, window_size, game_plan_path="game_plan.xml"):
+def analyze_game_video(game_name, game_plan_path="game_plan.xml"):
     """
     Uploads a recorded gameplay video and the game plan XML file to Gemini AI and gets feedback with timestamps.
     """
@@ -82,7 +82,7 @@ def analyze_game_video(game_name, window_size, game_plan_path="game_plan.xml"):
     except Exception as e:
         print(f"❌ [ERROR] Failed to analyze video: {e}")
         return None
-
+    
 
 #     return analysis_feedback
-analyze_game_video("Grid Escape", (600, 600))
+# analyze_game_video("Grid Escape", (600, 600))

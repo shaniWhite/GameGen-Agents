@@ -14,25 +14,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from dotenv import load_dotenv
 from utils.window_utils import capture_screenshot, detect_and_mark_movement, delete_screenshot
 from utils.file_utils import load_game_plan
-from utils.game_utils import  start_game, simulate_input
-
-
-# Configure logging
-logging.basicConfig(
-    filename="game_log2.txt",  
-    level=logging.DEBUG,  # Set the log level (DEBUG, INFO, WARNING, ERROR)
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.ERROR)  # Only show errors in the console
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-console_handler.setFormatter(formatter)
-logging.getLogger().addHandler(console_handler)
-logging.getLogger("openai").setLevel(logging.WARNING)  # Hide INFO logs from OpenAI API
-logging.getLogger("httpx").setLevel(logging.WARNING)  # For newer OpenAI SDK versions
-logging.getLogger("urllib3").setLevel(logging.WARNING)  # If using requests directly
-logging.getLogger("PIL").setLevel(logging.WARNING)
+from utils.game_utils import  start_game, simulate_input, stop_game
 
 
 load_dotenv()
@@ -41,10 +23,8 @@ if not openai.api_key:
     logging.error("⚠ OpenAI API key not found! Exiting...")
     raise ValueError("Missing OPENAI_API_KEY environment variable")
 
-# Global variable for game process
-game_process = None
-
-
+# # Global variable for game process
+# game_process = None
 
 # Create a folder for saving screenshots (if it doesn’t exist)
 screenshot_folder = "screenshots"
@@ -83,15 +63,19 @@ def toggle_pause():
 
 
 paused = False  # ✅ Tracks whether the game is paused or running
+
 def ControlTesterAgent(game_name):
     """Runs the game loop until a problem occurs."""
+    
     game_plan_text = load_game_plan()
-    start_game()  # Start the game if not already running
+    game_process = start_game()  # Start the game if not already running
     
     for i in range(3):  
         screenshot_before = capture_screenshot(game_name,"before",screenshot_folder)
+        print(f'1{paused}')
         if not paused:
             toggle_pause()
+            print({paused})
         if not screenshot_before:
             logging.error("Game window not found. Skipping iteration.")
             continue
@@ -133,9 +117,12 @@ def ControlTesterAgent(game_name):
             logging.error("⚠ Unable to extract action from response. Skipping iteration.")
             continue
         else:
+            
             toggle_pause()  # resume the game before taking action
-            simulate_input(action)        
+            simulate_input(action)  
+            print(f"Action taken: {action}")      
             toggle_pause () # pause the game after taking action
+            print({paused})
             time.sleep(1)  
 
         screenshot_after = capture_screenshot(game_name,"after", screenshot_folder)
@@ -226,12 +213,11 @@ def ControlTesterAgent(game_name):
         if "problem occurred" in verification_response:
             
             logging.error("❌ Problem detected! Stopping game for repair.")
-            if game_process and game_process.poll() is None:
-                game_process.terminate()
+            stop_game(game_process)
                 
             return verification_response
         
         logging.info("✅ No problem detected. Continuing game...")
         time.sleep(3)  # Wait before next move
 
-# ControlTesterAgent("Grid Escape")
+ControlTesterAgent("Pong Classic")

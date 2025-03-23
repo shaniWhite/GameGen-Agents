@@ -32,8 +32,8 @@ async def developer_agent(file_name, file_description, game_plan):
     Additionally, check that the display is initialized using pygame.get_init() before attempting to render menus or handle events. 
     ensure that when pygame.quit() is detected, the game should stop immediately by exiting the main loop and properly shutting down Pygame.
     If pygame.quit() has been called, the program should not continue executing functions that rely on an active Pygame session.
-    The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates.
-    The game should start with a main module in the main.py file(main shouldn't take any arguments).
+    The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates - but dont print anything to the screen.
+    The game should start with a main module in the main.py file!(main shouldn't take any arguments).
     """
     
     prompt = f"""Create a Python file named '{file_name}' with the following description: {file_description}
@@ -42,7 +42,7 @@ async def developer_agent(file_name, file_description, game_plan):
     {game_plan}
     Please return the full contents of the Python code without any language-specific annotations (like '''python) or markdown formatting. The code should be clean, well-commented, and properly formatted.
     
-    Remember, the game should start with a main module in the main.py file(main shouldn't take any arguments). Always return the full contents of the file
+    Remember, the game should start with a main module in the main.py file!(main shouldn't take any arguments). Always return the full contents of the file
     """
     
     response = await openai.ChatCompletion.acreate(

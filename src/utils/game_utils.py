@@ -12,19 +12,29 @@ import string
 
 
 def start_game():
-    """Starts the game process if not already running."""
-    global game_process
-    if game_process is None or game_process.poll() is not None:
-        logging.info("🎮 Starting the game...")
-        game_process = subprocess.Popen([sys.executable, "game/main.py"])
-        time.sleep(2)  # Allow time for the game to load
+    """Starts the game and returns the subprocess handle."""
+    print("🎮 Starting the game...")
+    game_process = subprocess.Popen([sys.executable, "game/main.py"])
+    time.sleep(2)  # Let the game boot up
+    return game_process
         
+def stop_game(process):
+    """Stops the game process if it's running."""
+    if process and process.poll() is None:
+        print("🛑 Attempting to terminate game process...")
+        process.terminate()
+        try:
+            process.wait(timeout=5)
+            print("✅ Game process terminated.")
+        except subprocess.TimeoutExpired:
+            print("⚠️ Game not responding. Forcing kill.")
+            process.kill()
+            print("☠️ Game process force-killed.")      
         
-game_process = None
+
 async def run_game():
-    global game_process
-    if game_process is None or game_process.poll() is not None:
-        logging.info(colored("Running the game...", "magenta"))
+    
+    logging.info("Running the game...")
     full_output = ""
     full_error = ""
     try:
@@ -34,33 +44,36 @@ async def run_game():
             stderr=subprocess.PIPE,
             text=True
         )
-        
         logging.info("Game is running.")
         
         while True:
-            try:
-                output = process.stdout.readline()
-                error = process.stderr.readline()
-                
-                if output:
-                    full_output += output
-                    logging.info(output.strip())
-                if error:
-                    full_error += error
-                    logging.error(colored(f"Runtime error: {error.strip()}", "red"))
-                
-                if process.poll() is not None:
-                    break
-                
-                await asyncio.sleep(0.1)
-            except KeyboardInterrupt:
-                logging.info(colored("\nGame stopped by user.", "yellow"))
-                process.terminate()
+            
+            output = process.stdout.readline()
+            error = process.stderr.readline()
+            
+            if output:
+                full_output += output
+                logging.info(output.strip())
+            if error:
+                full_error += error
+                logging.error(colored(f"Runtime error: {error.strip()}", "red"))
+            
+            if process.poll() is not None:
                 break
-        
+            
+            await asyncio.sleep(0.1)
+            
+        # Wait for 5 seconds before terminating the game
+        await asyncio.sleep(5)
+
         stdout, stderr = process.communicate()
         full_output += stdout
         full_error += stderr
+        
+        # Send a close event like clicking X
+        logging.info(colored("🛑 Closing the game window after 5 seconds...", "yellow"))
+        pyautogui.hotkey('alt', 'f4')  # Simulates pressing the X button
+        logging.info(colored("✅ Game closed.", "green"))
         
         if process.returncode != 0:
             full_error += f"\nProcess exited with return code {process.returncode}"
@@ -90,23 +103,6 @@ def close_game():
     else:
         logging.info("⚠ No active game process found to terminate.")
 
-paused = False  # ✅ Tracks whether the game is paused or running
-
-def toggle_pause():
-    """Toggles the game's pause state using the 'P' key."""
-    global paused
-
-    if paused:
-        logging.info("Resuming game...")  # ✅ Only resume if game is actually paused
-    else:
-        logging.info("Pausing game...")   # ✅ Only pause if game is running
-
-    keyboard.press("p")
-    time.sleep(0.3)
-    keyboard.release("p")
-    time.sleep(0.5)  # ✅ Allow time for the game to register pause/unpause
-
-    paused = not paused  # ✅ Toggle the pause state
 
 def simulate_input(action):
     """Simulates a keyboard press or mouse click based on AI instructions."""
@@ -146,4 +142,4 @@ def simulate_input(action):
     else:
         logging.error(f"⚠ Unknown action: {action}")
 
-
+run_game()

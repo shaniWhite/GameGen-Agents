@@ -81,7 +81,7 @@ def detect_and_mark_movement(before, after, output_path):
     logging.info(f" Movement detected and marked at: {output_path}")
     return output_path
 
-def record_gameplay_video(game_name, video_file_path="gameplay.mp4", duration=5, fps=30):
+def record_gameplay_video(game_name, video_file_path="gameplay.mp4", fps=30):
     """
     Records gameplay video by capturing the game window.
 

@@ -14,8 +14,12 @@ import agents.developers
 import agents.planners
 import agents.control_test
 from termcolor import colored
+import utils.game_database
 
 
+
+# Initialize the database once when the program starts
+utils.game_database.init_db()
 
 with open("game_log.txt", "w") as log_file:
     log_file.write("")
@@ -80,26 +84,28 @@ async def main():
     max_attempts = 10
     while True:
         error_message = await utils.game_utils.run_game()
-        utils.game_utils.close_game()
+        
         if error_message is None:
             logging.info(colored("Game ran successfully!", "green"))
-            
-            # Run the game with the image analysis agent
-            error_details = agents.control_test.ControlTesterAgent(game_name)
-            if error_details is None:
-                logging.info(colored("✅ Game ran successfully! No issues detected.", "green"))
-                analize = agents.video_analizer(game_name)
-                if analize is None:
-                    logging.info(colored("✅ Game ran successfully! No issues detected.", "green"))
-                    print(colored("🎉 Game created successfully! You can now play.", "cyan"))  # ✅ User feedback
-                    break 
-        
-                logging.error(colored(f"❌ Video analysis issue detected: {analize}", "red"))
+            for i in range(3):
+                for _ in range(3):
+                    logging.info("Running control tests...")
+                    # Run the game with the image analysis agent
+                    error_details = agents.control_test.ControlTesterAgent(game_name)
+                    if error_details is None:
+                        logging.info(colored("✅ Game ran successfully! No issues detected.", "green"))
+                        break
+                    print(colored(f"❌ Movement issue detected: {error_details}", "red"))
+                    # Send the error message 
+                    await agents.code_updater.GameUpdater_Agent(error_details)  
+                analize = agents.video_analizer.analyze_game_video(game_name)
                 await agents.code_updater.GameUpdater_Agent(analize)
-                
-            print(colored(f"❌ Movement issue detected: {error_details}", "red"))
-            # Send the error message 
-            await agents.code_updater.GameUpdater_Agent(error_details)  
+                       
+            print(colored("🎉 Game created successfully! You can now play.", "cyan"))
+            utils.game_database.save_game(game_name)
+            logging.info("Game saved to the database.")
+
+            break    
             
         else:
             logging.error(colored(f"Error detected: {error_message}", "red"))
@@ -109,8 +115,8 @@ async def main():
                 time.sleep(1)  
                                
                 # Try running the game again after fixing
+                logging.info("Running the game after fixing the errors...")
                 error_message = await utils.game_utils.run_game()
-                utils.game_utils.close_game()
                 if error_message is None:
                     logging.info(colored("Errors fixed successfully!", "green"))
                     break

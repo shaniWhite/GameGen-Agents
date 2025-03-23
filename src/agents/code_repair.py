@@ -34,11 +34,11 @@ async def Code_Repair_Agent(error_message):
     Analyze the error message and the contents of the game files, then provide the corrected versions of the files.
     Remember that the game should start with a main module in the main.py file(main shouldn't take any arguments).
     Write clean, well-commented code that follows best practices.
-    The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates.
+    The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates - but dont print anything to the screen.
     Ensure that pygame.init() is called before using any Pygame functions, including pygame.event.get(), and check pygame.get_init() before handling events or rendering.
     Additionally, check that the display is initialized using pygame.get_init() before attempting to render menus or handle events. 
     If "video system not initialized" error occur, it is because the program is triyng to execute Pygame-related functions and continuing to process events or update the display after pygame.quit() is called.
-    The game loop should exit immediately when the QUIT event is detected, and calling pygame.event.clear() before quitting can help prevent lingering events from causing issues.
+    The game loop should exit immediately when the QUIT event is detected, and calling pygame.event.clear() before quitting can help prevent lingering events from causing issues. FIND THE PROBLEM AND FIX IT.
     carefully reason about the error in a step by step manner ahead of providing the corrected code. no external files are allowed within the game. 
     One of the main goals is to review the logic of the code to ensure a playable and enjoyable game play experience for the user.
     <reasoning>
@@ -55,7 +55,7 @@ async def Code_Repair_Agent(error_message):
     Here are the contents of the files involved in the error:
     {file_contents}
     Please return the full contents of the Python code without any language-specific annotations (like '''python) or markdown formatting. The code should be clean, well-commented, and properly formatted.
-    Please analyze the error and provide corrected versions of the files to resolve the error. return the full content of the files Remember that the game should start with a main module in the main.py file(main shouldn't take any arguments)."""
+    Please analyze the error and provide corrected versions of the files to resolve the error. return the full content of the files. Remember that the game should start with a main module in the main.py file(main shouldn't take any arguments)."""
     
     response = await openai.ChatCompletion.acreate(
         model="gpt-4o-mini",
