@@ -1,0 +1,153 @@
+<game_plan>
+  <overview>The game is a simple 2D Pong game where two players control paddles on either side of the screen to hit a ball back and forth. The game features keyboard input for paddle movement, score tracking, a pause functionality, and a clean exit mechanism.</overview>
+  <game_name>Pong: The Classic Duel</game_name>
+  <window_size width="800" height="600"/>
+  <mechanics>Players can move their paddles up and down using keyboard controls (W/S for left paddle and Up/Down arrows for right paddle). The game tracks scores, allows for pausing, and properly handles game termination.</mechanics>
+  <files>
+    <file>
+      <name>main.py</name>
+      <description>Entry point of the game. Initializes the game, creates the window, and manages the main loop including event handling for pausing and quitting.</description>
+      <imports>
+        import pygame
+        from game import Game
+        from settings import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
+      </imports>
+      <functions>
+        <function>
+          <name>main</name>
+          <description>Starts the main game loop, managing events and updating the game state.</description>
+          <inputs>None</inputs>
+          <returns>None</returns>
+        </function>
+      </functions>
+    </file>
+    <file>
+      <name>game.py</name>
+      <description>Contains main gameplay logic, including the game loop, updating game objects (paddles and ball), drawing them on the screen, managing game state (pause and score tracking).</description>
+      <imports>
+        import pygame
+        from entities.paddle import Paddle
+        from entities.ball import Ball
+        from settings import BLACK
+      </imports>
+      <functions>
+        <function>
+          <name>__init__</name>
+          <description>Initializes game properties and objects.</description>
+          <inputs>screen: pygame.Surface</inputs>
+          <returns>None</returns>
+        </function>
+        <function>
+          <name>update</name>
+          <description>Updates the game state, including ball and paddle movements.</description>
+          <inputs>None</inputs>
+          <returns>None</returns>
+        </function>
+        <function>
+          <name>draw</name>
+          <description>Renders all game objects on the screen.</description>
+          <inputs>None</inputs>
+          <returns>None</returns>
+        </function>
+        <function>
+          <name>toggle_pause</name>
+          <description>Toggle the paused state of the game.</description>
+          <inputs>None</inputs>
+          <returns>None</returns>
+        </function>
+      </functions>
+    </file>
+    <file>
+      <name>settings.py</name>
+      <description>Defines constants used throughout the game such as screen dimensions, frame rate, colors, paddle sizes, and ball dimensions.</description>
+      <imports>None</imports>
+      <functions>
+        <function>
+          <name>Constants</name>
+          <description>Holds screen and game-related constants.</description>
+          <inputs>None</inputs>
+          <returns>None</returns>
+        </function>
+      </functions>
+    </file>
+    <file>
+      <name>entities/paddle.py</name>
+      <description>Contains the Paddle class used for player paddles. Handles paddle movement based on input and renders the paddle on the screen.</description>
+      <imports>
+        import pygame
+        from settings import PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_COLOR
+      </imports>
+      <functions>
+        <function>
+          <name>__init__</name>
+          <description>Initializes paddle position.</description>
+          <inputs>x: int, y: int</inputs>
+          <returns>None</returns>
+        </function>
+        <function>
+          <name>move</name>
+          <description>Handles paddle movement based on input keys.</description>
+          <inputs>up_key: int, down_key: int</inputs>
+          <returns>None</returns>
+        </function>
+        <function>
+          <name>draw</name>
+          <description>Renders the paddle on the screen.</description>
+          <inputs>screen: pygame.Surface</inputs>
+          <returns>None</returns>
+        </function>
+      </functions>
+    </file>
+    <file>
+      <name>entities/ball.py</name>
+      <description>Contains the Ball class that manages the ball's movement, rendering, and collision detection with paddles and screen edges.</description>
+      <imports>
+        import pygame
+        from settings import BALL_SIZE, BALL_COLOR
+      </imports>
+      <functions>
+        <function>
+          <name>__init__</name>
+          <description>Initializes ball position and velocity.</description>
+          <inputs>x: int, y: int</inputs>
+          <returns>None</returns>
+        </function>
+        <function>
+          <name>move</name>
+          <description>Updates the ball's position based on its current velocity.</description>
+          <inputs>None</inputs>
+          <returns>None</returns>
+        </function>
+        <function>
+          <name>draw</name>
+          <description>Renders the ball on the screen.</description>
+          <inputs>screen: pygame.Surface</inputs>
+          <returns>None</returns>
+        </function>
+      </functions>
+    </file>
+    <file>
+      <name>functions/game_utils.py</name>
+      <description>Contains utility functions for the game, such as resetting the ball position and checking for collisions between ball and paddles.</description>
+      <imports>
+        import pygame
+        from entities.paddle import Paddle
+        from entities.ball import Ball
+      </imports>
+      <functions>
+        <function>
+          <name>check_collision</name>
+          <description>Checks if the ball collides with a paddle, returning True or False.</description>
+          <inputs>paddle: Paddle, ball: Ball</inputs>
+          <returns>bool</returns>
+        </function>
+        <function>
+          <name>reset_ball</name>
+          <description>Resets the ball's position to the center after a point is scored.</description>
+          <inputs>ball: Ball</inputs>
+          <returns>None</returns>
+        </function>
+      </functions>
+    </file>
+  </files>
+</game_plan>

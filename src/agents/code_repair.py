@@ -17,7 +17,7 @@ if not openai.api_key:
 PRINT_RESPONSE = False
 
 async def Code_Repair_Agent(error_message):
-    logging.info(colored("Attempting to fix the error...", "yellow"))
+    logging.info("Code repair attempting to fix the error...")
     
     # Extract all filenames from the error message
     error_filenames = re.findall(r'.*?([^/\\]+\.py)"', error_message)
@@ -34,7 +34,7 @@ async def Code_Repair_Agent(error_message):
     Analyze the error message and the contents of the game files, then provide the corrected versions of the files.
     Remember that the game should start with a main module in the main.py file(main shouldn't take any arguments).
     Write clean, well-commented code that follows best practices.
-    The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates - but dont print anything to the screen.
+    "There should be 'paused' and 'exit' actions in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game."
     Ensure that pygame.init() is called before using any Pygame functions, including pygame.event.get(), and check pygame.get_init() before handling events or rendering.
     Additionally, check that the display is initialized using pygame.get_init() before attempting to render menus or handle events. 
     If "video system not initialized" error occur, it is because the program is triyng to execute Pygame-related functions and continuing to process events or update the display after pygame.quit() is called.

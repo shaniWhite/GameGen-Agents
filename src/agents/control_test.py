@@ -69,13 +69,14 @@ def ControlTesterAgent(game_name):
     
     for i in range(3):  
         screenshot_before = capture_screenshot(game_name,"before",screenshot_folder)
-        print(f'1{paused}')
         if not paused:
             toggle_pause()
-            print({paused})
         if not screenshot_before:
-            logging.error("Game window not found. Skipping iteration.")
-            continue
+            logging.error("Game window 'before' not found.")
+            return (
+                f"[ControlTesterAgent] ERROR: Could not find game window for '{game_name}'. "
+                "Check that the passed game_name matches the actual window title of the game."
+            )
         
         buffered = BytesIO()
         Image.open(screenshot_before).save(buffered, format="PNG")
@@ -93,11 +94,11 @@ def ControlTesterAgent(game_name):
             )
         messages.append(
         {"role": "user", "content": [
-            {"type": "text", "text": "This is the game screenshot. What button should I press next? you have to provide one! of any of the following commands: right, left, up, down, enter, space, click, double click, right click, move mouse"},
+            {"type": "text", "text": "This is the game screenshot. What button should I press next? you have to provide one! of any of the following commands: right, left, up, down, enter, space, click, double click, right click, move mouse. just provide the action with no extra comments" },
             {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64.b64encode(img_bytes).decode()}"}}
         ]})
         messages.append(
-        {"role": "assistant", "content": " response example: press 'left' " }  
+        {"role": "assistant", "content": " 'left' " }  
         )
         
         # Send image to OpenAI API (GPT-4 Vision)
@@ -119,13 +120,15 @@ def ControlTesterAgent(game_name):
             simulate_input(action)  
             print(f"Action taken: {action}")      
             toggle_pause () # pause the game after taking action
-            print({paused})
             time.sleep(1)  
             
         screenshot_after = capture_screenshot(game_name,"after", screenshot_folder)
         if not screenshot_after:
             logging.error("Game window not found after action. Skipping verification.")
-            continue
+            return (
+                f"[ControlTesterAgent] ERROR: Could not find game window for '{game_name}'. "
+                "Check that the passed game_name matches the actual window title of the game."
+            )
         
         screenshot_diff = "screenshots/movement_diff.png"
         if os.path.exists(screenshot_diff):

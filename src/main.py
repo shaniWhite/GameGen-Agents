@@ -82,34 +82,45 @@ async def main():
     # Run the game in a loop to catch and fix errors, then enter feedback loop
     max_attempts = 10
     while True:
-        error_message = await utils.game_utils.run_game()
         
+        error_message = await utils.game_utils.run_game()
         if error_message is None:
-            logging.info(colored("Game ran successfully!", "green"))
-            for i in range(3):
-                for _ in range(3):
-                    logging.info("Running control tests...")
-                    # Run the game with the image analysis agent
-                    error_details = agents.control_test.ControlTesterAgent(game_name)
-                    if error_details is None:
-                        logging.info(colored("✅ Game ran successfully! No issues detected.", "green"))
-                        break
-                    print(colored(f"❌ Movement issue detected: {error_details}", "red"))
-                    # Send the error message 
-                    await agents.code_updater.GameUpdater_Agent(error_details)  
-                    time.sleep(1)
-                analize = agents.video_analizer.analyze_game_video(game_name)
-                await agents.code_updater.GameUpdater_Agent(analize)
+            logging.info("Game ran successfully!")
+
+            for _ in range(2):
+                logging.info("Running control tests...")
+                # Run the game with the image analysis agent
+                error_details = agents.control_test.ControlTesterAgent(game_name)
+                if error_details is None:
+                    logging.info("✅ Game ran successfully! No issues detected.")
+                    break
+                logging.error(colored(f"❌ Movement issue detected: {error_details}", "red")) 
+                await agents.code_updater.GameUpdater_Agent(error_details)  
                 time.sleep(1)
-                       
+            # Video analyzer 
+            analize = agents.video_analizer.analyze_game_video(game_name)
+            await agents.code_updater.GameUpdater_Agent(analize)
+            time.sleep(1)
+            
+            # Run the game again to verify the changes
+            while True:
+                logging.info("🔁 Re-running game to verify all changes...")
+                final_error = await utils.game_utils.run_game()
+                if final_error is None:
+                    logging.info("✅ Final check passed. No errors found!")
+                    break  
+
+                logging.warning(colored(f"⚠️ New error detected after fixes: {final_error}", "yellow"))
+                await agents.code_updater.GameUpdater_Agent(final_error)
+                time.sleep(1)      
+                    
             print(colored("🎉 Game created successfully! You can now play.", "cyan"))
             utils.game_database.save_game(game_name)
             logging.info("Game saved to the database.")
-
             break    
             
         else:
-            logging.error(colored(f"Error detected: {error_message}", "red"))
+            logging.error(f"Error detected: {error_message}")
             for attempt in range(max_attempts):
                 logging.info(f"Attempt {attempt + 1} to fix the errors...")
                 await agents.code_repair.Code_Repair_Agent(error_message)
@@ -119,7 +130,7 @@ async def main():
                 logging.info("Running the game after fixing the errors...")
                 error_message = await utils.game_utils.run_game()
                 if error_message is None:
-                    logging.info(colored("Errors fixed successfully!", "green"))
+                    logging.info("Errors fixed successfully!")
                     break
                   
             else:

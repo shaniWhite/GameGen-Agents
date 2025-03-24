@@ -53,7 +53,7 @@ async def run_game():
                 logging.info("✅ Game process has exited on its own.")
                 break
 
-            if time.time() - start_time > 10:
+            if time.time() - start_time > 6:
                 print(colored("⏳ 10 seconds passed. Sending ESC to close the game...", "yellow"))
                 keyboard.press("esc")
                 time.sleep(0.1)

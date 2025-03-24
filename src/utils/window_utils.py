@@ -14,7 +14,7 @@ import subprocess
 
 def get_game_window(game_name):
     """Finds the game window by title."""
-    for window in gw.getWindowsWithTitle(game_name):  # Replace with the actual title
+    for window in gw.getWindowsWithTitle(game_name):  
         return window
     return None
 
@@ -102,7 +102,7 @@ def record_gameplay_video(game_name, video_file_path="gameplay.mp4", fps=30):
     # Get the game window position & size
     game_window = get_game_window(game_name)
     if not game_window:
-        print(f"❌ Error: Game window '{game_name}' not found!")
+        logging.info(f"❌ Error: Game window '{game_name}' not found!")
         return None
     
     # Get the game window position & size
@@ -114,7 +114,7 @@ def record_gameplay_video(game_name, video_file_path="gameplay.mp4", fps=30):
     out = cv2.VideoWriter(video_file_path, fourcc, fps, (width, height))
 
     start_time = time.time()
-    while time.time() - start_time < 5:
+    while time.time() - start_time < 10:
         screenshot = pyautogui.screenshot(region=(x, y, width, height))  # Capture only the game window
         frame = np.array(screenshot)
         frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)  # Convert to OpenCV format

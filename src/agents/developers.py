@@ -32,7 +32,7 @@ async def developer_agent(file_name, file_description, game_plan):
     Additionally, check that the display is initialized using pygame.get_init() before attempting to render menus or handle events. 
     ensure that when pygame.quit() is detected, the game should stop immediately by exiting the main loop and properly shutting down Pygame.
     If pygame.quit() has been called, the program should not continue executing functions that rely on an active Pygame session.
-    The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates - but dont print anything to the screen.
+    "There should be 'paused' and 'exit' actions in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game."
     The game should start with a main module in the main.py file!(main shouldn't take any arguments).
     """
     
