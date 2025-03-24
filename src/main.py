@@ -97,8 +97,10 @@ async def main():
                     print(colored(f"❌ Movement issue detected: {error_details}", "red"))
                     # Send the error message 
                     await agents.code_updater.GameUpdater_Agent(error_details)  
+                    time.sleep(1)
                 analize = agents.video_analizer.analyze_game_video(game_name)
                 await agents.code_updater.GameUpdater_Agent(analize)
+                time.sleep(1)
                        
             print(colored("🎉 Game created successfully! You can now play.", "cyan"))
             utils.game_database.save_game(game_name)

@@ -23,9 +23,6 @@ if not openai.api_key:
     logging.error("⚠ OpenAI API key not found! Exiting...")
     raise ValueError("Missing OPENAI_API_KEY environment variable")
 
-# # Global variable for game process
-# game_process = None
-
 # Create a folder for saving screenshots (if it doesn’t exist)
 screenshot_folder = "screenshots"
 os.makedirs(screenshot_folder, exist_ok=True)
@@ -96,7 +93,7 @@ def ControlTesterAgent(game_name):
             )
         messages.append(
         {"role": "user", "content": [
-            {"type": "text", "text": "This is the game screenshot. What button should I press next? you have to provide any of the following commands: right, left, up, down, enter, space, click, double click, right click, move mouse"},
+            {"type": "text", "text": "This is the game screenshot. What button should I press next? you have to provide one! of any of the following commands: right, left, up, down, enter, space, click, double click, right click, move mouse"},
             {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64.b64encode(img_bytes).decode()}"}}
         ]})
         messages.append(
