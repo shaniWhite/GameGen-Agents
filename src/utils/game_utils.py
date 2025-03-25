@@ -91,67 +91,6 @@ async def run_game():
         return None
 
     
-# async def run_game():
-    
-#     logging.info("Running the game...")
-#     full_output = ""
-#     full_error = ""
-#     try:
-#         process = subprocess.Popen(
-#         [sys.executable, "-c", "import sys; sys.path.insert(0, 'game'); import main; main.main()"],
-#             stdout=subprocess.PIPE,
-#             stderr=subprocess.PIPE,
-#             text=True
-#         )
-#         logging.info("Game is running.")
-        
-#         while True:
-            
-#             output = process.stdout.readline()
-#             error = process.stderr.readline()
-            
-#             if output:
-#                 full_output += output
-#                 logging.info(output.strip())
-#             if error:
-#                 full_error += error
-#                 logging.error(colored(f"Runtime error: {error.strip()}", "red"))
-            
-#             if process.poll() is not None:
-#                 break
-            
-#             await asyncio.sleep(0.1)
-            
-#         # Wait for 5 seconds before terminating the game
-#         await asyncio.sleep(15)
-
-#         stdout, stderr = process.communicate()
-#         full_output += stdout
-#         full_error += stderr
-        
-#         # Send a close event like clicking X
-#         logging.info(colored("🛑 Closing the game window after 5 seconds...", "yellow"))
-#         stop_game(process)
-#         logging.info(colored("✅ Game closed.", "green"))
-        
-#         if process.returncode != 0:
-#             full_error += f"\nProcess exited with return code {process.returncode}"
-        
-#     except Exception as e:
-#         full_error += f"\nError running game: {str(e)}\n{traceback.format_exc()}"
-    
-#     error_summary = ""
-#     if full_error:
-#         error_summary += f"Runtime errors:\n{full_error}\n"
-#     if "error" in full_output.lower() or "exception" in full_output.lower():
-#         error_summary += f"Possible errors in output:\n{full_output}\n"
-    
-#     if error_summary:
-#         logging.error(colored(error_summary, "red"))
-#         return error_summary
-#     else:
-#         return None
-
 
 def simulate_input(action):
     """Simulates a keyboard press or mouse click based on AI instructions."""

@@ -19,6 +19,10 @@ import utils.game_database
 
 app = FastAPI()
 
+class GameRequest(BaseModel):
+    description: str
+    iterations: int
+    
 # Initialize database and logging on startup
 @app.on_event("startup")
 async def startup_event():
@@ -41,9 +45,7 @@ async def startup_event():
     )
     logging.getLogger().addHandler(logging.StreamHandler())
 
-class GameRequest(BaseModel):
-    description: str
-    iterations: int
+
 
 @app.post("/create-game")
 async def create_game(request: GameRequest):
