@@ -5,6 +5,8 @@ import shutil
 from dotenv import load_dotenv
 import time
 import logging
+import agents.action_check
+import agents.action_fix
 import agents.code_repair 
 import agents.code_updater 
 import agents.video_analizer
@@ -72,7 +74,7 @@ async def main(user_input: str = None, iterations: int = 3):
     with open("game_plan.xml", "w", encoding="utf-8") as f:
         f.write(final_plan)
     
-    game_name, window_size, file_structure = utils.file_utils.parse_file_structure(final_plan)
+    game_name, window_size, file_structure, actions = utils.file_utils.parse_file_structure(final_plan)
     logging.info(f"Game Name: {game_name}")
     logging.info("Creating game files...")
     os.makedirs("game", exist_ok=True)
@@ -93,35 +95,35 @@ async def main(user_input: str = None, iterations: int = 3):
         error_message = await utils.game_utils.run_game()
         if error_message is None:
             logging.info("Game ran successfully!")
-
             for _ in range(2):
-                logging.info("Running control tests...")
-                # Run the game with the image analysis agent
-                error_details = agents.control_test.ControlTesterAgent(game_name)
-                if error_details is None:
-                    logging.info("✅ Game ran successfully! No issues detected.")
-                    break
-                logging.error(colored(f"❌ Movement issue detected: {error_details}", "red")) 
-                await agents.code_updater.GameUpdater_Agent(error_details)  
+                for _ in range(2):
+                    logging.info("Running control tests...")
+                    # Run the game with the image analysis agent
+                    action_results, failed_actions = agents.action_check.action_check_agent(game_name, actions)
+                    if failed_actions is None:
+                        logging.info("✅ All actions passed successfully!")
+                        break
+                    logging.error(f"❌ Some actions failed: {failed_actions}") 
+                    await agents.action_fix.action_fix_agent(failed_actions)  
+                    time.sleep(1)
+                # Video analyzer 
+                analize = agents.video_analizer.analyze_game_video(game_name)
+                await agents.code_updater.GameUpdater_Agent(analize)
                 time.sleep(1)
-            # Video analyzer 
-            analize = agents.video_analizer.analyze_game_video(game_name)
-            await agents.code_updater.GameUpdater_Agent(analize)
-            time.sleep(1)
-            
-            # Run the game again to verify the changes
-            while True:
-                logging.info("🔁 Re-running game to verify all changes...")
-                final_error = await utils.game_utils.run_game()
-                if final_error is None:
-                    logging.info("✅ Final check passed. No errors found!")
-                    break  
+                
+                # Run the game again to verify the changes
+                while True:
+                    logging.info("🔁 Re-running game to verify all changes...")
+                    final_error = await utils.game_utils.run_game()
+                    if final_error is None:
+                        logging.info("✅ Final check passed. No errors found!")
+                        break  
 
-                logging.warning(colored(f"⚠️ New error detected after fixes: {final_error}", "yellow"))
-                await agents.code_updater.GameUpdater_Agent(final_error)
-                time.sleep(1)      
-                    
-            print(colored("🎉 Game created successfully! You can now play.", "cyan"))
+                    logging.warning(colored(f"⚠️ New error detected after fixes: {final_error}", "yellow"))
+                    await agents.code_updater.GameUpdater_Agent(final_error)
+                    time.sleep(1)      
+                        
+            print("🎉 Game created successfully! You can now play.")
             utils.game_database.save_game(game_name)
             logging.info("Game saved to the database.")
             break    

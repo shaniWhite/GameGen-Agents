@@ -28,13 +28,21 @@ def parse_file_structure(xml_string):
         files.append((name, description))
 
     # Extract actions as tuples (player action, button name)
-    actions = []
-    for action_elem in root.findall('.//actions/action'):
-        action_text = action_elem.text.strip()
-        if "," in action_text:
-            action_name, button = map(str.strip, action_text.split(",", 1))  # Split into tuple
-            actions.append((action_name, button))  # Store as tuple    
+    # actions = []
+    # for action_elem in root.findall('.//actions/action'):
+    #     action_text = action_elem.text.strip()
+    #     if "," in action_text:
+    #         action_name, button = map(str.strip, action_text.split(",", 1))  # Split into tuple
+    #         actions.append((action_name, button))  # Store as tuple    
 
+    actions = []
+    for elem in root.findall(".//action"):
+        text = elem.text
+        if "key name:" in text.lower():
+            # Extract the key name inside quotes
+            key_name = text.split("key name:")[1].strip().strip("'\"() ")
+            actions.append((text.strip(), key_name))
+            
     return game_name, window_size, files, actions
 
 # Function to check for consecutive user messages and add a separator
