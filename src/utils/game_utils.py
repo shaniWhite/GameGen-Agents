@@ -89,8 +89,7 @@ async def run_game():
         return error_summary
     else:
         return None
-
-    
+ 
 
 def simulate_input(action):
     """Simulates a keyboard press or mouse click based on AI instructions."""

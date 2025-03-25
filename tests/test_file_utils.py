@@ -20,13 +20,25 @@ class TestFileUtils(unittest.TestCase):
                     <description>Enemy logic</description>
                 </file>
             </structure>
+            <actions>
+                <action>Move left, key name: 'left arrow'</action>
+                <action>Jump, key name: "space bar"</action>
+            </actions>
         </game>
         """
-        name, size, files = file_utils.parse_file_structure(xml)
+        name, size, files, actions = file_utils.parse_file_structure(xml)
+        
         self.assertEqual(name, "Space Invaders")
         self.assertEqual(size, (800, 600))
         self.assertEqual(len(files), 2)
         self.assertIn(("main.py", "Main game loop"), files)
+
+        expected_actions = [
+            ("Move left, key name: 'left arrow'", "left arrow"),
+            ("Jump, key name: \"space bar\"", "space bar"),
+        ]
+        self.assertEqual(actions, expected_actions)
+
 
     def test_insert_message_separator(self):
         messages = [
@@ -49,6 +61,23 @@ class TestFileUtils(unittest.TestCase):
         result = file_utils.load_game_plan()
         self.assertIsNone(result)
         mock_log.warning.assert_called_once()
+
+
+    def test_normalize_action_key(self):
+        test_cases = [
+            ("left arrow", "left"),
+            ("right arrow", "right"),
+            ("space bar", "space"),
+            ("up arrow", "up"),
+            ("down arrow", "down"),
+            ("enter", "enter"),
+            ("A", "A"),  # Not in mapping
+            ("LEFT ARROW", "left"),  # Case-insensitive
+        ]
+
+        for input_key, expected_output in test_cases:
+            with self.subTest(input_key=input_key):
+                self.assertEqual(file_utils.normalize_action_key(input_key), expected_output)
 
 if __name__ == "__main__":
     unittest.main()
