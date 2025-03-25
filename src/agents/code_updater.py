@@ -46,7 +46,7 @@ async def GameUpdater_Agent(user_feedback):
     updated_file_contents
     </file>
     always return the full content of the files
-    "There should be 'paused' and 'exit' actions in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game."
+    There should be 'paused' and 'exit' actions in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game.
     game should start with a main module in the main.py file(main shouldn't take any arguments).Write clean, well-commented code that follows best practices.
     Please return the full contents of the Python code without any language-specific annotations (like '''python) or markdown formatting. The code should be clean, well-commented, and properly formatted. 
     """

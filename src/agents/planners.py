@@ -52,7 +52,7 @@ async def plan_project(user_input, iterations):
         if is_final:
             
             messages_1.append({"role": "user", "content": "this is the final iteration. please provide your final game structure along with file structure you think is best for the game."
-                               "don't return any directories but just the file names and descriptions. make sure to mention what imports are necessary for each file. Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur. "
+                               "don't return any directories but just the file names,descriptions, required actions and imports and the logic if required. Make sure to mention what imports are necessary for each file. Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur. "
                                "There should be 'paused' and 'exit' actions in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game."
                                "ensure function and method inputs are accurate as well as their returns. Remember that the game should start with a *main* module in the main.py file!(main shouldn't take any arguments)."})
         
@@ -72,11 +72,20 @@ async def plan_project(user_input, iterations):
         messages_2.append({"role": "user", "content": response_1.choices[0].message['content']})
         
         if is_final:
-            messages_2.append({"role": "user", "content": "This is the final iteration. Please review the game design carefully and provide your final response in the following "
-                               "XML format: \n<game_plan>\n  <overview>Overall game description</overview>\n <game_name>Meaningful and relevant game name</game_name>\n <window_size width=\"600\" height=\"600\"/>\n <mechanics>Key game mechanics</mechanics>\n  <files>\n    <file>\n  <name>filename.py</name>\n  <description>File purpose and contents</description>\n  </file>\n  <!-- Repeat <file> element for each file -->\n  </files>\n</game_plan>."
-                               "please don't return any additional directories but just the file names and descriptions along with simple description of functions and methods along with their inputs and returns. Please return descriptions for all files." 
-                               "we will save all files in the same folder. make sure to mention what imports are necessary for each file. Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur as well as the clear and accurate definition of function and method inputs." 
-                               "Remember that the game should start with a main module in the main.py file!(main shouldn't take any arguments)."})
+            messages_2.append({"role": "user", "content": 
+                               """This is the final iteration. Please review the game design carefully and provide your final response in the XML format as in the end of this message. Follow these instructions in your response:\n
+                                    1. All files should be in the same directory, provide only the file name without it's route!!!\n
+                                    2. Don't return any additional directories but just the file names and descriptions along with simple description of functions and methods along with their inputs and returns. Please return descriptions for all files.\n
+                                    3. Provide all game actions and there keys.\n
+                                    4. The actions: 'paused' and 'exit' must appear in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game.\n
+                                    5. Make sure to mention what imports are necessary for each file.\n
+                                    6. Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur as well as the clear and accurate definition of function and method inputs.\n
+                                    7. Make sure that the game starts with a main module in the main.py file!(main shouldn't take any arguments).\n
+
+                                    Your response needs to be in this XML format:\n
+                                    <game_plan>\n  <overview>Overall game description</overview>\n  <game_name>Meaningful and relevant game name</game_name>\n  <window_size width="600" height="600"/>\n  <mechanics>Key game mechanics</mechanics>\n  <actions>\n    <action>Player action, button name</action>\n    <!-- Repeat <action> element for each action -->\n  </actions>\n  <files>\n    <file>\n      <name>filename.py</name>\n      <description>File purpose and contents</description>\n    </file>\n    <!-- Repeat <file> element for each file -->\n  </files>\n</game_plan>
+
+                               """})
         
         # messages_2 = insert_message_separator(messages_2)
         
