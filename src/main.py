@@ -55,9 +55,16 @@ if os.path.exists("game"):
 # Recreate an empty directory
 os.makedirs("game")  
 
-async def main():
-    user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
-    iterations = int(input(colored("How many planning iterations do you want? ","magenta")))
+async def main(user_input: str = None, iterations: int = 3):
+    if user_input is None:
+        user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
+    if not iterations:
+        iterations = int(input(colored("How many planning iterations do you want? ", "magenta")))
+
+
+# async def main():
+#     user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
+#     iterations = int(input(colored("How many planning iterations do you want? ","magenta")))
     
     logging.info("Planning the game structure...")
     final_plan = await agents.planners.plan_project(user_input, iterations)
@@ -142,3 +149,7 @@ async def main():
 # Run the game creation process
 if __name__ == "__main__":
     asyncio.run(main())
+
+# New entry point for API
+async def generate_game_from_api(description: str, iterations: int):
+    return await main(description, iterations)

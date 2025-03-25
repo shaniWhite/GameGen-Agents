@@ -34,11 +34,10 @@ async def developer_agent(file_name, file_description, game_plan):
     If pygame.quit() has been called, the program should not continue executing functions that rely on an active Pygame session.
     There should be 'paused' and 'exit' actions in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game.
     The game should start with a main module in the main.py file!(main shouldn't take any arguments).
-    return the code for the file in the following format:
+    return the code for the file in the following format, Do not include markdown syntax like ```python or ```:
     <code>
     file_code
     </code>
-    Do not include markdown syntax like ```python or ```.
     """
     
     prompt = f"""Create a Python file named '{file_name}' with the following description: {file_description}
