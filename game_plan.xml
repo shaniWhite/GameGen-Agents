@@ -1,127 +1,71 @@
 <game_plan>
-  <overview>A classic Pong game implemented using Pygame, where players control paddles to hit a moving ball and score points while the game features a pause functionality and clean exit on quitting.</overview>
-  <game_name>Pong Challenge</game_name>
+  <overview>A simple version of the classic Pong game, where two players control paddles to hit a ball back and forth, aiming to score points by getting the ball past the opponent's paddle. The game features pausing, clean quitting, and a straightforward user interface.</overview>
+  <game_name>Pong Classic</game_name>
   <window_size width="600" height="600"/>
-  <mechanics>Players control paddles to prevent the ball from leaving their side of the screen, scoring points when the opponent fails to do so. The game can be paused and resumed using the 'P' key. The game exits cleanly when the game window is closed or when the quit option is selected.</mechanics>
+  <mechanics>Players control paddles to hit a ball, with the game allowing for scoring and movement control. The game can be paused or exited cleanly during play.</mechanics>
+  <actions>
+    <action>Move Paddle Up, W</action>
+    <action>Move Paddle Down, S</action>
+    <action>Toggle Pause, P</action>
+    <action>Exit Game, Escape</action>
+  </actions>
   <files>
     <file>
       <name>main.py</name>
-      <description>This is the main entry point of the game. It initializes Pygame, creates the game window, and handles main loop events (quit and pause).</description>
-      <imports>import pygame, from game import Game</imports>
-      <functions>
-        <function>
-          <name>main</name>
-          <description>Starts the game loop and handles events such as quitting and pausing.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </function>
-      </functions>
+      <description>This is the entry point of the game, initializing Pygame and handling the main game loop, which processes events, updates the game state, and renders everything on the screen.
+      Functions:
+      - main(): Initializes Pygame, creates a Game object, runs the game loop until the game is exited.
+      Inputs: None
+      Returns: None
+      </description>
     </file>
     <file>
       <name>game.py</name>
-      <description>Contains the main game logic, managing the game states (playing, paused), updating and rendering paddles and ball objects, and handling scoring.</description>
-      <imports>import pygame, from paddle import Paddle, from ball import Ball</imports>
-      <functions>
-        <function>
-          <name>__init__</name>
-          <description>Initializes the game class, sets up paddles, ball, and initial scores.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>update</name>
-          <description>Updates the positions of game objects and checks for collisions.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>render</name>
-          <description>Draws all game objects on the screen.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>toggle_pause</name>
-          <description>Toggles the game pause state.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </function>
-      </functions>
+      <description>This file contains the core logic of the Pong game, managing game mechanics, paddle and ball interactions, and the paused state.
+      Functions:
+      - __init__(): Initializes the game state, paddles, and ball.
+      Inputs: None
+      Returns: None
+      - handle_events(): Processes user inputs for quitting and toggling pause.
+      Inputs: None
+      Returns: None
+      - update(): Updates paddle and ball positions only if the game is not paused.
+      Inputs: None
+      Returns: None
+      - draw(): Clears the screen and renders paddles and the ball.
+      Inputs: None
+      Returns: None
+      </description>
     </file>
     <file>
       <name>paddle.py</name>
-      <description>Defines a Paddle class for creating and controlling paddle objects, including movement and rendering.</description>
-      <imports>import pygame</imports>
-      <functions>
-        <function>
-          <name>__init__</name>
-          <description>Initializes a paddle object with position and dimensions.</description>
-          <inputs>self, x_position (int), y_position (int), width (int), height (int)</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>move_up</name>
-          <description>Moves the paddle up within game boundaries.</description>
-          <inputs>self</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>move_down</name>
-          <description>Moves the paddle down within game boundaries.</description>
-          <inputs>self</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>draw</name>
-          <description>Draws the paddle on the screen.</description>
-          <inputs>self, screen</inputs>
-          <returns>None</returns>
-        </function>
-      </functions>
+      <description>This file manages the paddle behavior, including movements, input handling, and drawing the paddle on the screen.
+      Functions:
+      - __init__(self, x, y, width, height): Initializes paddle position and size.
+      Inputs: x (int), y (int), width (int), height (int)
+      Returns: None
+      - update(self, keys): Updates paddle's position based on user input.
+      Inputs: keys (list of bools representing the state of the keyboard)
+      Returns: None
+      - draw(self, surface): Draws the paddle on the given surface.
+      Inputs: surface (Pygame Surface)
+      Returns: None
+      </description>
     </file>
     <file>
       <name>ball.py</name>
-      <description>Defines a Ball class for creating and controlling the ball's movement, collisions, and score updating.</description>
-      <imports>import pygame</imports>
-      <functions>
-        <function>
-          <name>__init__</name>
-          <description>Initializes a ball object with position, radius, and initial velocity.</description>
-          <inputs>self, x_position (int), y_position (int), radius (int), velocity (tuple)</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>update</name>
-          <description>Updates the ball's position based on its velocity.</description>
-          <inputs>self, delta_time (float)</inputs>
-          <returns>None</returns>
-        </function>
-        <function>
-          <name>check_collision</name>
-          <description>Checks for collisions with paddles or walls and updates position or score.</description>
-          <inputs>self, paddle1 (Paddle), paddle2 (Paddle)</inputs>
-          <returns>bool (indicating if a collision occurred)</returns>
-        </function>
-        <function>
-          <name>draw</name>
-          <description>Draws the ball on the screen.</description>
-          <inputs>self, screen</inputs>
-          <returns>None</returns>
-        </function>
-      </functions>
-    </file>
-    <file>
-      <name>settings.py</name>
-      <description>Contains configuration settings for the game such as screen dimensions, colors, paddle and ball speed, and initial game states.</description>
-      <imports>None</imports>
-      <functions>
-        <function>
-          <name>get_settings</name>
-          <description>Returns a dictionary containing game settings.</description>
-          <inputs>None</inputs>
-          <returns>dict</returns>
-        </function>
-      </functions>
+      <description>This file manages the ball's behavior including movement, collision detection with paddles and walls, and scoring logic.
+      Functions:
+      - __init__(self, x, y, radius): Initializes the ball's position and speed.
+      Inputs: x (int), y (int), radius (int)
+      Returns: None
+      - update(self): Updates ball's position and checks for collisions.
+      Inputs: None
+      Returns: None
+      - draw(self, surface): Draws the ball onto the specified surface.
+      Inputs: surface (Pygame Surface)
+      Returns: None
+      </description>
     </file>
   </files>
 </game_plan>

@@ -57,7 +57,7 @@ if os.path.exists("game"):
 # Recreate an empty directory
 os.makedirs("game")  
 
-async def main(user_input: str = None, iterations: int = 3):
+async def main(user_input: str = None, iterations: int = 1):
     if user_input is None:
         user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
     if not iterations:
@@ -99,7 +99,7 @@ async def main(user_input: str = None, iterations: int = 3):
                 for _ in range(2):
                     logging.info("Running control tests...")
                     # Run the game with the image analysis agent
-                    action_results, failed_actions = agents.action_check.action_check_agent(game_name, actions)
+                    action_results, failed_actions = await agents.action_check.action_check_agent(game_name, actions)
                     if failed_actions is None:
                         logging.info("✅ All actions passed successfully!")
                         break

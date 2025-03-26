@@ -14,12 +14,12 @@ from utils.game_utils import start_game, stop_game, simulate_input
 from utils.image_utils import encode_image_to_base64
 import google.generativeai as genai
 
-actions = [
-        ("Move Left", "left"),
-        ("Move Right", "right"),
-        ("Jump", "space"),
-        ("Confirm", "enter")
-    ]
+# actions = [
+#         ("Move Left", "left"),
+#         ("Move Right", "right"),
+#         ("Jump", "space"),
+#         ("Confirm", "enter")
+#     ]
 
 # Create a folder for saving screenshots (if it doesn’t exist)
 screenshot_folder = "screenshots"
@@ -164,5 +164,5 @@ async def action_check_agent(game_name, actions):
 
 
 
-if __name__ == "__main__":
-    asyncio.run(action_check_agent("Pong Challenge", actions))
+# if __name__ == "__main__":
+#     asyncio.run(action_check_agent("Pong Challenge", actions))

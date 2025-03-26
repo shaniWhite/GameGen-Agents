@@ -1,19 +1,86 @@
-2025-03-26 14:00:43 - DEBUG - Using proactor: IocpProactor
-2025-03-26 14:00:43 - INFO - \u2705 Game process has exited on its own.
-2025-03-26 14:00:43 - DEBUG - Using proactor: IocpProactor
-2025-03-26 14:00:43 - INFO - \u2705 Game process has exited on its own.
-2025-03-26 14:00:43 - ERROR - Runtime errors:
-Runtime Error Here
+2025-03-26 16:23:16 - DEBUG - Using proactor: IocpProactor
+2025-03-26 16:23:19 - INFO - Planning the game structure...
+2025-03-26 16:23:19 - INFO - Iteration 1 of 1 planning iterations
+2025-03-26 16:23:55 - INFO - [33mgame plan written to game_plan.xml[0m
+2025-03-26 16:23:55 - INFO - Game Name: Pong Classic
+2025-03-26 16:23:55 - INFO - Creating game files...
+2025-03-26 16:24:00 - INFO - File 'main.py' has been created.
+2025-03-26 16:24:00 - INFO - File 'ball.py' has been created.
+2025-03-26 16:24:02 - INFO - File 'paddle.py' has been created.
+2025-03-26 16:24:05 - INFO - File 'game.py' has been created.
+2025-03-26 16:24:05 - INFO - Game creation complete!
+2025-03-26 16:24:05 - INFO - Final game plan:
+2025-03-26 16:24:05 - INFO - \u2705 Game process has exited on its own.
+2025-03-26 16:24:05 - ERROR - Runtime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1
+    <code>
+    ^
+SyntaxError: invalid syntax
+
 \U0001f6a8 Process exited with return code 1
 
-2025-03-26 14:00:43 - INFO - Pressing left key...
-2025-03-26 14:00:43 - INFO - Pressing Space key...
-2025-03-26 14:00:44 - INFO - Moving mouse to center of the screen...
-2025-03-26 14:00:44 - INFO - Performing mouse double click...
-2025-03-26 14:00:44 - INFO - Performing right-click...
-2025-03-26 14:00:44 - INFO - Moving mouse to center of the screen...
-2025-03-26 14:00:44 - INFO - Moving mouse to center of the screen...
-2025-03-26 14:00:46 - INFO - \u2705 Game process terminated.
-2025-03-26 14:00:46 - DEBUG - Using proactor: IocpProactor
-2025-03-26 14:00:46 - INFO -  Movement detected and marked at: test/movement_result.png
-2025-03-26 14:00:46 - INFO - Screenshot saved: test/screens\screenshot_2.png
+2025-03-26 16:24:05 - ERROR - Error detected: Runtime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1
+    <code>
+    ^
+SyntaxError: invalid syntax
+
+\U0001f6a8 Process exited with return code 1
+
+2025-03-26 16:24:05 - INFO - Attempt 1 to fix the errors...
+2025-03-26 16:24:05 - INFO - Code repair attempting to fix the error...
+2025-03-26 16:24:31 - INFO - Updated file: ball.py
+2025-03-26 16:24:31 - INFO - Updated file: game.py
+2025-03-26 16:24:31 - INFO - Updated file: main.py
+2025-03-26 16:24:31 - INFO - Updated file: paddle.py
+2025-03-26 16:24:33 - INFO - Running the game after fixing the errors...
+2025-03-26 16:24:39 - ERROR - Runtime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 27, in main
+    game.update()
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 39, in update
+    self.paddle1.update(pygame.key.get_pressed())
+                        ^^^^^^^^^^^^^^^^^^^^^^^^
+pygame.error: video system not initialized
+
+\U0001f6a8 Process exited with return code 1
+
+2025-03-26 16:24:39 - INFO - Attempt 2 to fix the errors...
+2025-03-26 16:24:39 - INFO - Code repair attempting to fix the error...
+2025-03-26 16:24:53 - INFO - Updated file: ball.py
+2025-03-26 16:24:53 - INFO - Updated file: game.py
+2025-03-26 16:24:53 - INFO - Updated file: main.py
+2025-03-26 16:24:53 - INFO - Updated file: paddle.py
+2025-03-26 16:24:55 - INFO - Running the game after fixing the errors...
+2025-03-26 16:25:01 - ERROR - Runtime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 32, in main
+    pygame.display.flip()
+pygame.error: video system not initialized
+
+\U0001f6a8 Process exited with return code 1
+
+2025-03-26 16:25:01 - INFO - Attempt 3 to fix the errors...
+2025-03-26 16:25:01 - INFO - Code repair attempting to fix the error...
+2025-03-26 16:25:17 - INFO - Updated file: ball.py
+2025-03-26 16:25:17 - INFO - Updated file: game.py
+2025-03-26 16:25:17 - INFO - Updated file: main.py
+2025-03-26 16:25:17 - INFO - Updated file: paddle.py
+2025-03-26 16:25:19 - INFO - Running the game after fixing the errors...
+2025-03-26 16:25:25 - ERROR - Runtime errors:
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 32, in main
+    pygame.event.clear()
+pygame.error: video system not initialized
+
+\U0001f6a8 Process exited with return code 1
+
+2025-03-26 16:25:25 - INFO - Attempt 4 to fix the errors...
+2025-03-26 16:25:25 - INFO - Code repair attempting to fix the error...
