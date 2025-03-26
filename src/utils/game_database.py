@@ -30,14 +30,14 @@ def save_game(game_name):
     conn.commit()
     conn.close()
 
-def print_all_games():
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    c.execute("SELECT * FROM games")
-    rows = c.fetchall()
-    conn.close()
+# def print_all_games():
+#     conn = sqlite3.connect(DB_FILE)
+#     c = conn.cursor()
+#     c.execute("SELECT * FROM games")
+#     rows = c.fetchall()
+#     conn.close()
 
-    for row in rows:
-        print(row)
+#     for row in rows:
+#         print(row)
 
 # print_all_games()

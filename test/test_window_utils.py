@@ -7,7 +7,7 @@ import numpy as np
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 from src.utils import window_utils
 import cv2
-
+from PIL import Image
 
 
 
@@ -43,7 +43,7 @@ class TestWindowUtils(unittest.TestCase):
 
         game_name = "My Game"
         index = 2
-        folder = "tests/screens"
+        folder = "test/screens"
         expected_path = os.path.join(folder, "screenshot_2.png")
 
         # Make sure the folder exists for testing
@@ -58,12 +58,12 @@ class TestWindowUtils(unittest.TestCase):
 
     @patch('src.utils.window_utils.get_game_window', return_value=None)
     def test_capture_screenshot_no_window(self, mock_get_window):
-        result = window_utils.capture_screenshot("Missing Game", 0, "tests/screens")
+        result = window_utils.capture_screenshot("Missing Game", 0, "test/screens")
         self.assertIsNone(result)
 
 
     def test_delete_screenshot_existing_file(self):
-        path = "tests/temp_screenshot.png"
+        path = "test/temp_screenshot.png"
         with open(path, "w") as f:
             f.write("dummy")
         self.assertTrue(os.path.exists(path))
@@ -75,16 +75,51 @@ class TestWindowUtils(unittest.TestCase):
         with patch('src.utils.window_utils.logging') as mock_log:
             window_utils.delete_screenshot("nonexistent_file.png")
             mock_log.error.assert_called_once()
+    
+    
 
+    @patch("src.utils.window_utils.subprocess.Popen")
+    @patch("src.utils.window_utils.pyautogui.screenshot")
+    @patch("src.utils.window_utils.get_game_window")
+    @patch("src.utils.window_utils.cv2.VideoWriter")
+    def test_record_gameplay_video(self, mock_writer, mock_get_window, mock_screenshot, mock_popen):
+        # Setup mock game window
+        mock_window = MagicMock()
+        mock_window.left = 0
+        mock_window.top = 0
+        mock_window.width = 100
+        mock_window.height = 100
+        mock_get_window.return_value = mock_window
+
+        # Return a fake image from screenshot
+        mock_image = Image.fromarray(np.zeros((100, 100, 3), dtype=np.uint8))
+        mock_screenshot.return_value = mock_image
+
+        # Setup mocks for VideoWriter and subprocess
+        mock_video_writer = MagicMock()
+        mock_writer.return_value = mock_video_writer
+        mock_proc = MagicMock()
+        mock_popen.return_value = mock_proc
+
+        # Call the function
+        output_path = "test/test_output.mp4"
+        result = window_utils.record_gameplay_video("Fake Game", video_file_path=output_path, fps=1)
+
+        self.assertEqual(result, output_path)
+        mock_writer.assert_called_once()
+        mock_video_writer.write.assert_called()
+        mock_video_writer.release.assert_called_once()
+        mock_proc.terminate.assert_called_once()
+            
 
 class TestVideoUtils(unittest.TestCase):
 
     def setUp(self):
-        self.before_path = "tests/before.png"
-        self.after_path = "tests/after.png"
-        self.output_path = "tests/movement_result.png"
+        self.before_path = "test/before.png"
+        self.after_path = "test/after.png"
+        self.output_path = "test/movement_result.png"
 
-        os.makedirs("tests", exist_ok=True)
+        os.makedirs("test", exist_ok=True)
 
         # Create two dummy grayscale images with a shifted square
         before_img = np.zeros((100, 100), dtype=np.uint8)

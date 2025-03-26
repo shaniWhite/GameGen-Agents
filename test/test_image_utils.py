@@ -9,8 +9,8 @@ from src.utils import image_utils
 class TestEncodeImageToBase64(unittest.TestCase):
 
     def setUp(self):
-        self.image_path = "tests/test_image.png"
-        os.makedirs("tests", exist_ok=True)
+        self.image_path = "test/test_image.png"
+        os.makedirs("test", exist_ok=True)
 
         # Create a simple black square image
         img = np.zeros((10, 10, 3), dtype=np.uint8)
