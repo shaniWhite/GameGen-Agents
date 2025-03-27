@@ -1,8 +1,6 @@
 name: Trigger auto deployment for gamegen-api
 
-# When this action will be executed
 on:
-  # Automatically trigger it when detected changes in repo
   push:
     branches: 
       [ main ]
@@ -10,15 +8,35 @@ on:
     - '**'
     - '.github/workflows/gamegen-api-AutoDeployTrigger-93e6e1d6-b905-435c-bd73-bc69704f7fd7.yml'
 
-  # Allow manual trigger 
   workflow_dispatch:      
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Adjusted to root-level file
+
+      - name: Run tests
+        run: |
+          pytest test/  # Corrected to match your actual test folder
+
   build-and-deploy:
+    needs: test  # Ensures tests pass before deploying
     runs-on: ubuntu-latest
     permissions: 
-      id-token: write #This is required for requesting the OIDC JWT Token
-      contents: read #Required when GH token is used to authenticate with private repo
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout to the branch
@@ -44,5 +62,3 @@ jobs:
           imageToBuild: gamegenacr.azurecr.io/gamegen-api:${{ github.sha }}
           _buildArgumentsKey_: |
             _buildArgumentsValues_
-
-
