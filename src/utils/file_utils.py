@@ -27,21 +27,21 @@ def parse_file_structure(xml_string):
         description = file_elem.find('description').text
         files.append((name, description))
 
-    # Extract actions as tuples (player action, button name)
-    # actions = []
-    # for action_elem in root.findall('.//actions/action'):
-    #     action_text = action_elem.text.strip()
-    #     if "," in action_text:
-    #         action_name, button = map(str.strip, action_text.split(",", 1))  # Split into tuple
-    #         actions.append((action_name, button))  # Store as tuple    
-
     actions = []
     for elem in root.findall(".//action"):
-        text = elem.text
-        if "key name:" in text.lower():
-            # Extract the key name inside quotes
+        text = elem.text.strip()
+
+        # Check if the action is in Format 1 (e.g., "Move left paddle up, W")
+        if "," in text:
+            action_name, button = map(str.strip, text.split(",", 1))  # Split into tuple
+            actions.append((action_name, button))  # Store as tuple
+        # Check if the action is in Format 2 (e.g., "key name: 'W'")
+        elif "key name:" in text.lower():
             key_name = text.split("key name:")[1].strip().strip("'\"() ")
-            actions.append((text.strip(), key_name))
+            actions.append((text.strip(), key_name))  # Store as tuple (full text, key_name)
+    # Print parsed actions to verify
+    print(actions)
+
             
     return game_name, window_size, files, actions
 
@@ -72,4 +72,12 @@ def normalize_action_key(action_key):
         "down arrow": "down",
         "enter": "enter",
     }
+    # Remove "key: " prefix if present
+    if action_key.lower().startswith("key: "):
+        action_key = action_key[5:].strip()
+    
+    print(f"Normalized key: {key_mappings.get(action_key.lower(), action_key)}")  # Debugging print
+    
     return key_mappings.get(action_key.lower(), action_key)  # Default to original if not found
+
+# normalize_action_key('key: UP ARROW')

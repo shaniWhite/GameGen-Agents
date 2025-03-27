@@ -17,52 +17,57 @@ import agents.planners
 import agents.control_test
 from termcolor import colored
 import utils.game_database
+import sys
 
 
 # Initialize the database once when the program starts
 utils.game_database.init_db()
 
-with open("game_log.txt", "w") as log_file:
-    log_file.write("")
+def setup_environment():
+    # Clear the log file
+    with open("game_log.txt", "w") as log_file:
+        log_file.write("")
 
-# Configure logging
-logging.basicConfig(
-    filename="game_log.txt",  
-    level=logging.DEBUG,  # Set the log level (DEBUG, INFO, WARNING, ERROR)
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
-console_handler = logging.StreamHandler()
-console_handler.setLevel(logging.ERROR)  # Only show errors in the console
-formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-console_handler.setFormatter(formatter)
-logging.getLogger().addHandler(console_handler)
-logging.getLogger("openai").setLevel(logging.WARNING)  # Hide INFO logs from OpenAI API
-logging.getLogger("httpx").setLevel(logging.WARNING)  # For newer OpenAI SDK versions
-logging.getLogger("urllib3").setLevel(logging.WARNING)  # If using requests directly
-logging.getLogger("PIL").setLevel(logging.WARNING)
+    # Configure logging
+    logging.basicConfig(
+        filename="game_log.txt",
+        level=logging.DEBUG,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
-# Remove the 'game' directory and its contents if it exists
-if os.path.exists("game"):
-    try:
-        def remove_readonly(func, path, _):
-            """Forces removal of read-only files."""
-            os.chmod(path, 0o777)
-            func(path)
+    # Remove and recreate the 'game' directory
+    clear_game_directory()
+    os.makedirs("game", exist_ok=True)
+    
+    # Suppress debug logs from external libraries
+    logging.getLogger("openai").setLevel(logging.WARNING)  # Ignore AI tool logs
+    logging.getLogger("httpx").setLevel(logging.WARNING)   # Suppress network logs
+    logging.getLogger("urllib3").setLevel(logging.WARNING) # Suppress HTTP logs
+    logging.getLogger("PIL").setLevel(logging.WARNING)     # Suppress image processing logs
 
-        shutil.rmtree("game", onerror=remove_readonly)  # Force delete
-    except Exception as e:
-        logging.error(f"❌ Error deleting 'game' directory: {str(e)}") 
-        
-# Recreate an empty directory
-os.makedirs("game")  
+    # Redirect stderr to prevent AI debug logs from appearing
+    sys.stderr = open(os.devnull, "w")  # Suppress background error messages
+
+    logging.info("✅ Game environment setup complete!")  # Add confirmation log
+
+def clear_game_directory():
+    if os.path.exists("game"):
+        try:
+            def remove_readonly(func, path, _):
+                os.chmod(path, 0o777)
+                func(path)
+            shutil.rmtree("game", onerror=remove_readonly)
+        except Exception as e:
+            logging.error(f"❌ Error deleting 'game' directory: {str(e)}")
 
 async def main(user_input: str = None, iterations: int = 1):
+    setup_environment()
+    clear_game_directory()
     if user_input is None:
         user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
     if not iterations:
         iterations = int(input(colored("How many planning iterations do you want? ", "magenta")))
-
 
 # async def main():
 #     user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
@@ -76,6 +81,7 @@ async def main(user_input: str = None, iterations: int = 1):
     
     game_name, window_size, file_structure, actions = utils.file_utils.parse_file_structure(final_plan)
     logging.info(f"Game Name: {game_name}")
+    logging.info(f"aCTIONS: {actions}")
     logging.info("Creating game files...")
     os.makedirs("game", exist_ok=True)
     
@@ -154,4 +160,5 @@ if __name__ == "__main__":
 
 # New entry point for API
 async def generate_game_from_api(description: str, iterations: int):
-    return await main(description, iterations)
+    await main(description, iterations)
+    return {"message": "✅ Game creation started from API!"}

@@ -16,7 +16,7 @@ class GameRequest(BaseModel):
 async def generate_game(request: GameRequest):
     try:
         # Forward the request to your local runner
-        local_url = "http://192.168.10.105:8001/generate_game"
+        local_url = "https://1221-194-153-101-249.ngrok-free.app/generate_game"
         response = requests.post(local_url, json=request.dict())
         response.raise_for_status()
 

@@ -81,5 +81,4 @@ def analyze_game_video(game_name, game_plan_path="game_plan.xml"):
         return None
     
 
-#     return analysis_feedback
-# analyze_game_video("Pong Dash")
+# analyze_game_video("Pong Battle")

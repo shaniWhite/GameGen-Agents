@@ -14,12 +14,7 @@ from utils.game_utils import start_game, stop_game, simulate_input
 from utils.image_utils import encode_image_to_base64
 import google.generativeai as genai
 
-# actions = [
-#         ("Move Left", "left"),
-#         ("Move Right", "right"),
-#         ("Jump", "space"),
-#         ("Confirm", "enter")
-#     ]
+actions = [('Move paddle up', 'key: UP ARROW'), ('Move paddle down', 'key: DOWN ARROW'), ('Toggle pause', 'key: P'), ('Exit game', 'key: ESCAPE')]
 
 # Create a folder for saving screenshots (if it doesn’t exist)
 screenshot_folder = "screenshots"
@@ -33,19 +28,18 @@ async def action_check_agent(game_name, actions):
     action_results = {}
     failed_actions = []
     
-
     game_process = start_game()
     time.sleep(1)
-    print("Game is running. Please play the game. Close the window to stop.")
+    # print("Game is running. Please play the game. Close the window to stop.")
         
     # ✅ Simulate pressing 'P' to pause the game
-    print("Pausing the game...")
+    logging.info("Pausing the game...")
     time.sleep(1)  # Give time for the game to register the pause
     pyautogui.press("P")
                 
     game_window = get_game_window(game_name)
     if not game_window:
-        print(f"⚠️ Could not find window: {game_name}")
+        logging.error(f"⚠️ Could not find window: {game_name}")
         return
     
     filtered_actions = [
@@ -57,14 +51,13 @@ async def action_check_agent(game_name, actions):
     for action_name, action_key in filtered_actions:
         attempt = 0
         success = False
-        
-            
+               
         while attempt < 3 and not success:
             print(f"🔁 Testing: {action_name} ({action_key}) — Attempt {attempt + 1}")
-
+            logging.info(f"🔁 Testing: {action_name} ({action_key}) — Attempt {attempt + 1}")
             screenshot_before = capture_screenshot(game_name, "before", screenshot_folder)
             if not screenshot_before:
-                print("⚠ Could not capture 'before' screenshot.")
+                logging.error("⚠ Could not capture 'before' screenshot.")
                 break
 
             pyautogui.press("p")  # Resume game
@@ -95,14 +88,16 @@ async def action_check_agent(game_name, actions):
                 logging.error("⚠ Movement highlight image was not created!")
                 
             if screenshot_before and screenshot_after:
-                prompt = """
-                "I am sending you three images:\n"
-                    "1. The first image is the game screen **before** pressing the key you suggested.\n"
-                    "2. The second image is the game screen **after** pressing the key.\n"
+                prompt = f"""
+     
+                You will verify the correctness of the action: '{action_name}'.
+                "Here are 3 screenshots from the game: {game_name}.:\n"
+                    "1. The first image is the game screen **before** pressing the key '{action_key}' to make the action '{action_name}'.\n"
+                    "2. The second image is the game screen **after** pressing the key '{action_key}.\n"
                     "3.The third image is an **annotated version** where the player's position **before movement** is highlighted with a red mark.\n\n"
                         "so in the third image, if the player is not where the red mark is, it means that he moved and you determine if the movement was correct or not."
                     "Your Task:\n"
-                        "- Analyze the images to verify if the movement occurred as expected based on the suggested key action.\n"
+                        "- Analyze the images to verify if the movement occurred as expected based on the action provided.\n"
                         "- Then, confirm whether the movement aligns with the key action that was suggested.\n\n"
                         
                         "How to Respond:\n"
@@ -145,7 +140,7 @@ async def action_check_agent(game_name, actions):
                 if "the movement worked" in verification_result:
                     success = True
                     action_results[action_name] = "Success"
-                else:
+                elif "problem occurred" in verification_result:
                     attempt += 1
                     if attempt >= 3:
                         action_results[action_name] = f"Failed: {verification_result}"
@@ -165,4 +160,4 @@ async def action_check_agent(game_name, actions):
 
 
 # if __name__ == "__main__":
-#     asyncio.run(action_check_agent("Pong Challenge", actions))
+#     asyncio.run(action_check_agent("Pong Mania", actions))
