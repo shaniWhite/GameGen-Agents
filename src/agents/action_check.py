@@ -1,8 +1,6 @@
-
 import os
 import sys
 import time
-
 import base64
 import pyautogui
 import asyncio
@@ -89,7 +87,6 @@ async def action_check_agent(game_name, actions):
                 
             if screenshot_before and screenshot_after:
                 prompt = f"""
-     
                 You will verify the correctness of the action: '{action_name}'.
                 "Here are 3 screenshots from the game: {game_name}.:\n"
                     "1. The first image is the game screen **before** pressing the key '{action_key}' to make the action '{action_name}'.\n"

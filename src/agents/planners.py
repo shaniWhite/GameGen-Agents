@@ -2,7 +2,6 @@
 import logging
 import re
 import openai
-from termcolor import colored
 from dotenv import load_dotenv
 import os
 
@@ -21,11 +20,16 @@ async def plan_project(user_input, iterations):
     -Focus on game mechanics, structure, and overall design and function and method inputs(proper inputs and number of inputs) and returns of functions and methods. 
     -Do not suggest external media files or images.make sure no code files need any external files. all assets must be generated within pygame. 
     -you must select a meaningful and relevant game name that fits the gameplay theme.
-    -Ensure that the game properly handles quitting. If the player closes the window by pressing 'X' button  or selects 'Quit' from a menu, the game must exit cleanly without trying to continue execution.
-    -The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates.
-    -Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur. No need to discuss timelines or git commands. 
     -Main purpose is to review and evaluate the project structure so that when the final files and their descriptions are prepared the code will function without any errors.
-    -Remember that the game should start with a main module in the main.py file!
+    -Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur. No need to discuss timelines or git commands.
+    
+    -When writing the game plan, concider the following instructions:
+        1.Ensure that the game properly handles quitting. If the player closes the window by pressing 'X' button  or selects 'Quit' from a menu, the game must exit cleanly without trying to continue execution.
+        2.The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates.
+        3.The game should support exiting it by adding a 'exit' action. pressing 'escape' on the keyboard should exit the game.
+        4.Remember that the game should start with a main module in the main.py file! (main shouldn't take any arguments).
+
+
     here is the user input: {user_input}
     """
     
@@ -35,11 +39,14 @@ async def plan_project(user_input, iterations):
     Focus on code organization, modularity, and best practices and function and method inputs(proper inputs and number of inputs) and returns of functions and methods . 
     Do not suggest external media files or images. make sure no code files need any external files. all assets must be generated within pygame. 
     you must select a meaningful and relevant game name that fits the gameplay theme.
-    The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates - but dont print anything to the screen.
-    Ensure that the game properly handles quitting. If the player closes the window by pressing 'X' button  or selects 'Quit' from a menu, the game must exit cleanly without trying to continue execution.
     Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur. No need to discuss timelines or git commands.  
     Main purpose is to review and evaluate the project structure so that when the final files and their descriptions are prepared the code will function without any errors.
-    Remember that the game should start with a main module in the main.py file!
+    
+    When writing the game plan, concider the following instructions:
+        1.Ensure that the game properly handles quitting. If the player closes the window by pressing 'X' button  or selects 'Quit' from a menu, the game must exit cleanly without trying to continue execution.
+        2.The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates.
+        3.The game should support exiting it by adding a 'exit' action. pressing 'escape' on the keyboard should exit the game.
+        4.Remember that the game should start with a main module in the main.py file! (main shouldn't take any arguments).
     here is the user input: {user_input}
     """
     messages_1 = [{"role": "user", "content": f"please plan a Pygame project based on the following user input: {user_input}. Remember that the game should start with a main module in the main.py file!"}]
@@ -67,7 +74,7 @@ async def plan_project(user_input, iterations):
         )
 
         if PRINT_RESPONSE:
-            print(colored(response_1.choices[0].message['content'], "green"))
+            print(response_1.choices[0].message['content'])
         messages_1.append({"role": "assistant", "content": response_1.choices[0].message['content']})
         messages_2.append({"role": "user", "content": response_1.choices[0].message['content']})
         
@@ -99,7 +106,7 @@ async def plan_project(user_input, iterations):
         )
         
         if PRINT_RESPONSE:
-            print(colored(response_2.choices[0].message['content'], "blue"))
+            print(response_2.choices[0].message['content'])
         messages_2.append({"role": "assistant", "content": response_2.choices[0].message['content']})
         messages_1.append({"role": "user", "content": response_2.choices[0].message['content']})
     

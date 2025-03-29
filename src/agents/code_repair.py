@@ -2,7 +2,6 @@ import os
 import re
 import sys
 import time
-from termcolor import colored
 import openai
 import logging
 from dotenv import load_dotenv
@@ -67,7 +66,7 @@ async def Code_Repair_Agent(error_message):
     )
 
     if PRINT_RESPONSE:
-        logging.info(colored(response.choices[0].message['content'], "magenta"))
+        logging.info(response.choices[0].message['content'])
     # Extract corrected file contents from the response
     corrected_files = re.findall(r'<file name="(.*?)">(.*?)</file>', response.choices[0].message['content'], re.DOTALL)
     
