@@ -65,6 +65,11 @@ class TestGameUtils(unittest.TestCase):
 
         game_utils.simulate_input("move mouse")
         mock_move_to.assert_called_with(960, 540, duration=0.5)
+        
+    @unittest.skipIf(
+    platform.system() != "Windows" or os.environ.get("CI") == "true",
+    "Skipped GUI-related test in CI or on non-Windows"
+    )
 
     @patch("logging.error")
     def test_simulate_input_unknown_action(self, mock_log):

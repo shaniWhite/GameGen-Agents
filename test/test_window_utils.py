@@ -7,9 +7,14 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 's
 from src.utils import window_utils
 import cv2
 from PIL import Image
+import platform
 
 class TestWindowUtils(unittest.TestCase):
 
+    @unittest.skipIf(
+        platform.system() != "Windows" or os.environ.get("CI") == "true",
+        "Skipped GUI-related test in CI or on non-Windows"
+    )
     @patch('pygetwindow.getWindowsWithTitle')
     def test_get_game_window_found(self, mock_get_windows):
         mock_window = MagicMock()
@@ -18,6 +23,10 @@ class TestWindowUtils(unittest.TestCase):
         result = window_utils.get_game_window("Test Game")
         self.assertEqual(result, mock_window)
 
+    @unittest.skipIf(
+        platform.system() != "Windows" or os.environ.get("CI") == "true",
+        "Skipped GUI-related test in CI or on non-Windows"
+    )
     @patch('pygetwindow.getWindowsWithTitle')
     def test_get_game_window_not_found(self, mock_get_windows):
         mock_get_windows.return_value = []
@@ -25,6 +34,10 @@ class TestWindowUtils(unittest.TestCase):
         result = window_utils.get_game_window("Nonexistent Game")
         self.assertIsNone(result)
 
+    @unittest.skipIf(
+        platform.system() != "Windows" or os.environ.get("CI") == "true",
+        "Skipped GUI-related test in CI or on non-Windows"
+    )
     @patch('pyautogui.screenshot')
     @patch('src.utils.window_utils.get_game_window')
     def test_capture_screenshot_success(self, mock_get_window, mock_screenshot):
@@ -52,6 +65,10 @@ class TestWindowUtils(unittest.TestCase):
         mock_image.save.assert_called_once_with(expected_path)
         self.assertEqual(result, expected_path)
 
+    @unittest.skipIf(
+        platform.system() != "Windows" or os.environ.get("CI") == "true",
+        "Skipped GUI-related test in CI or on non-Windows"
+    )
     @patch('src.utils.window_utils.get_game_window', return_value=None)
     def test_capture_screenshot_no_window(self, mock_get_window):
         result = window_utils.capture_screenshot("Missing Game", 0, "test/screens")
@@ -71,7 +88,10 @@ class TestWindowUtils(unittest.TestCase):
         window_utils.delete_screenshot("nonexistent_file.png")
         mock_log.error.assert_called_once()
 
-
+    @unittest.skipIf(
+        platform.system() != "Windows" or os.environ.get("CI") == "true",
+        "Skipped GUI-related test in CI or on non-Windows"
+    )
     @patch("subprocess.Popen")
     @patch("pyautogui.screenshot")
     @patch("src.utils.window_utils.get_game_window")
