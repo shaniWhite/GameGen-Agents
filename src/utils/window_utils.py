@@ -95,19 +95,19 @@ def record_gameplay_video(game_name, video_file_path="gameplay.mp4", fps=30):
     - str: Path to the saved video file or None if the window is not found.
     """
     
-    print("🎮 Starting external game...")
+    logging.info("🎮 Starting external game for recording...")
     game_process = subprocess.Popen(["python", "game/main.py"])
     time.sleep(2)  
     
     # Get the game window position & size
     game_window = get_game_window(game_name)
     if not game_window:
-        logging.info(f"❌ Error: Game window '{game_name}' not found!")
+        logging.info(f"❌ Error: Game window '{game_name}' not found in recording game!")
         return None
     
     # Get the game window position & size
     x, y, width, height = game_window.left, game_window.top, game_window.width, game_window.height
-    print(f"🎥 Recording game window at ({x}, {y}) with size {width}x{height}...")
+    logging.info(f"🎥 Recording game window at ({x}, {y}) with size {width}x{height}...")
 
     # Setup screen recording
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
@@ -127,8 +127,9 @@ def record_gameplay_video(game_name, video_file_path="gameplay.mp4", fps=30):
 
     if game_process:
         game_process.terminate()
-        print("✅ Game process terminated.")
+        logging.info("✅ Game process terminated.")
 
-    print(f"✅ Recording complete. Video saved to: {video_file_path}")
+    logging.info(f"✅ Recording complete. Video saved to: {video_file_path}")
     return video_file_path
+
 # record_gameplay_video("Grid Escape")

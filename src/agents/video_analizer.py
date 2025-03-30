@@ -72,11 +72,11 @@ def analyze_game_video(game_name, game_plan_path="game_plan.xml"):
             
         )
         logging.info("📢 Gemini Feedback on video:\n%s\n--- End of feedback ---", response.text)
-
+        # print("📢 Gemini Feedback on video:\n", response.text)
         return response.text  # ✅ Return AI feedback
     except Exception as e:
         logging.error(f"❌ [ERROR] Failed to analyze video: {e}")
         return None
     
 
-# analyze_game_video("Pong Battle")
+# analyze_game_video("Pong Duel")

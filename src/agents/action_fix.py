@@ -58,8 +58,9 @@ async def action_fix_agent(failed_actions):
     if updated_files:
         for filename, content in updated_files:
             file_path = os.path.join("game", filename)
+            clean_content = content.strip()
             with open(file_path, "w", encoding="utf-8") as f:
-                f.write(content.strip())
+                f.write(clean_content)
             print(f"Updated file: {filename}")
     
     else:

@@ -26,12 +26,10 @@ async def action_check_agent(game_name, actions):
     
     game_process = start_game()
     time.sleep(1)
-    # print("Game is running. Please play the game. Close the window to stop.")
         
     # ✅ Simulate pressing 'P' to pause the game
     logging.info("Pausing the game...")
-    time.sleep(1)  # Give time for the game to register the pause
-    pyautogui.press("P")
+    simulate_input("p")
                 
     game_window = get_game_window(game_name)
     if not game_window:
@@ -49,7 +47,7 @@ async def action_check_agent(game_name, actions):
         success = False
                
         while attempt < 3 and not success:
-            print(f"🔁 Testing: {action_name} ({action_key}) — Attempt {attempt + 1}")
+            
             logging.info(f"🔁 Testing: {action_name} ({action_key}) — Attempt {attempt + 1}")
             screenshot_before = capture_screenshot(game_name, "before", screenshot_folder)
             if not screenshot_before:
@@ -59,11 +57,14 @@ async def action_check_agent(game_name, actions):
             pyautogui.press("p")  #resume game
             logging.info("resuming game...")    
             time.sleep(0.2)
+            simulate_input("p")  # resume game
+            logging.info("resume game...")    
+            time.sleep(0.2)
 
             simulate_input(normalize_action_key(action_key))
             time.sleep(0.2)
 
-            pyautogui.press("p")  # pause game
+            simulate_input("p")  # pause game again
             time.sleep(0.5)
 
             screenshot_after = capture_screenshot(game_name, "after", screenshot_folder)
@@ -131,7 +132,7 @@ async def action_check_agent(game_name, actions):
             try:
                 response = model.generate_content(contents)
                 verification_result = response.text.strip().lower()
-                print(f"🧠 Gemini response: {verification_result}")
+                logging.info(f"🧠 Gemini response: {verification_result}")
 
                 if "the movement worked" in verification_result:
                     success = True
@@ -143,14 +144,14 @@ async def action_check_agent(game_name, actions):
                         failed_actions.append(action_name)
 
             except Exception as e:
-                print(f"⚠ Gemini error: {e}")
+                logging.error(f"⚠ Gemini error: {e}")
                 attempt += 1
 
         if not success:
-            print(f"❌ Action '{action_name}' failed after 3 attempts.\n")
+            logging.error(f"❌ Action '{action_name}' failed after 3 attempts.\n")
 
     stop_game(game_process)
-    print("✅ All actions tested.")
+    logging.info("✅ All actions tested.")
     return action_results, failed_actions
 
 

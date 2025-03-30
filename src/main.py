@@ -62,7 +62,7 @@ def clear_game_directory():
         except Exception as e:
             logging.error(f"❌ Error deleting 'game' directory: {str(e)}")
 
-async def main(user_input: str = None, iterations: int = 1):
+async def main(user_input: str = None, iterations: int = 2):
     setup_environment()
     clear_game_directory()
     if user_input is None:
@@ -83,12 +83,13 @@ async def main(user_input: str = None, iterations: int = 1):
     game_name, window_size, file_structure, actions = utils.file_utils.parse_file_structure(final_plan)
     logging.info(f"Game Name: {game_name}")
     logging.info(f"ACTIONS: {actions}")
+    logging.info(f"ACTIONS: {actions}")
     logging.info("Creating game files...")
     os.makedirs("game", exist_ok=True)
     
     tasks = []
     for file_name, file_description in file_structure:
-        task = asyncio.create_task(agents.developers.developer_agent(file_name, file_description, final_plan))
+        task = asyncio.create_task(agents.developers.developer_agent(file_name, file_description, final_plan, actions))
         tasks.append(task)
     
     await asyncio.gather(*tasks)
