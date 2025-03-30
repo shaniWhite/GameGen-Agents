@@ -100,6 +100,8 @@ async def main(user_input: str = None, iterations: int = 1):
             for _ in range(2):
                 for _ in range(2):
                     logging.info("Running control tests...")
+                   
+
                     # Run the game with the image analysis agent
                     action_results, failed_actions = await agents.action_check.action_check_agent(game_name, actions)
                     if failed_actions is None:

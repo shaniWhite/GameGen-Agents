@@ -1,8 +1,8 @@
 <game_plan>
-  <overview>Brick Blaster is a classic brick breaker game where the player uses a paddle to bounce a ball and destroy bricks arranged at the top of the screen, aiming to clear all bricks without letting the ball fall off the screen.</overview>
-  <game_name>Brick Blaster</game_name>
+  <overview>"Brick Buster" is a classic brick breaker arcade game where players control a paddle to bounce a ball upwards, breaking bricks arranged in patterns at the top of the screen, while aiming to clear all bricks without letting the ball fall below the paddle.</overview>
+  <game_name>Brick Buster</game_name>
   <window_size width="800" height="600"/>
-  <mechanics>Players control a paddle to bounce a ball and destroy bricks while avoiding letting the ball fall below the paddle. The game features scoring, pause functionality, and smooth game state handling.</mechanics>
+  <mechanics>The game features a paddle, a ball, and bricks. The player moves the paddle left and right to catch the ball, with the goal of breaking all bricks by bouncing the ball off the paddle.</mechanics>
   <actions>
     <action>Move paddle left, LEFT ARROW</action>
     <action>Move paddle right, RIGHT ARROW</action>
@@ -12,59 +12,27 @@
   <files>
     <file>
       <name>main.py</name>
-      <description>This is the main entry point of the game that initializes Pygame, sets up the game loop, and handles events, ensuring the game runs smoothly and exits cleanly when needed.</description>
-      <imports>import pygame, from game import Game, from constants import WIDTH, HEIGHT</imports>
-      <functions>
-        <function>main() -> None: Initializes the game, runs the game loop, processes events, updates game state, and renders the game on the screen.</function>
-      </functions>
+      <description>The entry point of the game that initializes Pygame and manages the main game loop. It handles quitting and starts the game instance.</description>
     </file>
     <file>
       <name>game.py</name>
-      <description>This file contains the core game logic, including the classes for Ball, Paddle, Brick, and the overall Game management.</description>
-      <imports>import pygame, from constants import *</imports>
-      <functions>
-        <function>Ball.__init__(self, x: float, y: float) -> None: Initializes ball position and movement.</function>
-        <function>Ball.move(self) -> None: Updates the ball's position based on current speed and direction.</function>
-        <function>Ball.reset(self) -> None: Resets the ball to its starting position.</function>
-        <function>Paddle.__init__(self, x: float) -> None: Initializes paddle position.</function>
-        <function>Paddle.move(self, dx: float) -> None: Moves the paddle left or right, while keeping it within screen boundaries.</function>
-        <function>Brick.__init__(self, x: float, y: float) -> None: Initializes brick position.</function>
-        <function>Brick.is_destroyed(self) -> bool: Returns whether the brick has been destroyed.</function>
-        <function>Brick.destroy(self) -> None: Marks the brick as destroyed.</function>
-        <function>Game.__init__(self) -> None: Initializes game state variables, including score, and instantiates Ball, Paddle, and Bricks.</function>
-        <function>Game.handle_events(self) -> bool: Processes player inputs and checks for quitting conditions, returns False when exiting.</function>
-        <function>Game.update(self) -> None: Updates the game state with movements and collision checks if the game is not paused.</function>
-        <function>Game.draw(self, screen: pygame.Surface) -> None: Renders all game components like bricks, paddle, ball, and score.</function>
-        <function>Game.toggle_pause(self) -> None: Toggles the paused state of the game.</function>
-        <function>Game.is_paused(self) -> bool: Returns the current paused state.</function>
-      </functions>
+      <description>Manages the overall game state, including initialization of game objects, updates per frame, and the transitions between different game states.</description>
     </file>
     <file>
-      <name>ui.py</name>
-      <description>This file manages the rendering of UI elements such as the score display and the pause menu, enhancing the player experience.</description>
-      <imports>import pygame, from constants import FONT_SIZE, WHITE</imports>
-      <functions>
-        <function>draw_score(screen: pygame.Surface, score: int) -> None: Renders the current score on the screen.</function>
-        <function>draw_pause_menu(screen: pygame.Surface) -> None: Displays options when the game is paused.</function>
-      </functions>
+      <name>paddle.py</name>
+      <description>Represents the paddle controlled by the player, including methods to draw the paddle and update its position based on player input.</description>
     </file>
     <file>
-      <name>constants.py</name>
-      <description>This file contains constant values used throughout the game, such as colors, screen dimensions, and game settings, to avoid magic numbers in the code.</description>
-      <contents>
-        <constant>WIDTH = 800</constant>
-        <constant>HEIGHT = 600</constant>
-        <constant>BLACK = (0, 0, 0)</constant>
-        <constant>WHITE = (255, 255, 255)</constant>
-        <constant>RED = (255, 0, 0)</constant>
-        <constant>GREEN = (0, 255, 0)</constant>
-        <constant>FONT_SIZE = 32</constant>
-        <constant>BRICK_ROWS = 5</constant>
-        <constant>BRICK_COLUMNS = 10</constant>
-        <constant>PADDLE_WIDTH = 100</constant>
-        <constant>PADDLE_HEIGHT = 20</constant>
-        <constant>BALL_RADIUS = 10</constant>
-      </contents>
+      <name>ball.py</name>
+      <description>Represents the ball that moves and interacts with the paddle and bricks. It includes methods for drawing the ball and updating its position while handling collisions.</description>
+    </file>
+    <file>
+      <name>brick.py</name>
+      <description>Defines individual bricks within the game, including their rendering and methods to check for collisions with the ball.</description>
+    </file>
+    <file>
+      <name>utils.py</name>
+      <description>Contains various utility functions such as collision detection and text rendering, which support the main game functionality.</description>
     </file>
   </files>
 </game_plan>

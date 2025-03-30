@@ -2,8 +2,7 @@ import os
 import sys
 import time
 import base64
-import pyautogui
-import asyncio
+
 import logging
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.window_utils import get_game_window, capture_screenshot, delete_screenshot, detect_and_mark_movement
