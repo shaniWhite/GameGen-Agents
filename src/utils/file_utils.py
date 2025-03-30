@@ -29,7 +29,7 @@ def parse_file_structure(xml_string):
 
     # Extract actions
     actions = []
-    for elem in root.findall(".//action"):
+    for elem in root.findall('.//actions/action'):
         text = elem.text.strip()  # Full action text
 
         if "," in text:
@@ -40,7 +40,11 @@ def parse_file_structure(xml_string):
             action_desc = text
             key_name = None
 
-    actions.append((action_desc, key_name))  
+        actions.append((action_desc, key_name))  
+        
+     # ✅ Add logging to check parsed actions
+    logging.info(f"✅ Parsed actions: {actions}")
+    
     return game_name, window_size, files, actions
 
 
