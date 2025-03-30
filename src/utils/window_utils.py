@@ -1,24 +1,23 @@
 
-import pygetwindow as gw
-import pyautogui
+
 import os
 import logging
 import cv2
 from PIL import Image, ImageDraw
 import numpy as np
-from mss import mss
-import cv2
 import time
 import subprocess
 
 
 def get_game_window(game_name):
+    import pygetwindow as gw
     """Finds the game window by title."""
     for window in gw.getWindowsWithTitle(game_name):  
         return window
     return None
 
 def capture_screenshot(game_name, index, screenshot_folder):
+    import pyautogui
     """Captures a screenshot of the game window."""
     game_window = get_game_window(game_name)
     if game_window:
@@ -81,6 +80,7 @@ def detect_and_mark_movement(before, after, output_path):
     return output_path
 
 def record_gameplay_video(game_name, video_file_path="gameplay.mp4", fps=30):
+    import pyautogui
     """
     Records gameplay video by capturing the game window.
 

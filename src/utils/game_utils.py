@@ -1,11 +1,9 @@
 import asyncio
 import logging
-import os
 import subprocess
 import sys
 import time
 import keyboard
-import pyautogui
 import string
 import traceback
 
@@ -90,6 +88,7 @@ async def run_game():
  
 
 def simulate_input(action):
+    import pyautogui
     """Simulates a keyboard press or mouse click based on AI instructions."""
     
     if not action:
