@@ -122,7 +122,7 @@ async def main(user_input: str = None, iterations: int = 1):
                         break  
 
                     logging.warning(f"⚠️ New error detected after fixes: {final_error}")
-                    await agents.code_updater.GameUpdater_Agent(final_error,actions)
+                    await agents.code_repair.Code_Repair_Agent(final_error,actions)
                     time.sleep(1)      
                         
             print("🎉 Game created successfully! You can now play.")
