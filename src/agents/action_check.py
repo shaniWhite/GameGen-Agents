@@ -14,8 +14,6 @@ from utils.game_utils import start_game, stop_game, simulate_input
 from utils.image_utils import encode_image_to_base64
 import google.generativeai as genai
 
-actions = [('Move paddle up', 'key: UP ARROW'), ('Move paddle down', 'key: DOWN ARROW'), ('Toggle pause', 'key: P'), ('Exit game', 'key: ESCAPE')]
-
 # Create a folder for saving screenshots (if it doesn’t exist)
 screenshot_folder = "screenshots"
 os.makedirs(screenshot_folder, exist_ok=True)
@@ -59,14 +57,15 @@ async def action_check_agent(game_name, actions):
             if not screenshot_before:
                 logging.error("⚠ Could not capture 'before' screenshot.")
                 break
-
-            pyautogui.press("p")  # Resume game
-            time.sleep(0.2)
+                
+            # pyautogui.press("p")  # pause game
+            # logging.info("pausing game...")    
+            # time.sleep(0.2)
 
             simulate_input(normalize_action_key(action_key))
             time.sleep(0.2)
 
-            pyautogui.press("p")  # Pause game
+            pyautogui.press("p")  # pause game
             time.sleep(0.5)
 
             screenshot_after = capture_screenshot(game_name, "after", screenshot_folder)
@@ -159,5 +158,6 @@ async def action_check_agent(game_name, actions):
 
 
 
-# if __name__ == "__main__":
-#     asyncio.run(action_check_agent("Pong Mania", actions))
+if __name__ == "__main__":
+    actions =[('Move paddle up, W', None), ('Move paddle down, S', None), ('Toggle pause, P', None), ('Exit game, Escape', None)]
+    asyncio.run(action_check_agent("Pong Challenge", actions))

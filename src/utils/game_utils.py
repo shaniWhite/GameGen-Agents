@@ -93,6 +93,10 @@ async def run_game():
 
 def simulate_input(action):
     """Simulates a keyboard press or mouse click based on AI instructions."""
+    
+    if not action:
+        logging.warning("⚠ simulate_input was given None or empty action. Skipping...")
+        return
     action = action.lower().strip()  # Normalize input
 
     # Keyboard actions

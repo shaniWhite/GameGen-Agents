@@ -1,21 +1,18 @@
-2025-03-27 11:01:54 - INFO - \u2705 Game environment setup complete!
-2025-03-27 11:01:54 - INFO - Planning the game structure...
-2025-03-27 11:01:54 - INFO - Iteration 1 of 2 planning iterations
-2025-03-27 11:02:40 - INFO - Iteration 2 of 2 planning iterations
-2025-03-27 11:03:13 - INFO - [33mgame plan written to game_plan.xml[0m
-2025-03-27 11:03:13 - INFO - Game Name: Quest for the Lost Artifact
-2025-03-27 11:03:13 - INFO - aCTIONS: [('Move Player', 'Arrow Keys'), ('Interact with NPC', 'E'), ('Open/Close Inventory', 'I'), ('Toggle Pause', 'P'), ('Exit Game', 'Escape')]
-2025-03-27 11:03:13 - INFO - Creating game files...
-2025-03-27 11:03:17 - INFO - File 'main.py' has been created.
-2025-03-27 11:03:19 - INFO - File 'characters.py' has been created.
-2025-03-27 11:03:20 - INFO - File 'world.py' has been created.
-2025-03-27 11:03:20 - INFO - File 'game.py' has been created.
-2025-03-27 11:03:20 - INFO - File 'inventory.py' has been created.
-2025-03-27 11:03:22 - INFO - File 'ui.py' has been created.
-2025-03-27 11:03:22 - INFO - Game creation complete!
-2025-03-27 11:03:22 - INFO - Final game plan:
-2025-03-27 11:03:22 - INFO - \u2705 Game process has exited on its own.
-2025-03-27 11:03:22 - ERROR - Runtime errors:
+2025-03-30 11:20:25 - INFO - \u2705 Game environment setup complete!
+2025-03-30 11:20:44 - INFO - Planning the game structure...
+2025-03-30 11:20:44 - INFO - Iteration 1 of 1 planning iterations
+2025-03-30 11:21:21 - INFO - [33mgame plan written to game_plan.xml[0m
+2025-03-30 11:21:21 - INFO - Game Name: Pong Challenge
+2025-03-30 11:21:21 - INFO - aCTIONS: [('Move paddle up, W', None), ('Move paddle down, S', None), ('Toggle pause, P', None), ('Exit game, Escape', None)]
+2025-03-30 11:21:21 - INFO - Creating game files...
+2025-03-30 11:21:23 - INFO - File 'game.py' has been created.
+2025-03-30 11:21:24 - INFO - File 'paddle.py' has been created.
+2025-03-30 11:21:25 - INFO - File 'main.py' has been created.
+2025-03-30 11:21:26 - INFO - File 'ball.py' has been created.
+2025-03-30 11:21:26 - INFO - Game creation complete!
+2025-03-30 11:21:26 - INFO - Final game plan:
+2025-03-30 11:21:26 - INFO - \u2705 Game process has exited on its own.
+2025-03-30 11:21:26 - ERROR - Runtime errors:
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
   File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1
@@ -25,7 +22,7 @@ SyntaxError: invalid syntax
 
 \U0001f6a8 Process exited with return code 1
 
-2025-03-27 11:03:22 - ERROR - Error detected: Runtime errors:
+2025-03-30 11:21:26 - ERROR - Error detected: Runtime errors:
 Traceback (most recent call last):
   File "<string>", line 1, in <module>
   File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 1
@@ -35,108 +32,26 @@ SyntaxError: invalid syntax
 
 \U0001f6a8 Process exited with return code 1
 
-2025-03-27 11:03:22 - INFO - Attempt 1 to fix the errors...
-2025-03-27 11:03:22 - INFO - Code repair attempting to fix the error...
-2025-03-27 11:04:07 - INFO - Updated file: characters.py
-2025-03-27 11:04:07 - INFO - Updated file: game.py
-2025-03-27 11:04:07 - INFO - Updated file: inventory.py
-2025-03-27 11:04:07 - INFO - Updated file: main.py
-2025-03-27 11:04:08 - INFO - Updated file: ui.py
-2025-03-27 11:04:08 - INFO - Updated file: world.py
-2025-03-27 11:04:10 - INFO - Running the game after fixing the errors...
-2025-03-27 11:04:10 - INFO - \u2705 Game process has exited on its own.
-2025-03-27 11:04:10 - ERROR - Runtime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 2, in <module>
-    from game import Game
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 3, in <module>
-    from world import GameWorld
-ImportError: cannot import name 'GameWorld' from 'world' (C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\world.py)
+2025-03-30 11:21:26 - INFO - Attempt 1 to fix the errors...
+2025-03-30 11:21:26 - INFO - Code repair attempting to fix the error...
+2025-03-30 11:21:42 - INFO - Updated file: main.py
+2025-03-30 11:21:42 - INFO - Updated file: game.py
+2025-03-30 11:21:42 - INFO - Updated file: ball.py
+2025-03-30 11:21:42 - INFO - Updated file: paddle.py
+2025-03-30 11:21:44 - INFO - Running the game after fixing the errors...
+2025-03-30 11:21:53 - ERROR - Runtime errors:
+\u26a0\ufe0f Timeout reading process output
 
-\U0001f6a8 Process exited with return code 1
-
-2025-03-27 11:04:10 - INFO - Attempt 2 to fix the errors...
-2025-03-27 11:04:10 - INFO - Code repair attempting to fix the error...
-2025-03-27 11:04:31 - INFO - Updated file: game.py
-2025-03-27 11:04:31 - INFO - Updated file: main.py
-2025-03-27 11:04:31 - INFO - Updated file: world.py
-2025-03-27 11:04:33 - INFO - Running the game after fixing the errors...
-2025-03-27 11:04:34 - INFO - \u2705 Game process has exited on its own.
-2025-03-27 11:04:34 - ERROR - Runtime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 2, in <module>
-    from game import Game
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 5, in <module>
-    from ui import UserInterface
-ImportError: cannot import name 'UserInterface' from 'ui' (C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\ui.py)
-
-\U0001f6a8 Process exited with return code 1
-
-2025-03-27 11:04:34 - INFO - Attempt 3 to fix the errors...
-2025-03-27 11:04:34 - INFO - Code repair attempting to fix the error...
-2025-03-27 11:04:54 - INFO - Updated file: game.py
-2025-03-27 11:04:54 - INFO - Updated file: ui.py
-2025-03-27 11:04:56 - INFO - Running the game after fixing the errors...
-2025-03-27 11:04:57 - INFO - \u2705 Game process has exited on its own.
-2025-03-27 11:04:57 - ERROR - Runtime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 37, in main
-    game.render()
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 84, in render
-    self.player.draw(self.screen)  # Assuming player has a draw method
-    ^^^^^^^^^^^^^^^^
-AttributeError: 'Player' object has no attribute 'draw'
-
-\U0001f6a8 Process exited with return code 1
-
-2025-03-27 11:04:57 - INFO - Attempt 4 to fix the errors...
-2025-03-27 11:04:57 - INFO - Code repair attempting to fix the error...
-2025-03-27 11:05:31 - INFO - Updated file: characters.py
-2025-03-27 11:05:31 - INFO - Updated file: game.py
-2025-03-27 11:05:31 - INFO - Updated file: main.py
-2025-03-27 11:05:31 - INFO - Updated file: ui.py
-2025-03-27 11:05:31 - INFO - Updated file: world.py
-2025-03-27 11:05:33 - INFO - Running the game after fixing the errors...
-2025-03-27 11:05:34 - INFO - \u2705 Game process has exited on its own.
-2025-03-27 11:05:34 - ERROR - Runtime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 36, in main
-    game.render()
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 84, in render
-    self.player.draw(self.screen)  # Draw the player
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\characters.py", line 44, in draw
-    pygame.draw.rect(screen, (255, 255, 0), (self.x * 40, self.y * 40, 40, 40))
-    ^^^^^^
-NameError: name 'pygame' is not defined
-
-\U0001f6a8 Process exited with return code 1
-
-2025-03-27 11:05:34 - INFO - Attempt 5 to fix the errors...
-2025-03-27 11:05:34 - INFO - Code repair attempting to fix the error...
-2025-03-27 11:06:13 - INFO - Updated file: characters.py
-2025-03-27 11:06:13 - INFO - Updated file: game.py
-2025-03-27 11:06:13 - INFO - Updated file: main.py
-2025-03-27 11:06:13 - INFO - Updated file: ui.py
-2025-03-27 11:06:13 - INFO - Updated file: world.py
-2025-03-27 11:06:15 - INFO - Running the game after fixing the errors...
-2025-03-27 11:06:16 - INFO - \u2705 Game process has exited on its own.
-2025-03-27 11:06:16 - ERROR - Runtime errors:
-Traceback (most recent call last):
-  File "<string>", line 1, in <module>
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\main.py", line 36, in main
-    game.render()
-  File "C:\Users\שני אמרגי\OneDrive - Reichman University\מסמכים\software dev using AI\GameGen-Dev\game\game.py", line 87, in render
-    self.ui.draw()                  # Draw the UI
-    ^^^^^^^^^^^^
-AttributeError: 'UI' object has no attribute 'draw'
-
-\U0001f6a8 Process exited with return code 1
-
-2025-03-27 11:06:16 - INFO - Attempt 6 to fix the errors...
-2025-03-27 11:06:16 - INFO - Code repair attempting to fix the error...
-2025-03-27 11:06:35 - INFO - Updated file: game.py
+2025-03-30 11:21:53 - INFO - Attempt 2 to fix the errors...
+2025-03-30 11:21:53 - INFO - Code repair attempting to fix the error...
+2025-03-30 11:22:11 - INFO - Updated file: ball.py
+2025-03-30 11:22:11 - INFO - Updated file: game.py
+2025-03-30 11:22:11 - INFO - Updated file: main.py
+2025-03-30 11:22:11 - INFO - Updated file: paddle.py
+2025-03-30 11:22:13 - INFO - Running the game after fixing the errors...
+2025-03-30 11:22:19 - INFO - Errors fixed successfully!
+2025-03-30 11:22:25 - INFO - Game ran successfully!
+2025-03-30 11:22:25 - INFO - Running control tests...
+2025-03-30 11:22:28 - INFO - Pausing the game...
+2025-03-30 11:22:30 - INFO - \U0001f501 Testing: Move paddle up, W (None) — Attempt 1
+2025-03-30 11:22:31 - INFO - Screenshot saved: screenshots\screenshot_before.png

@@ -32,15 +32,15 @@ def parse_file_structure(xml_string):
     for elem in root.findall(".//action"):
         text = elem.text.strip()  # Full action text
 
-        key_name = None
-        if "key name:" in text.lower():
-            key_name = text.split("key name:")[1].strip().strip("'\"() ")  # Extract key name
-        
-        actions.append((text, key_name))  # Store as (full_text, key_name)
+        if "," in text:
+            parts = text.rsplit(",", 1)
+            action_desc = parts[0].strip()
+            key_name = parts[1].strip()
+        else:
+            action_desc = text
+            key_name = None
 
-    # Print parsed actions to verify
-    # print(actions)
-
+    actions.append((action_desc, key_name))  
     return game_name, window_size, files, actions
 
 
@@ -63,6 +63,10 @@ def load_game_plan():
     
 def normalize_action_key(action_key):
     """Maps keys to correct pyautogui key presses."""
+    if not action_key:
+        logging.warning("⚠ Warning: action_key is None or empty.")
+        return None  
+
     key_mappings = {
         "left arrow": "left",
         "right arrow": "right",
@@ -74,9 +78,8 @@ def normalize_action_key(action_key):
     # Remove "key: " prefix if present
     if action_key.lower().startswith("key: "):
         action_key = action_key[5:].strip()
-    
-    # print(f"Normalized key: {key_mappings.get(action_key.lower(), action_key)}")  # Debugging print
-    
-    return key_mappings.get(action_key.lower(), action_key)  # Default to original if not found
+
+    return key_mappings.get(action_key.lower(), action_key)
+  # Default to original if not found
 
 # normalize_action_key('key: UP ARROW')
