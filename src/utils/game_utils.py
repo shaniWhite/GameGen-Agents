@@ -105,12 +105,13 @@ def simulate_input(action):
         time.sleep(0.3)
         pyautogui.keyUp(action)
 
-    elif action in ["enter", "space"] or action in string.ascii_lowercase:
-        logging.info(f"Pressing {action.capitalize()} key...")
-        keyboard.press(action)
+    elif action in ["enter", "space", "p", "pause"] or action in string.ascii_lowercase:
+        key_to_press = "p" if action in ["p", "pause"] else action
+        logging.info(f"Pressing {key_to_press.upper()} key...")
+        keyboard.press(key_to_press)
         time.sleep(0.2)
-        keyboard.release(action)
-
+        keyboard.release(key_to_press)
+        
     # Mouse actions
     elif action == "click":
         logging.info("Performing mouse click...")

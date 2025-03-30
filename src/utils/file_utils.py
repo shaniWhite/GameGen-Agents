@@ -41,9 +41,6 @@ def parse_file_structure(xml_string):
             key_name = None
 
         actions.append((action_desc, key_name))  
-        
-     # ✅ Add logging to check parsed actions
-    logging.info(f"✅ Parsed actions: {actions}")
     
     return game_name, window_size, files, actions
 
