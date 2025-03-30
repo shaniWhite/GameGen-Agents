@@ -26,8 +26,10 @@ async def plan_project(user_input, iterations):
     -When writing the game plan, concider the following instructions:
         1.Ensure that the game properly handles quitting. If the player closes the window by pressing 'X' button  or selects 'Quit' from a menu, the game must exit cleanly without trying to continue execution.
         2.The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates.
-        3.The game should support exiting it by adding a 'exit' action. pressing 'escape' on the keyboard should exit the game.
-        4.Remember that the game should start with a main module in the main.py file! (main shouldn't take any arguments).
+        3.You must follow this : Ensure that the actions provided follow this format exactly:
+            actions = [('Move paddle up', 'P ARROW'), ('Move paddle down', 'DOWN ARROW'), ('Toggle pause', 'P'), ('Exit game', 'ESCAPE')]
+        4.The game should support exiting it by adding a 'exit' action. pressing 'escape' on the keyboard should exit the game.
+        5.Remember that the game should start with a main module in the main.py file! (main shouldn't take any arguments).
 
 
     here is the user input: {user_input}
@@ -46,7 +48,9 @@ async def plan_project(user_input, iterations):
         1.Ensure that the game properly handles quitting. If the player closes the window by pressing 'X' button  or selects 'Quit' from a menu, the game must exit cleanly without trying to continue execution.
         2.The game should support pausing by adding a 'paused' state. Pressing 'P' should toggle pause on/off, stopping all movement and physics updates.
         3.The game should support exiting it by adding a 'exit' action. pressing 'escape' on the keyboard should exit the game.
-        4.Remember that the game should start with a main module in the main.py file! (main shouldn't take any arguments).
+        4.You must follow this : Ensure that the actions provided follow this format exactly:
+            actions = [('Move paddle up', 'P ARROW'), ('Move paddle down', 'DOWN ARROW'), ('Toggle pause', 'P'), ('Exit game', 'ESCAPE')]
+        5.Remember that the game should start with a main module in the main.py file! (main shouldn't take any arguments).
     here is the user input: {user_input}
     """
     messages_1 = [{"role": "user", "content": f"please plan a Pygame project based on the following user input: {user_input}. Remember that the game should start with a main module in the main.py file!"}]
@@ -85,9 +89,11 @@ async def plan_project(user_input, iterations):
                                     2. Don't return any additional directories but just the file names and descriptions along with simple description of functions and methods along with their inputs and returns. Please return descriptions for all files.\n
                                     3. Provide all game actions and there keys.\n
                                     4. The actions: 'paused' and 'exit' must appear in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game.\n
-                                    5. Make sure to mention what imports are necessary for each file.\n
-                                    6. Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur as well as the clear and accurate definition of function and method inputs.\n
-                                    7. Make sure that the game starts with a main module in the main.py file!(main shouldn't take any arguments).\n
+                                    5. You must follow this : Ensure that the actions provided follow this format exactly:
+                                        actions = [('Move paddle up', 'P ARROW'), ('Move paddle down', 'DOWN ARROW'), ('Toggle pause', 'P'), ('Exit game', 'ESCAPE')]\n
+                                    6. Make sure to mention what imports are necessary for each file.\n
+                                    7. Critical objective is to keep the project structure simple while making sure no circular imports or broken imports occur as well as the clear and accurate definition of function and method inputs.\n
+                                    8. Make sure that the game starts with a main module in the main.py file!(main shouldn't take any arguments).\n
 
                                     Your response needs to be in this XML format:\n
                                     <game_plan>\n  <overview>Overall game description</overview>\n  <game_name>Meaningful and relevant game name</game_name>\n  <window_size width="600" height="600"/>\n  <mechanics>Key game mechanics</mechanics>\n  <actions>\n    <action>Player action, button name</action>\n    <!-- Repeat <action> element for each action -->\n  </actions>\n  <files>\n    <file>\n      <name>filename.py</name>\n      <description>File purpose and contents</description>\n    </file>\n    <!-- Repeat <file> element for each file -->\n  </files>\n</game_plan>

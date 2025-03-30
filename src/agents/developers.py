@@ -31,7 +31,7 @@ async def developer_agent(file_name, file_description, game_plan):
     If pygame.quit() has been called, the program should not continue executing functions that rely on an active Pygame session.
     *** There maust be 'paused' and 'exit' actions in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game.***
     you must follow this : Ensure that the actions provided follow this format exactly:
-    actions = [('Move paddle up', 'key: UP ARROW'), ('Move paddle down', 'key: DOWN ARROW'), ('Toggle pause', 'key: P'), ('Exit game', 'key: ESCAPE')]
+    actions = [('Move paddle up', 'P ARROW'), ('Move paddle down', 'DOWN ARROW'), ('Toggle pause', 'P'), ('Exit game', 'ESCAPE')]
     The game should start with a main module in the main.py file!(main shouldn't take any arguments).
     return the code for the file in the following format, Do not include markdown syntax like ```python or ```:
     <code>
