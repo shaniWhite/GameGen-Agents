@@ -54,9 +54,7 @@ async def action_check_agent(game_name, actions):
                 logging.error("⚠ Could not capture 'before' screenshot.")
                 break
                 
-            pyautogui.press("p")  #resume game
-            logging.info("resuming game...")    
-            time.sleep(0.2)
+            
             simulate_input("p")  # resume game
             logging.info("resume game...")    
             time.sleep(0.2)
