@@ -1,143 +1,34 @@
 <game_plan>
-  <overview>This is a simple Pong game where a player competes against an AI opponent. The game supports a paused state and provides a clean exit method.</overview>
-  <game_name>Pong Challenge</game_name>
+  <overview>Brick Breaker is a classic arcade game where players control a paddle to bounce a ball and break a layer of bricks. The objective is to destroy all the bricks while preventing the ball from falling off the screen.</overview>
+  <game_name>Brick Breaker</game_name>
   <window_size width="600" height="600"/>
-  <mechanics>Player controls a paddle to bounce a ball against an AI-controlled paddle.</mechanics>
+  <mechanics>Players control a paddle to bounce a ball, breaking bricks as the ball strikes them. The game includes a pause feature and an exit option.</mechanics>
   <actions>
-    <action>Move paddle up, W</action>
-    <action>Move paddle down, S</action>
+    <action>Move paddle left, LEFT_ARROW</action>
+    <action>Move paddle right, RIGHT_ARROW</action>
     <action>Toggle pause, P</action>
-    <action>Exit game, Escape</action>
+    <action>Exit game, ESCAPE</action>
   </actions>
   <files>
     <file>
       <name>main.py</name>
-      <description>This is the main entry point of the game. It initializes Pygame, sets up the game window, and contains the main game loop handling events and rendering.</description>
-      <methods>
-        <method>
-          <name>main</name>
-          <description>Initializes Pygame and manages the main game loop.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </method>
-      </methods>
-      <imports>
-        <import>import pygame</import>
-        <import>from game import Game</import>
-      </imports>
+      <description>This is the entry point of the game, initializing Pygame, creating an instance of the Game class, and managing the game loop execution. The main loop checks for quit events and calls the game state update and render methods.</description>
     </file>
     <file>
       <name>game.py</name>
-      <description>This file contains the Game class managing the game state, player input, AI opponent logic, and overall game logic.</description>
-      <methods>
-        <method>
-          <name>__init__</name>
-          <description>Initializes the game state, player paddle, AI paddle, and ball.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>start_game</name>
-          <description>Starts or resets the game.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>handle_events</name>
-          <description>Handles keyboard events for player actions and game state management.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>update</name>
-          <description>Updates game objects, including paddle positions, AI logic, and ball movement.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>draw</name>
-          <description>Renders paddles, the ball, and the score on the screen.</description>
-          <inputs>surface</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>toggle_pause</name>
-          <description>Toggles the paused state of the game.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </method>
-      </methods>
-      <imports>
-        <import>import pygame</import>
-        <import>from paddle import Paddle</import>
-        <import>from ball import Ball</import>
-      </imports>
+      <description>This file contains the Game class which handles the overall game state and logic, initializes game entities, and processes user inputs. It manages the main game loop, toggling pause state, and ensuring smooth transitions between game states.</description>
     </file>
     <file>
       <name>paddle.py</name>
-      <description>This file contains the Paddle class representing player and AI paddles, managing their movements and rendering.</description>
-      <methods>
-        <method>
-          <name>__init__</name>
-          <description>Initializes the paddle with specified position and controls.</description>
-          <inputs>position, control_up, control_down</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>move_up</name>
-          <description>Moves the paddle up if it's within bounds.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>move_down</name>
-          <description>Moves the paddle down if it's within bounds.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>draw</name>
-          <description>Renders the paddle on the provided surface.</description>
-          <inputs>surface</inputs>
-          <returns>None</returns>
-        </method>
-      </methods>
-      <imports>
-        <import>import pygame</import>
-      </imports>
+      <description>The Paddle class represents the player's paddle. It handles paddle movements based on user input and manages its drawing on the game surface.</description>
     </file>
     <file>
       <name>ball.py</name>
-      <description>This file contains the Ball class that represents ball behavior, including movement and collision detection.</description>
-      <methods>
-        <method>
-          <name>__init__</name>
-          <description>Initializes the ball with specified position and velocity.</description>
-          <inputs>initial_position, initial_velocity</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>update</name>
-          <description>Updates the ball's position based on velocity and detects collisions.</description>
-          <inputs>paddle1, paddle2</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>reset</name>
-          <description>Resets the ball's position and gives it a random initial direction.</description>
-          <inputs>None</inputs>
-          <returns>None</returns>
-        </method>
-        <method>
-          <name>draw</name>
-          <description>Renders the ball on the provided surface.</description>
-          <inputs>surface</inputs>
-          <returns>None</returns>
-        </method>
-      </methods>
-      <imports>
-        <import>import pygame</import>
-      </imports>
+      <description>This file contains the Ball class, responsible for the ball's movement, bouncing behavior, and collision detection with the paddle and bricks. It also handles rendering the ball on the game surface.</description>
+    </file>
+    <file>
+      <name>brick.py</name>
+      <description>This file contains the Brick class, representing the bricks in the game. It manages brick initialization, drawing, and behavior when hit by the ball.</description>
     </file>
   </files>
 </game_plan>

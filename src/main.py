@@ -5,7 +5,6 @@ import shutil
 from dotenv import load_dotenv
 import time
 import logging
-from termcolor import colored
 import agents.action_check
 import agents.action_fix
 import agents.code_repair 
@@ -15,7 +14,6 @@ import utils.file_utils
 import utils.game_utils 
 import agents.developers 
 import agents.planners
-import agents.control_test
 import utils.game_database
 import sys
  
@@ -62,21 +60,17 @@ def clear_game_directory():
         except Exception as e:
             logging.error(f"❌ Error deleting 'game' directory: {str(e)}")
 
-async def main(user_input: str = None, iterations: int = 2):
+async def main(user_input: str = None, iterations: int = 1):
     setup_environment()
     clear_game_directory()
     if user_input is None:
-        user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
+        user_input = input("Describe the Pygame game you want to create: ")
     if not iterations:
-        iterations = int(input(colored("How many planning iterations do you want? ", "magenta")))
-
-# async def main():
-#     user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
-#     iterations = int(input(colored("How many planning iterations do you want? ","magenta")))
+        iterations = int(input("How many planning iterations do you want? "))
     
     logging.info("Planning the game structure...")
     final_plan = await agents.planners.plan_project(user_input, iterations)
-    logging.info(colored("game plan written to game_plan.xml", "yellow"))
+    logging.info("game plan written to game_plan.xml")
     with open("game_plan.xml", "w", encoding="utf-8") as f:
         f.write(final_plan)
     
@@ -116,7 +110,7 @@ async def main(user_input: str = None, iterations: int = 2):
                     time.sleep(1)
                 # Video analyzer 
                 analize = agents.video_analizer.analyze_game_video(game_name)
-                await agents.code_updater.GameUpdater_Agent(analize)
+                await agents.code_updater.GameUpdater_Agent(analize,actions)
                 time.sleep(1)
                 
                 # Run the game again to verify the changes
@@ -127,8 +121,8 @@ async def main(user_input: str = None, iterations: int = 2):
                         logging.info("✅ Final check passed. No errors found!")
                         break  
 
-                    logging.warning(colored(f"⚠️ New error detected after fixes: {final_error}", "yellow"))
-                    await agents.code_updater.GameUpdater_Agent(final_error)
+                    logging.warning(f"⚠️ New error detected after fixes: {final_error}")
+                    await agents.code_updater.GameUpdater_Agent(final_error,actions)
                     time.sleep(1)      
                         
             print("🎉 Game created successfully! You can now play.")
@@ -140,7 +134,7 @@ async def main(user_input: str = None, iterations: int = 2):
             logging.error(f"Error detected: {error_message}")
             for attempt in range(max_attempts):
                 logging.info(f"Attempt {attempt + 1} to fix the errors...")
-                await agents.code_repair.Code_Repair_Agent(error_message)
+                await agents.code_repair.Code_Repair_Agent(error_message,actions)
                 time.sleep(1)  
                                
                 # Try running the game again after fixing
@@ -151,8 +145,8 @@ async def main(user_input: str = None, iterations: int = 2):
                     break
                   
             else:
-                logging.error(colored(f"Failed to fix all errors after {max_attempts} attempts.", "red"))
-                user_choice = input(colored("Press Enter to continue error correcting, or type 'no' to quit: ", "yellow")).lower()
+                logging.error(f"Failed to fix all errors after {max_attempts} attempts.")
+                user_choice = input("Press Enter to continue error correcting, or type 'no' to quit: ").lower()
                 if user_choice == 'no':
                     return
 

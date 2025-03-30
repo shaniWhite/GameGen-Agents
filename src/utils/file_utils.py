@@ -29,17 +29,12 @@ def parse_file_structure(xml_string):
 
     # Extract actions
     actions = []
-    for elem in root.findall(".//actions/action"):
-        action_text = elem.text.strip()  # Full action text
-
+    for action_elem in root.findall('.//actions/action'):
+        action_text = action_elem.text.strip()
         if "," in action_text:
             action_name, button = map(str.strip, action_text.split(",", 1))  # Split into tuple
-            actions.append((action_name, button))
-        else:
-            action_desc = action_text
-            key_name = None
-
-        actions.append((action_desc, key_name))  
+            actions.append((action_name, button))  # Store as tuple
+            
     return game_name, window_size, files, actions
 
 
@@ -79,6 +74,6 @@ def normalize_action_key(action_key):
         action_key = action_key[5:].strip()
 
     return key_mappings.get(action_key.lower(), action_key)
-  # Default to original if not found
+  
 
 # normalize_action_key('key: UP ARROW')
