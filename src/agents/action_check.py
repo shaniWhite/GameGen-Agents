@@ -56,9 +56,9 @@ async def action_check_agent(game_name, actions):
                 logging.error("⚠ Could not capture 'before' screenshot.")
                 break
                 
-            # pyautogui.press("p")  # pause game
-            # logging.info("pausing game...")    
-            # time.sleep(0.2)
+            pyautogui.press("p")  #resume game
+            logging.info("resuming game...")    
+            time.sleep(0.2)
 
             simulate_input(normalize_action_key(action_key))
             time.sleep(0.2)
@@ -155,6 +155,6 @@ async def action_check_agent(game_name, actions):
 
 
 
-if __name__ == "__main__":
-    actions =[('Move paddle up, W', None), ('Move paddle down, S', None), ('Toggle pause, P', None), ('Exit game, Escape', None)]
-    asyncio.run(action_check_agent("Pong Challenge", actions))
+# if __name__ == "__main__":
+#     actions =[]
+#     asyncio.run(action_check_agent("Pong Challenge", actions))

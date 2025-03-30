@@ -5,6 +5,7 @@ import shutil
 from dotenv import load_dotenv
 import time
 import logging
+from termcolor import colored
 import agents.action_check
 import agents.action_fix
 import agents.code_repair 
@@ -17,6 +18,7 @@ import agents.planners
 import agents.control_test
 import utils.game_database
 import sys
+ 
 
 
 # Initialize the database once when the program starts
@@ -64,19 +66,23 @@ async def main(user_input: str = None, iterations: int = 1):
     setup_environment()
     clear_game_directory()
     if user_input is None:
-        user_input = input("Describe the Pygame game you want to create: ")
+        user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
     if not iterations:
-        iterations = int(input("How many planning iterations do you want? "))
+        iterations = int(input(colored("How many planning iterations do you want? ", "magenta")))
+
+# async def main():
+#     user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
+#     iterations = int(input(colored("How many planning iterations do you want? ","magenta")))
     
     logging.info("Planning the game structure...")
     final_plan = await agents.planners.plan_project(user_input, iterations)
-    logging.info("game plan written to game_plan.xml")
+    logging.info(colored("game plan written to game_plan.xml", "yellow"))
     with open("game_plan.xml", "w", encoding="utf-8") as f:
         f.write(final_plan)
     
     game_name, window_size, file_structure, actions = utils.file_utils.parse_file_structure(final_plan)
     logging.info(f"Game Name: {game_name}")
-    logging.info(f"aCTIONS: {actions}")
+    logging.info(f"ACTIONS: {actions}")
     logging.info("Creating game files...")
     os.makedirs("game", exist_ok=True)
     
@@ -120,7 +126,7 @@ async def main(user_input: str = None, iterations: int = 1):
                         logging.info("✅ Final check passed. No errors found!")
                         break  
 
-                    logging.warning(f"⚠️ New error detected after fixes: {final_error}")
+                    logging.warning(colored(f"⚠️ New error detected after fixes: {final_error}", "yellow"))
                     await agents.code_updater.GameUpdater_Agent(final_error)
                     time.sleep(1)      
                         
@@ -144,8 +150,8 @@ async def main(user_input: str = None, iterations: int = 1):
                     break
                   
             else:
-                logging.error(f"Failed to fix all errors after {max_attempts} attempts.")
-                user_choice = input("Press Enter to continue error correcting, or type 'no' to quit: ").lower()
+                logging.error(colored(f"Failed to fix all errors after {max_attempts} attempts.", "red"))
+                user_choice = input(colored("Press Enter to continue error correcting, or type 'no' to quit: ", "yellow")).lower()
                 if user_choice == 'no':
                     return
 
