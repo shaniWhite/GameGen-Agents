@@ -10,7 +10,6 @@ from PIL import Image
 import platform
 
 class TestWindowUtils(unittest.TestCase):
-
     @unittest.skipIf(
         platform.system() != "Windows" or os.environ.get("CI") == "true",
         "Skipped GUI-related test in CI or on non-Windows"

@@ -53,7 +53,6 @@ async def action_check_agent(game_name, actions):
                 logging.error("⚠ Could not capture 'before' screenshot.")
                 break
                 
-            
             simulate_input("p")  # resume game
             logging.info("resume game...")    
             time.sleep(0.2)
