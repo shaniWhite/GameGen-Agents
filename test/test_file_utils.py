@@ -21,21 +21,21 @@ class TestFileUtils(unittest.TestCase):
                 </file>
             </structure>
             <actions>
-                <action>Move left, key name: 'left arrow'</action>
-                <action>Jump, key name: "space bar"</action>
+                <action>Move left, left arrow</action>
+                <action>Jump, space bar</action>
             </actions>
         </game>
         """
         name, size, files, actions = file_utils.parse_file_structure(xml)
-        
+
         self.assertEqual(name, "Space Invaders")
         self.assertEqual(size, (800, 600))
         self.assertEqual(len(files), 2)
         self.assertIn(("main.py", "Main game loop"), files)
 
         expected_actions = [
-            ("Move left, key name: 'left arrow'", "left arrow"),
-            ("Jump, key name: \"space bar\"", "space bar"),
+            ("Move left", "left arrow"),
+            ("Jump", "space bar"),
         ]
         self.assertEqual(actions, expected_actions)
 

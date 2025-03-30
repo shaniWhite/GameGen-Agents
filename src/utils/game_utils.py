@@ -12,7 +12,7 @@ import traceback
 
 def start_game():
     """Starts the game and returns the subprocess handle."""
-    print("🎮 Starting the game...")
+    logging.info("🎮 Starting the game...")
     game_process = subprocess.Popen([sys.executable, "game/main.py"])
     time.sleep(2)  # Let the game boot up
     return game_process
@@ -20,7 +20,6 @@ def start_game():
 def stop_game(process):
     """Stops the game process if it's running."""
     if process and process.poll() is None:
-        # print("🛑 Attempting to terminate game process...")
         process.terminate()
         try:
             process.wait(timeout=5)
@@ -43,7 +42,7 @@ async def run_game():
             text=True
         )
 
-        print("🎮 Game is running...")
+        logging.info("🎮 Game is running...")
         start_time = time.time()
 
         # Loop without blocking on output
@@ -53,7 +52,7 @@ async def run_game():
                 break
 
             if time.time() - start_time > 6:
-                print("⏳ 10 seconds passed. Sending ESC to close the game...")
+                logging.info("⏳ 10 seconds passed. Sending ESC to close the game...")
                 keyboard.press("esc")
                 time.sleep(0.1)
                 keyboard.release("esc")

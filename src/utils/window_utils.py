@@ -36,7 +36,6 @@ def delete_screenshot(file_path):
     
     if os.path.exists(file_path):
         os.remove(file_path)
-        # print(f"🗑️ Deleted: {file_path}")
     else:
         logging.error(f"⚠ No file found: {file_path}")
         
