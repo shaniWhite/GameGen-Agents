@@ -3,7 +3,9 @@ import unittest
 from unittest.mock import patch, MagicMock
 import subprocess
 import asyncio
+import platform
 from src.utils import game_utils
+import os
 
 class TestGameUtils(unittest.TestCase):
 
@@ -29,8 +31,13 @@ class TestGameUtils(unittest.TestCase):
         game_utils.stop_game(process)
         self.assertNotEqual(process.poll(), None)
         
+    @unittest.skipIf(
+    platform.system() != "Windows" or os.environ.get("CI") == "true",
+    "Skipping GUI-dependent test in CI or on non-Windows"
+    )    
     @patch("src.utils.game_utils.pyautogui")
     @patch("src.utils.game_utils.keyboard")
+    
     def test_simulate_input_keyboard_keys(self, mock_keyboard, mock_pyautogui):
         game_utils.simulate_input("left")
         mock_pyautogui.keyDown.assert_called_with("left")
@@ -40,6 +47,11 @@ class TestGameUtils(unittest.TestCase):
         mock_keyboard.press.assert_called_with("space")
         mock_keyboard.release.assert_called_with("space")
 
+    @unittest.skipIf(
+    platform.system() != "Windows" or os.environ.get("CI") == "true",
+    "Skipping GUI-dependent test in CI or on non-Windows"
+)
+    
     @patch("src.utils.game_utils.pyautogui")
     def test_simulate_input_mouse_actions(self, mock_pyautogui):
         # Return width and height for screen size
