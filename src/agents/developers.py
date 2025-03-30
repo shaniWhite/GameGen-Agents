@@ -1,7 +1,5 @@
-
 import os
 import logging
-from termcolor import colored
 import openai
 from dotenv import load_dotenv
 
@@ -13,7 +11,6 @@ if not openai.api_key:
     raise ValueError("Missing OPENAI_API_KEY environment variable")
 
 async def developer_agent(file_name, file_description, game_plan):
-    # logging.info(colored(f"Creating file '{file_name}'...", "magenta"))
     # create game folder if it doesnt exist
     os.makedirs("game", exist_ok=True)
     # Ensure the full directory exists before writing the file
@@ -32,7 +29,9 @@ async def developer_agent(file_name, file_description, game_plan):
     Additionally, check that the display is initialized using pygame.get_init() before attempting to render menus or handle events. 
     ensure that when pygame.quit() is detected, the game should stop immediately by exiting the main loop and properly shutting down Pygame.
     If pygame.quit() has been called, the program should not continue executing functions that rely on an active Pygame session.
-    There should be 'paused' and 'exit' actions in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game.
+    *** There maust be 'paused' and 'exit' actions in addition to the game actions - Pressing 'P' in the keyboard should toggle pause on/off, stopping all movement and physics updates, and pressing 'escape' on the keyboard should exit the game.***
+    you must follow this : Ensure that the actions provided follow this format exactly:
+    actions = [('Move paddle up', 'key: UP ARROW'), ('Move paddle down', 'key: DOWN ARROW'), ('Toggle pause', 'key: P'), ('Exit game', 'key: ESCAPE')]
     The game should start with a main module in the main.py file!(main shouldn't take any arguments).
     return the code for the file in the following format, Do not include markdown syntax like ```python or ```:
     <code>

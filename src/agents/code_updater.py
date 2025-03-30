@@ -4,7 +4,6 @@ import sys
 import time
 import re
 import logging
-from termcolor import colored
 import openai
 from dotenv import load_dotenv
 
@@ -66,7 +65,7 @@ async def GameUpdater_Agent(user_feedback):
     )
     
     if PRINT_RESPONSE:
-        logging.info(colored(response.choices[0].message['content'], "magenta"))
+        logging.info(response.choices[0].message['content'])
 
     # Extract updated file contents from the response
     updated_files = re.findall(r'<file name="(.*?)">(.*?)</file>', response.choices[0].message['content'], re.DOTALL)

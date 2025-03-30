@@ -1,5 +1,3 @@
-
-
 import time
 import openai
 import base64

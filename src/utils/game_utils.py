@@ -8,7 +8,6 @@ import keyboard
 import pyautogui
 import string
 import traceback
-from termcolor import colored
 
 
 def start_game():
@@ -44,7 +43,7 @@ async def run_game():
             text=True
         )
 
-        print(colored("🎮 Game is running...", "magenta"))
+        print("🎮 Game is running...")
         start_time = time.time()
 
         # Loop without blocking on output
@@ -54,7 +53,7 @@ async def run_game():
                 break
 
             if time.time() - start_time > 6:
-                print(colored("⏳ 10 seconds passed. Sending ESC to close the game...", "yellow"))
+                print("⏳ 10 seconds passed. Sending ESC to close the game...")
                 keyboard.press("esc")
                 time.sleep(0.1)
                 keyboard.release("esc")

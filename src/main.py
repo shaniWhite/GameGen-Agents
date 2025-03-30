@@ -15,7 +15,6 @@ import utils.game_utils
 import agents.developers 
 import agents.planners
 import agents.control_test
-from termcolor import colored
 import utils.game_database
 import sys
 
@@ -65,17 +64,13 @@ async def main(user_input: str = None, iterations: int = 1):
     setup_environment()
     clear_game_directory()
     if user_input is None:
-        user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
+        user_input = input("Describe the Pygame game you want to create: ")
     if not iterations:
-        iterations = int(input(colored("How many planning iterations do you want? ", "magenta")))
-
-# async def main():
-#     user_input = input(colored("Describe the Pygame game you want to create: ", "magenta"))
-#     iterations = int(input(colored("How many planning iterations do you want? ","magenta")))
+        iterations = int(input("How many planning iterations do you want? "))
     
     logging.info("Planning the game structure...")
     final_plan = await agents.planners.plan_project(user_input, iterations)
-    logging.info(colored("game plan written to game_plan.xml", "yellow"))
+    logging.info("game plan written to game_plan.xml")
     with open("game_plan.xml", "w", encoding="utf-8") as f:
         f.write(final_plan)
     
@@ -125,7 +120,7 @@ async def main(user_input: str = None, iterations: int = 1):
                         logging.info("✅ Final check passed. No errors found!")
                         break  
 
-                    logging.warning(colored(f"⚠️ New error detected after fixes: {final_error}", "yellow"))
+                    logging.warning(f"⚠️ New error detected after fixes: {final_error}")
                     await agents.code_updater.GameUpdater_Agent(final_error)
                     time.sleep(1)      
                         
@@ -149,8 +144,8 @@ async def main(user_input: str = None, iterations: int = 1):
                     break
                   
             else:
-                logging.error(colored(f"Failed to fix all errors after {max_attempts} attempts.", "red"))
-                user_choice = input(colored("Press Enter to continue error correcting, or type 'no' to quit: ", "yellow")).lower()
+                logging.error(f"Failed to fix all errors after {max_attempts} attempts.")
+                user_choice = input("Press Enter to continue error correcting, or type 'no' to quit: ").lower()
                 if user_choice == 'no':
                     return
 
